@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Payku Invita</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #fef7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 48px 40px 40px;
+      box-shadow: 0px 24px 64px rgba(49, 0, 101, 0.12);
+      text-align: center;
+      max-width: 380px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative blobs */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(74,20,140,0.08), transparent 70%);
+      border-radius: 50%;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -40px;
+      width: 140px; height: 140px;
+      background: radial-gradient(circle, rgba(108,80,156,0.07), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .logo {
+      height: 32px;
+      margin-bottom: 28px;
+    }
+
+    .label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #4a4452;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    /* QR wrapper with gradient border */
+    .qr-border {
+      display: inline-block;
+      padding: 3px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #310065, #4A148C, #6c509c);
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .qr-inner {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qr-canvas-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Center logo overlay */
+    .qr-logo {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px; height: 52px;
+      background: #ffffff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 12px rgba(49,0,101,0.18);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .qr-logo img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .headline {
+      font-size: 22px;
+      font-weight: 800;
+      color: #310065;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .subtext {
+      font-size: 13px;
+      color: #4a4452;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    .url-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f3ebf6;
+      color: #4A148C;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+      word-break: break-all;
+      text-align: center;
+    }
+
+    .divider {
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, #310065, #6c509c);
+      border-radius: 999px;
+      margin: 0 auto 24px;
+    }
+
+    .btn-download {
+      margin-top: 32px;
+      background: linear-gradient(135deg, #310065, #4A148C);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-download:hover  { opacity: 0.9; }
+    .btn-download:active { transform: scale(0.97); }
+  </style>
+</head>
+<body>
+
+<div class="card" id="qr-card">
+
+  <img class="logo"
+    src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
+    alt="Payku">
+
+  <div class="label">Escanea y obtén tu café gratis</div>
+
+  <div class="qr-border">
+    <div class="qr-inner">
+      <div id="qr-canvas-wrap">
+        <!-- QR generado por JS aquí -->
+        <div id="qr-container"></div>
+        <div class="qr-logo">
+          <img src="https://payku.com/images/noto.png" alt="Payku">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="headline">Tranquilo,<br>payku paga ☕</p>
+  <p class="subtext">Elige tu café favorito y completa<br>el proceso. ¡Es completamente gratis!</p>
+
+  <div class="url-chip">
+    bmoragapayku.github.io/paykucafe
+  </div>
+
+</div>
+
+<br>
+<!--button class="btn-download" onclick="downloadQR()">
+  ⬇ Descargar QR
+</button-->
+
+<script>
+  const URL_TARGET = 'https://bmoragapayku.github.io/paykucafe/';
+  const QR_SIZE    = 240;
+
+  // Genera el QR
+  const qr = new QRCode(document.getElementById('qr-container'), {
+    text:           URL_TARGET,
+    width:          QR_SIZE,
+    height:         QR_SIZE,
+    colorDark:      '#310065',
+    colorLight:     '#ffffff',
+    correctLevel:   QRCode.CorrectLevel.H   // H = 30% tolerancia, necesario para el logo
+  });
+
+  // Descarga la tarjeta completa como imagen
+  function downloadQR() {
+    const card = document.getElementById('qr-card');
+
+    // Usa html2canvas si está disponible, si no, descarga solo el canvas del QR
+    const canvas = card.querySelector('canvas');
+    if (!canvas) { alert('QR aún generándose, intenta en un segundo.'); return; }
+
+    // Descarga solo el canvas del QR como PNG
+    const link = document.createElement('a');
+    link.download = 'qr-payku-cafe.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+</script>
+
+</body>
+</html>
