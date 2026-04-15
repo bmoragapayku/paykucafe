@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payku Invita · Café Gratis en la Feria</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary":                  "#310065",
+            "primary-container":        "#4A148C",
+            "secondary":                "#6c509c",
+            "tertiary":                 "#391900",
+            "surface":                  "#fef7ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low":    "#f9f1fb",
+            "surface-container":        "#f3ebf6",
+            "surface-container-high":   "#ede6f0",
+            "surface-container-highest":"#e8e0ea",
+            "on-surface":               "#1d1a21",
+            "on-surface-variant":       "#4a4452",
+            "on-primary":               "#ffffff",
+            "on-primary-container":     "#b889ff",
+            "secondary-container":      "#c9aafe",
+            "on-secondary-container":   "#563a85",
+            "outline-variant":          "#cdc3d4",
+            "outline":                  "#7c7483",
+            "error":                    "#ba1a1a",
+            "tertiary-fixed":           "#ffdcc5",
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg":      "0.5rem",
+            "xl":      "1.5rem",
+            "full":    "9999px"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body":     ["Manrope", "sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Screen system */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeInUp 0.4s ease-out forwards; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spin { animation: spin 0.9s linear infinite; }
+
+    @keyframes draw {
+      from { stroke-dashoffset: 80; }
+      to   { stroke-dashoffset: 0; }
+    }
+    .draw { stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw 0.5s ease-out 0.2s forwards; }
+
+    @keyframes pop {
+      0%   { transform: scale(0.5); opacity: 0; }
+      70%  { transform: scale(1.1); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    .pop { animation: pop 0.5s ease-out forwards; }
+
+    /* Sloth animations */
+    @keyframes sloth-entry {
+      0%   { transform: scale(0.4) rotate(-15deg); opacity: 0; }
+      60%  { transform: scale(1.12) rotate(4deg);  opacity: 1; }
+      80%  { transform: scale(0.96) rotate(-2deg); }
+      100% { transform: scale(1) rotate(0deg);     opacity: 1; }
+    }
+    @keyframes sloth-float {
+      0%, 100% { transform: translateY(0px) rotate(-1deg); }
+      50%       { transform: translateY(-14px) rotate(2deg); }
+    }
+    @keyframes sloth-rocket {
+      0%, 100% { opacity: 1; transform: scaleY(1); }
+      50%       { opacity: 0.7; transform: scaleY(1.15); }
+    }
+    .sloth-wrap {
+      width: 140px;
+      height: 140px;
+      position: relative;
+    }
+    .sloth-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      animation: sloth-entry 0.7s cubic-bezier(.34,1.56,.64,1) forwards,
+                 sloth-float 3s ease-in-out 0.7s infinite;
+      filter: drop-shadow(0px 16px 24px rgba(49,0,101,0.25));
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+      100% { transform: translateY(105vh) rotate(540deg); opacity: 0; }
+    }
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      animation: fall linear forwards;
+      z-index: 9999;
+    }
+
+    /* Form inputs */
+    .field {
+      width: 100%;
+      background: #f9f1fb;
+      border: none;
+      border-bottom: 2px solid rgba(205,195,212,0.5);
+      border-radius: 8px 8px 0 0;
+      padding: 16px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 1rem;
+      color: #1d1a21;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field:focus { border-bottom-color: #4A148C; }
+    .field::placeholder { color: rgba(74,68,82,0.4); }
+
+    /* Credit card */
+    .card-gradient {
+      background: linear-gradient(135deg, #310065 0%, #4A148C 60%, #6c509c 100%);
+    }
+    .card-gradient::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .card-gradient::after {
+      content: '';
+      position: absolute;
+      bottom: -70px; left: -30px;
+      width: 210px; height: 210px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+
+<body class="bg-surface font-body text-on-surface min-h-screen">
+
+<!-- ================================================ -->
+<!-- NAV — always visible                             -->
+<!-- ================================================ -->
+<nav class="fixed top-0 w-full z-50 bg-[#fef7ff]/80 backdrop-blur-md shadow-[0px_12px_32px_rgba(49,0,101,0.06)]">
+  <div class="flex justify-between items-center w-full px-6 md:px-8 py-4 max-w-7xl mx-auto">
+    <button onclick="goTo('catalog')" class="focus:outline-none">
+      <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75" alt="Payku" class="h-8 w-auto">
+    </button>
+    <button onclick="goTo('cart')" class="relative p-2 text-primary transition-transform active:scale-90">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span id="cart-badge" class="hidden absolute top-0 right-0 bg-primary-container text-white text-[10px] font-bold w-4 h-4 rounded-full ring-2 ring-surface flex items-center justify-center">1</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ================================================ -->
+<!-- SCREEN 1 · CATALOG                              -->
+<!-- ================================================ -->
+<div id="screen-catalog" class="screen active">
+  <main class="pt-32 pb-20 px-6 max-w-7xl mx-auto animate-in">
+
+    <header class="mb-16">
+      <div class="inline-flex items-center gap-2 bg-secondary-container/40 text-on-secondary-container px-4 py-2 rounded-full text-sm font-semibold mb-6">
+        <span class="material-symbols-outlined text-base">celebration</span>
+        Feria de Tecnología · Tu café es gratis
+      </div>
+      <h1 class="font-headline font-extrabold text-5xl md:text-7xl text-primary tracking-tight leading-none mb-4">
+        Payku te invita<br>a un café
+      </h1>
+      <p class="text-on-surface-variant max-w-xl text-lg leading-relaxed">
+        Descubre cómo hacemos los pagos más simples.
+      </p>
+    </header>
+
+    <!-- Bento grid -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+
+      <!-- CORTADO — featured -->
+      <div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-lowest shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.01]">
+        <div class="grid md:grid-cols-2 h-full">
+          <div class="relative h-64 md:h-full overflow-hidden">
+            <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiAVq8I9ZLAmcO4w29MA91KI2vGHtYH3CQ5tfi7gdqNiljgTOx2faLWGNFdHxn7LzXj5sT99NE-59Ae0h9BvxGni7K9Pwki6lN3wjRD7AwQrlfTI7lbTYrgqCIgzpymhpSBxV3xqowccFnDSDMMBkgPlfI1PhJEtYKuv9lEyYvDLzz0aOaLIXgzRzKcqIU-F6gHSo6hwggmSZCbXiY1aG3PpLoJNQuL0B3KNnAn8a7rvRRshAKvOpq8hWWbQR22g65gyTCCviJXLmE"
+              alt="Cortado">
+          </div>
+          <div class="p-8 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start mb-4">
+                <span class="bg-secondary-container text-on-secondary-container text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Elección del Editor</span>
+                <span class="text-2xl font-bold text-primary">$3.500</span>
+              </div>
+              <h2 class="font-headline text-3xl font-bold text-on-surface mb-3">Cortado</h2>
+              <p class="text-on-surface-variant mb-6 leading-relaxed">
+                Partes iguales de espresso y leche al vapor. Equilibrado e intenso, para el paladar que aprecia la fuerza suavizada por textura aterciopelada.
+              </p>
+              <div class="flex gap-2 mb-6">
+                <span class="px-3 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container text-xs font-semibold">Espresso</span>
+                <span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">Leche al vapor</span>
+              </div>
+            </div>
+            <button onclick="addToCart('Cortado','https://lh3.googleusercontent.com/aida-public/AB6AXuBiAVq8I9ZLAmcO4w29MA91KI2vGHtYH3CQ5tfi7gdqNiljgTOx2faLWGNFdHxn7LzXj5sT99NE-59Ae0h9BvxGni7K9Pwki6lN3wjRD7AwQrlfTI7lbTYrgqCIgzpymhpSBxV3xqowccFnDSDMMBkgPlfI1PhJEtYKuv9lEyYvDLzz0aOaLIXgzRzKcqIU-F6gHSo6hwggmSZCbXiY1aG3PpLoJNQuL0B3KNnAn8a7rvRRshAKvOpq8hWWbQR22g65gyTCCviJXLmE','Espresso + Leche al vapor · Cremoso','$3.500')"
+              class="bg-gradient-to-r from-primary to-primary-container text-on-primary py-4 px-8 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform active:scale-95 hover:opacity-90">
+              <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+              Agregar · Gratis hoy
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESPRESSO -->
+      <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-square rounded-lg overflow-hidden mb-6">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIpHYJAJQtQ1nXAlq8n3s9xZINdHh3dTEeoMB-wyDdp4FfjsmRkALyFBBC_2p6OG67AEwzGnfLY_xwWy_zb8LNV7ExsWzWekycKn-PxMDGH_yxNufJ9cnh45-iPdw1y80i-02YH-5LnoZ_ixGEl8vlvw0qjcjsUPzSnxWj7oE_3XkcijaTHlj8hanuUk3wBbRf2UnmxQYB5nySxKQEXmJ4SJBJMR8_vAx6S7wC-NGtCrUUoTUinvN_s408b4hb7lonTl3kTFJk59Xm"
+            alt="Espresso">
+        </div>
+        <div class="flex justify-between items-baseline mb-2">
+          <h3 class="font-headline text-xl font-bold">Espresso</h3>
+          <span class="font-bold text-primary">$2.500</span>
+        </div>
+        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Extracción pura y concentrada. Intenso y profundo con notas de chocolate oscuro.</p>
+        <button onclick="addToCart('Espresso','https://lh3.googleusercontent.com/aida-public/AB6AXuCIpHYJAJQtQ1nXAlq8n3s9xZINdHh3dTEeoMB-wyDdp4FfjsmRkALyFBBC_2p6OG67AEwzGnfLY_xwWy_zb8LNV7ExsWzWekycKn-PxMDGH_yxNufJ9cnh45-iPdw1y80i-02YH-5LnoZ_ixGEl8vlvw0qjcjsUPzSnxWj7oE_3XkcijaTHlj8hanuUk3wBbRf2UnmxQYB5nySxKQEXmJ4SJBJMR8_vAx6S7wC-NGtCrUUoTUinvN_s408b4hb7lonTl3kTFJk59Xm','Intenso · Notas de chocolate oscuro','$2.500')"
+          class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
+          Gratis · Agregar
+        </button>
+      </div>
+
+      <!-- LATTE -->
+      <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-[4/3] rounded-lg overflow-hidden mb-6">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgoETbKphFsXqm6w2HIKuw5_eZHGsi34Aa8V1e5rR4_-vdWffQQYgQhzhX6DOeXXLFa9eZC1LhxWufM_MvbFHi08pjjfh16Qhg_Js7SOWloaROXoqccvb3blR5LyDfhCrCsGcuzabzA2VzZyPPFkkVzOJZ4ZEnlo61gQuf-8zlfb7sa0SJeHKSqu1LM0LhPJ-a_hGy1bIiiA_0pha1e3Fa4yJ5pQMAc4IkuGPlOpiS3K38IQI48zpy0TRBnmThUx53o_jKdO8q5Pt2"
+            alt="Latte">
+        </div>
+        <div class="flex justify-between items-baseline mb-2">
+          <h3 class="font-headline text-xl font-bold">Latte</h3>
+          <span class="font-bold text-primary">$3.990</span>
+        </div>
+        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Nuestra opción más suave. Doble espresso con leche vaporizada sedosa y micro-espuma.</p>
+        <button onclick="addToCart('Latte','https://lh3.googleusercontent.com/aida-public/AB6AXuDgoETbKphFsXqm6w2HIKuw5_eZHGsi34Aa8V1e5rR4_-vdWffQQYgQhzhX6DOeXXLFa9eZC1LhxWufM_MvbFHi08pjjfh16Qhg_Js7SOWloaROXoqccvb3blR5LyDfhCrCsGcuzabzA2VzZyPPFkkVzOJZ4ZEnlo61gQuf-8zlfb7sa0SJeHKSqu1LM0LhPJ-a_hGy1bIiiA_0pha1e3Fa4yJ5pQMAc4IkuGPlOpiS3K38IQI48zpy0TRBnmThUx53o_jKdO8q5Pt2','Suave · Leche sedosa y cremosa','$3.990')"
+          class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
+          Gratis · Agregar
+        </button>
+      </div>
+
+      <!-- CAPPUCCINO -->
+      <div class="md:col-span-8 group bg-surface-container-low rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.01]">
+        <div class="flex flex-col md:flex-row h-full">
+          <div class="md:w-1/2 p-8 flex flex-col justify-center">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="w-10 h-px bg-primary"></span>
+              <span class="text-xs font-bold tracking-widest uppercase text-primary">Perfección Clásica</span>
+            </div>
+            <h3 class="font-headline text-3xl font-bold mb-4 text-on-surface">Cappuccino</h3>
+            <p class="text-on-surface-variant mb-6 leading-relaxed">Tercios perfectos: espresso, leche al vapor y espuma espesa. Con cacao orgánico por encima.</p>
+            <div class="flex items-center gap-4">
+              <span class="text-2xl font-bold text-primary">$3.200</span>
+              <button onclick="addToCart('Cappuccino','https://lh3.googleusercontent.com/aida-public/AB6AXuB1itEXcEUL0vbamDCzdo_3OlnPf5tHmaBCAhW8uST8RcDKSVXWi6Ydu4o-vNl70pMOf2M5meEBgRwvcAo2Pnqo3Y8oIqe1paaO3Fs7WHYJzs0lg30GNQHWHA275VFexaX-Af2UqFzUTghabkZ3x6XnRyvVgAr13RYsvmSuYYTkgHLmqRu1PDUv2JUNjofnuth08j7FDv6Sfp6GUCfSlxHH5pXjWjoDOh0Ri_8eiPW9yteKtGqzlmCEA3TitfP_fwmD76QVlXXzp8VM','Espuma espesa · Cacao orgánico','$3.200')"
+                class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold active:scale-95 transition-transform hover:opacity-90">
+                Gratis · Agregar
+              </button>
+            </div>
+          </div>
+          <div class="md:w-1/2 h-56 md:h-auto overflow-hidden">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1itEXcEUL0vbamDCzdo_3OlnPf5tHmaBCAhW8uST8RcDKSVXWi6Ydu4o-vNl70pMOf2M5meEBgRwvcAo2Pnqo3Y8oIqe1paaO3Fs7WHYJzs0lg30GNQHWHA275VFexaX-Af2UqFzUTghabkZ3x6XnRyvVgAr13RYsvmSuYYTkgHLmqRu1PDUv2JUNjofnuth08j7FDv6Sfp6GUCfSlxHH5pXjWjoDOh0Ri_8eiPW9yteKtGqzlmCEA3TitfP_fwmD76QVlXXzp8VM"
+              alt="Cappuccino">
+          </div>
+        </div>
+      </div>
+
+      <!-- MOCHA -->
+      <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-square rounded-lg overflow-hidden mb-6 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8"
+            alt="Mocha">
+          <div class="absolute top-3 right-3">
+            <span class="bg-tertiary text-white text-[10px] px-2 py-1 rounded-full uppercase tracking-tight font-bold">Especial</span>
+          </div>
+        </div>
+        <div class="flex justify-between items-baseline mb-2">
+          <h3 class="font-headline text-xl font-bold">Mocha</h3>
+          <span class="font-bold text-primary">$4.500</span>
+        </div>
+        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">La indulgencia máxima. Chocolate Valrhona oscuro en nuestro tostado con micro-espuma.</p>
+        <button onclick="addToCart('Mocha','https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8','Chocolate Valrhona · Micro-espuma','$4.500')"
+          class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
+          Gratis · Agregar
+        </button>
+      </div>
+
+      <!-- CTA promo -->
+      <div class="md:col-span-12 flex items-center justify-center bg-primary p-10 md:p-14 rounded-xl text-center text-on-primary relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-72 h-72 bg-primary-container rounded-full -translate-y-1/2 translate-x-1/4 opacity-30 blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+        <div class="relative z-10">
+          <h4 class="font-headline text-2xl md:text-3xl font-bold mb-3 tracking-tight">¿Quieres saber cómo integrar pagos en minutos?</h4>
+          <p class="text-on-primary-container mb-6 max-w-lg mx-auto text-sm md:text-base leading-relaxed">Pide tu café gratis y pasa por el stand de Payku. Te mostramos cómo simplificar los cobros en tu negocio.</p>
+          <div class="inline-flex items-center gap-2 text-sm font-semibold bg-surface/20 px-5 py-2 rounded-full">
+            <span class="material-symbols-outlined text-base">arrow_downward</span>
+            Elige tu café arriba
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ================================================ -->
+<!-- SCREEN 2 · CART                                 -->
+<!-- ================================================ -->
+<div id="screen-cart" class="screen">
+  <main class="pt-32 pb-20 px-6 max-w-3xl mx-auto animate-in">
+    <button onclick="goTo('catalog')" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors mb-8 group">
+      <span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+      <span class="font-semibold text-sm">Volver al catálogo</span>
+    </button>
+
+    <h1 class="font-headline font-extrabold text-4xl md:text-5xl text-primary tracking-tight mb-2">Tu Selección</h1>
+    <p class="text-on-surface-variant text-lg mb-10 leading-relaxed">Confirma tu café y continúa para registrarte.</p>
+
+    <!-- Cart item -->
+    <div id="cart-item-display" class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] mb-6 min-h-[120px]"></div>
+
+    <!-- Summary -->
+    <div class="bg-surface-container-low rounded-xl p-8 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] mb-8">
+      <h2 class="font-headline font-bold text-lg text-primary mb-5">Resumen del pedido</h2>
+      <div class="space-y-3 mb-5">
+        <div class="flex justify-between text-on-surface-variant">
+          <span class="font-medium">Precio del café</span>
+          <span class="font-headline font-bold text-on-surface" id="cart-original-price">—</span>
+        </div>
+        <div class="flex justify-between text-on-surface-variant">
+          <span class="font-medium">Payku paga por ti</span>
+          <span class="font-headline font-bold text-green-600" id="cart-discount">—</span>
+        </div>
+      </div>
+      <div class="border-t border-outline-variant/30 pt-5 flex justify-between items-baseline">
+        <span class="font-headline font-extrabold text-lg text-primary">Total a pagar</span>
+        <span class="font-headline font-extrabold text-3xl text-primary">$0</span>
+      </div>
+    </div>
+
+    <button id="cart-continue-btn" onclick="goTo('register')"
+      class="w-full py-5 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg tracking-tight shadow-xl transition-transform active:scale-95 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+      Continuar · Registrarme
+    </button>
+  </main>
+</div>
+
+<!-- ================================================ -->
+<!-- SCREEN 3 · REGISTRATION                         -->
+<!-- ================================================ -->
+<div id="screen-register" class="screen">
+  <main class="pt-32 pb-20 px-6 max-w-xl mx-auto animate-in">
+    <button onclick="goTo('cart')" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors mb-8 group">
+      <span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+      <span class="font-semibold text-sm">Volver al carro</span>
+    </button>
+
+    <div class="mb-10">
+      <div class="inline-flex items-center gap-2 bg-secondary-container/40 text-on-secondary-container px-4 py-2 rounded-full text-sm font-semibold mb-5">
+        <span class="material-symbols-outlined text-base">person</span>
+        Paso 1 de 2 · Tus datos
+      </div>
+      <h1 class="font-headline font-extrabold text-4xl text-primary tracking-tight mb-2">Cuéntanos de ti</h1>
+      <p class="text-on-surface-variant leading-relaxed">Solo necesitamos algunos datos para preparar tu café y conocerte mejor.</p>
+    </div>
+
+    <form id="register-form" onsubmit="handleRegister(event)" class="space-y-7">
+      <div>
+        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">Nombre Completo *</label>
+        <input id="field-name" type="text" required autocomplete="name" placeholder="Ej: María González" class="field">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">Correo Electrónico *</label>
+        <input id="field-email" type="text" required autocomplete="email" placeholder="nombre@empresa.com"
+          class="field" oninput="validateEmail(this)" onblur="validateEmail(this, true)">
+        <div id="email-feedback" class="hidden mt-2 text-xs font-semibold flex items-center gap-1.5"></div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">Empresa *</label>
+        <input id="field-company" type="text" required placeholder="Nombre de tu empresa u organización" class="field">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2">Cargo *</label>
+        <input id="field-job" type="text" required placeholder="Ej: CTO, Gerente de Finanzas, Fundador..." class="field">
+      </div>
+
+      <div id="register-error" class="hidden text-sm text-error font-medium bg-red-50 border border-red-100 rounded-xl p-4"></div>
+
+      <button type="submit" id="register-btn"
+        class="w-full py-5 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg tracking-tight shadow-xl transition-transform active:scale-95 hover:opacity-90">
+        Continuar al Pago
+      </button>
+
+      <p class="text-center text-xs text-on-surface-variant/50 leading-relaxed pt-2">
+        Tus datos son seguros y solo serán usados por el equipo de Payku.<br>No enviaremos spam, te lo prometemos.
+      </p>
+    </form>
+  </main>
+</div>
+
+<!-- ================================================ -->
+<!-- SCREEN 4 · FAKE PAYKU PAYMENT                   -->
+<!-- ================================================ -->
+<div id="screen-payment" class="screen">
+  <main class="pt-32 pb-20 px-6 max-w-md mx-auto animate-in">
+
+    <!-- Payment form view -->
+    <div id="payment-form-view">
+
+      <!-- Payku branding -->
+      <div class="text-center mb-8">
+        <h2 class="font-headline font-extrabold text-3xl text-primary tracking-tight mb-1">Tranquilo, Payku te invita</h2>
+        <p class="text-on-surface-variant font-medium mb-1">Continúa con el pago</p>
+        <p class="text-xs text-on-surface-variant/50">Pasarela de Pago Segura · SSL</p>
+      </div>
+
+      <!-- Order banner -->
+      <div class="bg-secondary-container/30 rounded-xl p-4 mb-7 flex items-center gap-4">
+        <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 shadow">
+          <img id="payment-img" src="" alt="Café" class="w-full h-full object-cover">
+        </div>
+        <div class="flex-1">
+          <p class="text-xs text-on-surface-variant uppercase tracking-widest font-semibold mb-0.5">Pagando por</p>
+          <p class="font-headline font-bold text-primary text-lg leading-tight" id="payment-coffee-name">—</p>
+          <div class="flex items-baseline gap-2 mt-1">
+            <span class="font-headline font-extrabold text-xl text-primary" id="payment-original">—</span>
+            <span class="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">Payku paga</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card visual -->
+      <div class="card-gradient rounded-xl p-6 mb-7 text-white relative overflow-hidden shadow-xl">
+        <!-- Payku logo en esquina superior izquierda -->
+        <div class="absolute top-4 left-5 z-10 opacity-90">
+          <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
+            alt="Payku" class="h-5 w-auto brightness-0 invert">
+        </div>
+        <div class="flex justify-between items-start mb-8 relative z-10 mt-6">
+          <div>
+            <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Número</p>
+            <p class="font-mono text-base tracking-widest" id="card-display">4241 2412 2422 3142</p>
+          </div>
+          <div class="flex items-center gap-0.5 opacity-90">
+            <div class="w-7 h-7 bg-red-400 rounded-full"></div>
+            <div class="w-7 h-7 bg-yellow-400 rounded-full -ml-2.5"></div>
+          </div>
+        </div>
+        <div class="flex justify-between items-end relative z-10">
+          <div>
+            <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Nombre</p>
+            <p class="font-semibold text-sm uppercase tracking-wider" id="card-name-display">PAYKU SPA</p>
+          </div>
+          <div class="text-right">
+            <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Vence</p>
+            <p class="font-mono text-sm" id="card-exp-display">12/28</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card form -->
+      <div class="bg-surface-container-lowest rounded-xl p-7 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] space-y-6">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Número de Tarjeta</label>
+          <input type="tel" id="card-number" maxlength="19" value="4241 2412 2422 3142"
+            disabled class="field font-mono opacity-60 cursor-not-allowed select-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Nombre en Tarjeta</label>
+          <input type="text" id="card-holder" value="Payku SpA"
+            disabled class="field opacity-60 cursor-not-allowed select-none">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Vencimiento</label>
+            <input type="tel" id="card-exp" maxlength="5" value="12/28"
+              disabled class="field font-mono opacity-60 cursor-not-allowed select-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">CVV</label>
+            <input type="tel" id="card-cvv" maxlength="3" value="•••"
+              disabled class="field font-mono opacity-60 cursor-not-allowed select-none">
+          </div>
+        </div>
+
+        <div id="pay-error" class="hidden text-sm text-error font-medium"></div>
+
+        <button onclick="processPay()" id="pay-btn"
+          class="w-full py-5 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg shadow-xl transition-transform active:scale-95 hover:opacity-90">
+          Confirmar · Pagar $0
+        </button>
+
+        <div class="flex items-center justify-center gap-2 text-on-surface-variant/40 text-xs pt-1">
+          <span class="material-symbols-outlined text-sm">lock</span>
+          Transacción cifrada · Powered by Payku
+        </div>
+      </div>
+    </div>
+
+    <!-- Processing view -->
+    <div id="payment-processing-view" class="hidden text-center py-24 animate-in">
+      <div class="w-16 h-16 border-4 border-surface-container-high border-t-primary-container rounded-full spin mx-auto mb-8"></div>
+      <h2 class="font-headline font-extrabold text-2xl text-primary mb-2">Procesando tu pedido…</h2>
+      <p class="text-on-surface-variant text-sm leading-relaxed">Conectando con la red de pago segura de Payku.<br>Un momento por favor.</p>
+    </div>
+
+  </main>
+</div>
+
+<!-- ================================================ -->
+<!-- SCREEN 5 · THANK YOU                            -->
+<!-- ================================================ -->
+<div id="screen-thanks" class="screen">
+  <main class="pt-32 pb-20 px-6 max-w-xl mx-auto text-center animate-in">
+
+    <!-- Payku sloth -->
+    <div class="sloth-wrap mx-auto mb-6">
+      <img src="https://payku.com/images/noto.png" alt="Payku" class="sloth-img">
+    </div>
+
+    <h1 class="font-headline font-extrabold text-5xl md:text-6xl text-primary tracking-tight mb-3">¡Gracias!</h1>
+    <p class="text-xl text-on-surface-variant leading-relaxed mb-2">
+      Tu compra fue exitosa, <span class="font-bold text-on-surface" id="thanks-name">amigo</span>.
+    </p>
+    <p class="text-on-surface-variant leading-relaxed mb-12">
+      Muestra esta pantalla en el stand de Payku para retirar tu café. ☕
+    </p>
+
+    <!-- Coffee card -->
+    <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_20px_60px_rgba(49,0,101,0.12)] mb-8 mx-auto max-w-sm">
+      <div class="h-52 overflow-hidden">
+        <img id="thanks-coffee-img" src="" alt="Tu café" class="w-full h-full object-cover">
+      </div>
+      <div class="p-7 text-left">
+        <p class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold mb-1">Tu pedido confirmado</p>
+        <h2 class="font-headline font-extrabold text-3xl text-primary mb-1" id="thanks-coffee-name">—</h2>
+        <p class="text-on-surface-variant text-sm mb-5" id="thanks-coffee-desc">—</p>
+        <div class="border-t border-outline-variant/20 pt-4 flex justify-between items-center">
+          <span class="text-on-surface-variant text-sm font-medium">Total pagado</span>
+          <span class="font-headline font-extrabold text-2xl text-primary">$0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payku pitch -->
+    <div class="bg-secondary-container/30 rounded-xl p-6 mb-8 text-left">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5">bolt</span>
+        <div>
+          <p class="font-headline font-bold text-on-surface mb-1">Payku: pagos simples para tu negocio</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed">Integra cobros en minutos con nuestra API. Pregúntanos en el stand y te hacemos una demo en vivo.</p>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="resetAll()" class="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:underline underline-offset-4">
+      <span class="material-symbols-outlined text-base">refresh</span>
+      Volver al inicio
+    </button>
+
+  </main>
+</div>
+
+<!-- ================================================ -->
+<!-- FOOTER                                          -->
+<!-- ================================================ -->
+<footer class="w-full border-t border-outline-variant/20 bg-surface">
+  <div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-8 max-w-7xl mx-auto gap-3">
+    <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75" alt="Payku" class="h-7 w-auto">
+    <p class="text-xs text-on-surface-variant/50">© 2026 Payku. Pagos simples para tu negocio.</p>
+  </div>
+</footer>
+
+<!-- ================================================ -->
+<!-- JAVASCRIPT                                      -->
+<!-- ================================================ -->
+<script>
+// ──────────────────────────────────────────────────────
+// SUPABASE CONFIGURATION
+// 1. Crea una cuenta gratis en https://supabase.com
+// 2. Crea un proyecto nuevo
+// 3. En Settings → API copia la URL del proyecto y el anon/public key
+// 4. Ve a SQL Editor y ejecuta:
+//
+//    CREATE TABLE leads (
+//      id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+//      name text NOT NULL,
+//      email text NOT NULL,
+//      company text NOT NULL,
+//      job_title text NOT NULL,
+//      coffee_name text,
+//      coffee_desc text,
+//      created_at timestamptz DEFAULT now()
+//    );
+//    ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+//    CREATE POLICY "public insert" ON leads FOR INSERT WITH CHECK (true);
+//
+// 5. Reemplaza los valores de abajo con los tuyos:
+// ──────────────────────────────────────────────────────
+const SUPABASE_URL      = 'https://TU_PROJECT_ID.supabase.co';
+const SUPABASE_ANON_KEY = 'TU_ANON_KEY_AQUI';
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── State ──────────────────────────────────────────────
+let cart = null;          // { name, image, desc, price }
+let currentUser = null;   // { name, email, company, job }
+
+// ── Navigation ─────────────────────────────────────────
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + screenId);
+  if (el) {
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+// ── Email validation ───────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function validateEmail(input, isBlur = false) {
+  const val     = input.value.trim();
+  const fb      = document.getElementById('email-feedback');
+  const isEmpty = val.length === 0;
+
+  // Don't show anything while field is still empty and user hasn't left it
+  if (isEmpty && !isBlur) {
+    fb.classList.add('hidden');
+    input.style.borderBottomColor = '';
+    return;
+  }
+
+  if (isEmpty) {
+    showEmailFeedback('error', 'Ingresa tu correo electrónico');
+    input.style.borderBottomColor = '#ba1a1a';
+    return;
+  }
+
+  const valid = EMAIL_RE.test(val);
+
+  if (valid) {
+    showEmailFeedback('ok', 'Correo válido');
+    input.style.borderBottomColor = '#16a34a'; // green-600
+  } else {
+    // Show specific hint depending on what's missing
+    let msg = 'Correo inválido';
+    if (!val.includes('@'))           msg = 'Falta el símbolo @';
+    else if (val.endsWith('@'))       msg = 'Falta el dominio después de @';
+    else if (!val.includes('.', val.indexOf('@'))) msg = 'Falta el dominio (ej: .com)';
+    showEmailFeedback('error', msg);
+    input.style.borderBottomColor = '#ba1a1a';
+  }
+}
+
+function showEmailFeedback(type, message) {
+  const fb = document.getElementById('email-feedback');
+  fb.classList.remove('hidden');
+  if (type === 'ok') {
+    fb.innerHTML = `
+      <span class="material-symbols-outlined text-green-600" style="font-size:14px;line-height:1">check_circle</span>
+      <span class="text-green-600">${message}</span>`;
+  } else {
+    fb.innerHTML = `
+      <span class="material-symbols-outlined text-error" style="font-size:14px;line-height:1">error</span>
+      <span class="text-error">${message}</span>`;
+  }
+}
+
+// ── Cart ───────────────────────────────────────────────
+function addToCart(name, image, desc, price) {
+  cart = { name, image, desc, price };
+
+  // Show badge
+  const badge = document.getElementById('cart-badge');
+  badge.classList.remove('hidden');
+  badge.style.display = 'flex';
+
+  renderCartItem();
+  goTo('cart');
+}
+
+function renderCartItem() {
+  const el = document.getElementById('cart-item-display');
+  if (!cart) {
+    el.innerHTML = `
+      <div class="text-center py-8 text-on-surface-variant">
+        <span class="material-symbols-outlined text-4xl block mb-2 text-outline">coffee_off</span>
+        <p class="text-sm mb-3">No has seleccionado ningún café</p>
+        <button onclick="goTo('catalog')" class="text-primary font-bold text-sm hover:underline underline-offset-4">
+          Ver catálogo →
+        </button>
+      </div>`;
+    document.getElementById('cart-original-price').textContent = '—';
+    document.getElementById('cart-discount').textContent = '—';
+    document.getElementById('cart-continue-btn').disabled = true;
+    return;
+  }
+
+  document.getElementById('cart-continue-btn').disabled = false;
+
+  el.innerHTML = `
+    <div class="flex flex-col sm:flex-row gap-5">
+      <div class="w-full sm:w-36 h-36 rounded-lg overflow-hidden flex-shrink-0">
+        <img src="${cart.image}" alt="${cart.name}" class="w-full h-full object-cover">
+      </div>
+      <div class="flex-grow py-1">
+        <div class="flex justify-between items-start mb-1">
+          <h3 class="font-headline font-bold text-xl text-primary">${cart.name}</h3>
+          <button onclick="removeFromCart()" class="material-symbols-outlined text-outline hover:text-error transition-colors leading-none">close</button>
+        </div>
+        <p class="text-sm text-on-surface-variant mb-3 leading-relaxed">${cart.desc}</p>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container text-xs font-semibold">1 unidad</span>
+          <span class="font-headline font-bold text-primary text-sm">${cart.price}</span>
+          <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Payku paga</span>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('cart-original-price').textContent = cart.price;
+  document.getElementById('cart-discount').textContent = `-${cart.price}`;
+}
+
+function removeFromCart() {
+  cart = null;
+  document.getElementById('cart-badge').style.display = 'none';
+  renderCartItem();
+}
+
+// ── Registration ───────────────────────────────────────
+async function handleRegister(e) {
+  e.preventDefault();
+
+  const name    = document.getElementById('field-name').value.trim();
+  const email   = document.getElementById('field-email').value.trim();
+  const company = document.getElementById('field-company').value.trim();
+  const job     = document.getElementById('field-job').value.trim();
+
+  // Validate email before submitting
+  validateEmail(document.getElementById('field-email'), true);
+  if (!EMAIL_RE.test(email)) {
+    document.getElementById('field-email').focus();
+    return;
+  }
+
+  const errEl = document.getElementById('register-error');
+  errEl.classList.add('hidden');
+
+  const btn = document.getElementById('register-btn');
+  btn.textContent = 'Guardando…';
+  btn.disabled = true;
+
+  // Save lead to Supabase (non-blocking — demo continues regardless)
+  try {
+    const { error } = await db.from('leads').insert([{
+      name,
+      email,
+      company,
+      job_title: job,
+      coffee_name: cart ? cart.name : null,
+      coffee_desc: cart ? cart.desc : null,
+    }]);
+    if (error) console.warn('[Supabase]', error.message);
+  } catch (err) {
+    console.warn('[Supabase] Could not save lead:', err);
+  }
+
+  currentUser = { name, email, company, job };
+
+  // Populate payment screen
+  if (cart) {
+    document.getElementById('payment-coffee-name').textContent = cart.name;
+    document.getElementById('payment-img').src = cart.image;
+    document.getElementById('payment-original').textContent = cart.price;
+  }
+
+  btn.textContent = 'Continuar al Pago';
+  btn.disabled = false;
+  goTo('payment');
+}
+
+// ── Payment helpers ────────────────────────────────────
+function fmtCard(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 16);
+  v = v.match(/.{1,4}/g)?.join(' ') || v;
+  input.value = v;
+  const pad = (v.replace(/\s/g, '') + '•'.repeat(16)).slice(0, 16);
+  const display = pad.match(/.{1,4}/g).join(' ');
+  document.getElementById('card-display').textContent = display;
+}
+
+function fmtExp(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 4);
+  if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+  input.value = v;
+  document.getElementById('card-exp-display').textContent = v || 'MM/AA';
+}
+
+// ── Process fake payment ───────────────────────────────
+function processPay() {
+  document.getElementById('pay-error').classList.add('hidden');
+
+  // Swap to processing view
+  document.getElementById('payment-form-view').classList.add('hidden');
+  document.getElementById('payment-processing-view').classList.remove('hidden');
+
+  // Simulate network delay
+  setTimeout(() => {
+    // Populate thank-you screen
+    if (cart) {
+      document.getElementById('thanks-coffee-img').src   = cart.image;
+      document.getElementById('thanks-coffee-name').textContent = cart.name;
+      document.getElementById('thanks-coffee-desc').textContent = cart.desc;
+    }
+    if (currentUser) {
+      document.getElementById('thanks-name').textContent = currentUser.name.split(' ')[0];
+    }
+
+    goTo('thanks');
+    launchConfetti();
+
+    // Reset payment view for potential next use
+    setTimeout(() => {
+      document.getElementById('payment-form-view').classList.remove('hidden');
+      document.getElementById('payment-processing-view').classList.add('hidden');
+    }, 500);
+  }, 2800);
+}
+
+// ── Confetti ───────────────────────────────────────────
+function launchConfetti() {
+  const colors = ['#310065','#4A148C','#6c509c','#c9aafe','#ffdcc5','#ffb782','#ffffff'];
+  for (let i = 0; i < 70; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti';
+    const size = Math.random() * 10 + 6;
+    p.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      top: -20px;
+      width: ${size}px;
+      height: ${size}px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      border-radius: ${Math.random() > 0.5 ? '50%' : '3px'};
+      animation-duration: ${Math.random() * 2 + 1.5}s;
+      animation-delay: ${Math.random() * 0.8}s;
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 4500);
+  }
+}
+
+// ── Reset ──────────────────────────────────────────────
+function resetAll() {
+  cart = null;
+  currentUser = null;
+
+  document.getElementById('cart-badge').style.display = 'none';
+  document.getElementById('register-form').reset();
+  document.getElementById('card-display').textContent     = '4242 4242 4242 4242';
+  document.getElementById('card-name-display').textContent = 'PAYKU SPA';
+  document.getElementById('card-exp-display').textContent  = '12/28';
+  document.getElementById('pay-error').classList.add('hidden');
+  document.getElementById('register-error').classList.add('hidden');
+
+  renderCartItem();
+  goTo('catalog');
+}
+
+// Init cart display
+renderCartItem();
+</script>
+
+</body>
+</html>
