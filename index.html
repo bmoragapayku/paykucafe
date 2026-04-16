@@ -214,7 +214,7 @@
     <header class="mb-16">
       <div class="inline-flex items-center gap-2 bg-secondary-container/40 text-on-secondary-container px-4 py-2 rounded-full text-sm font-semibold mb-6">
         <span class="material-symbols-outlined text-base">celebration</span>
-        Feria de Tecnología · Tu café es gratis
+        Fintech Forum · Tu café es gratis
       </div>
       <h1 class="font-headline font-extrabold text-5xl md:text-7xl text-primary tracking-tight leading-none mb-4">
         Payku te invita<br>a un café
@@ -224,7 +224,7 @@
       </p>
     </header>
 
-    <!-- Bento grid -->
+    <!-- Bento grid — 7 variedades -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
 
       <!-- CORTADO — featured -->
@@ -242,9 +242,7 @@
                 <span class="text-2xl font-bold text-primary">$3.500</span>
               </div>
               <h2 class="font-headline text-3xl font-bold text-on-surface mb-3">Cortado</h2>
-              <p class="text-on-surface-variant mb-6 leading-relaxed">
-                Partes iguales de espresso y leche al vapor. Equilibrado e intenso, para el paladar que aprecia la fuerza suavizada por textura aterciopelada.
-              </p>
+              <p class="text-on-surface-variant mb-6 leading-relaxed">Partes iguales de espresso y leche al vapor. Equilibrado e intenso, para el paladar que aprecia la fuerza suavizada por textura aterciopelada.</p>
               <div class="flex gap-2 mb-6">
                 <span class="px-3 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container text-xs font-semibold">Espresso</span>
                 <span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">Leche al vapor</span>
@@ -277,25 +275,43 @@
         </button>
       </div>
 
-      <!-- LATTE -->
+      <!-- AMERICANO -->
       <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
-        <div class="aspect-[4/3] rounded-lg overflow-hidden mb-6">
+        <div class="aspect-square rounded-lg overflow-hidden mb-6">
           <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgoETbKphFsXqm6w2HIKuw5_eZHGsi34Aa8V1e5rR4_-vdWffQQYgQhzhX6DOeXXLFa9eZC1LhxWufM_MvbFHi08pjjfh16Qhg_Js7SOWloaROXoqccvb3blR5LyDfhCrCsGcuzabzA2VzZyPPFkkVzOJZ4ZEnlo61gQuf-8zlfb7sa0SJeHKSqu1LM0LhPJ-a_hGy1bIiiA_0pha1e3Fa4yJ5pQMAc4IkuGPlOpiS3K38IQI48zpy0TRBnmThUx53o_jKdO8q5Pt2"
-            alt="Latte">
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8"
+            alt="Americano">
         </div>
         <div class="flex justify-between items-baseline mb-2">
-          <h3 class="font-headline text-xl font-bold">Latte</h3>
-          <span class="font-bold text-primary">$3.990</span>
+          <h3 class="font-headline text-xl font-bold">Americano</h3>
+          <span class="font-bold text-primary">$2.800</span>
         </div>
-        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Nuestra opción más suave. Doble espresso con leche vaporizada sedosa y micro-espuma.</p>
-        <button onclick="addToCart('Latte','https://lh3.googleusercontent.com/aida-public/AB6AXuDgoETbKphFsXqm6w2HIKuw5_eZHGsi34Aa8V1e5rR4_-vdWffQQYgQhzhX6DOeXXLFa9eZC1LhxWufM_MvbFHi08pjjfh16Qhg_Js7SOWloaROXoqccvb3blR5LyDfhCrCsGcuzabzA2VzZyPPFkkVzOJZ4ZEnlo61gQuf-8zlfb7sa0SJeHKSqu1LM0LhPJ-a_hGy1bIiiA_0pha1e3Fa4yJ5pQMAc4IkuGPlOpiS3K38IQI48zpy0TRBnmThUx53o_jKdO8q5Pt2','Suave · Leche sedosa y cremosa','$3.990')"
+        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Espresso diluido en agua caliente. Suave y largo, con todo el aroma del grano sin la intensidad concentrada.</p>
+        <button onclick="addToCart('Americano','https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8','Suave y aromático · Largo','$2.800')"
           class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
           Gratis · Agregar
         </button>
       </div>
 
-      <!-- CAPPUCCINO -->
+      <!-- LATTE VAINILLA -->
+      <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-square rounded-lg overflow-hidden mb-6">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgoETbKphFsXqm6w2HIKuw5_eZHGsi34Aa8V1e5rR4_-vdWffQQYgQhzhX6DOeXXLFa9eZC1LhxWufM_MvbFHi08pjjfh16Qhg_Js7SOWloaROXoqccvb3blR5LyDfhCrCsGcuzabzA2VzZyPPFkkVzOJZ4ZEnlo61gQuf-8zlfb7sa0SJeHKSqu1LM0LhPJ-a_hGy1bIiiA_0pha1e3Fa4yJ5pQMAc4IkuGPlOpiS3K38IQI48zpy0TRBnmThUx53o_jKdO8q5Pt2"
+            alt="Latte Vainilla">
+        </div>
+        <div class="flex justify-between items-baseline mb-2">
+          <h3 class="font-headline text-xl font-bold">Latte Vainilla</h3>
+          <span class="font-bold text-primary">$3.990</span>
+        </div>
+        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Latte sedoso con sirope de vainilla natural. Dulce y aromático, perfecto para los que disfrutan un toque especial.</p>
+        <button onclick="addToCart('Latte Vainilla','https://lh3.googleusercontent.com/aida-public/AB6AXuDgoETbKphFsXqm6w2HIKuw5_eZHGsi34Aa8V1e5rR4_-vdWffQQYgQhzhX6DOeXXLFa9eZC1LhxWufM_MvbFHi08pjjfh16Qhg_Js7SOWloaROXoqccvb3blR5LyDfhCrCsGcuzabzA2VzZyPPFkkVzOJZ4ZEnlo61gQuf-8zlfb7sa0SJeHKSqu1LM0LhPJ-a_hGy1bIiiA_0pha1e3Fa4yJ5pQMAc4IkuGPlOpiS3K38IQI48zpy0TRBnmThUx53o_jKdO8q5Pt2','Leche sedosa · Sirope de vainilla','$3.990')"
+          class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
+          Gratis · Agregar
+        </button>
+      </div>
+
+      <!-- CAPPUCCINO — horizontal -->
       <div class="md:col-span-8 group bg-surface-container-low rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.01]">
         <div class="flex flex-col md:flex-row h-full">
           <div class="md:w-1/2 p-8 flex flex-col justify-center">
@@ -321,25 +337,48 @@
         </div>
       </div>
 
-      <!-- MOCHA -->
+      <!-- LATTE CARAMELO -->
       <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
         <div class="aspect-square rounded-lg overflow-hidden mb-6 relative">
           <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8"
-            alt="Mocha">
-          <div class="absolute top-3 right-3">
-            <span class="bg-tertiary text-white text-[10px] px-2 py-1 rounded-full uppercase tracking-tight font-bold">Especial</span>
-          </div>
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM3CMwN-xlN3m_HhwaB4HblfUSTUDrrMnRq3MGAlCxTsSA5uYozVP9413xwdFylTFYC5Dy1FYk2a1_74gLeCsHwRZxb4OEfwAWlc2OOT7fP7ECaUpYg7TdAtUbxWN3EZQfpx7fBtpyKv_3jQtnYTCpuoGkczUf9rDL1KqjIYGByQbfioqWyymqdSdj0dP-e8jEVQI39G_rUqiHBRVnWIlLYLQVSHYYVR8uB_SEwkE7heV8GKevdBRmvVZLPTSWWNGCs_1f_3lrsyHu"
+            alt="Latte Caramelo">
         </div>
         <div class="flex justify-between items-baseline mb-2">
-          <h3 class="font-headline text-xl font-bold">Mocha</h3>
-          <span class="font-bold text-primary">$4.500</span>
+          <h3 class="font-headline text-xl font-bold">Latte Caramelo</h3>
+          <span class="font-bold text-primary">$3.990</span>
         </div>
-        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">La indulgencia máxima. Chocolate Valrhona oscuro en nuestro tostado con micro-espuma.</p>
-        <button onclick="addToCart('Mocha','https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8','Chocolate Valrhona · Micro-espuma','$4.500')"
+        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Latte con sirope de caramelo tostado. Un equilibrio irresistible entre el amargor del espresso y la dulzura ahumada.</p>
+        <button onclick="addToCart('Latte Caramelo','https://lh3.googleusercontent.com/aida-public/AB6AXuAM3CMwN-xlN3m_HhwaB4HblfUSTUDrrMnRq3MGAlCxTsSA5uYozVP9413xwdFylTFYC5Dy1FYk2a1_74gLeCsHwRZxb4OEfwAWlc2OOT7fP7ECaUpYg7TdAtUbxWN3EZQfpx7fBtpyKv_3jQtnYTCpuoGkczUf9rDL1KqjIYGByQbfioqWyymqdSdj0dP-e8jEVQI39G_rUqiHBRVnWIlLYLQVSHYYVR8uB_SEwkE7heV8GKevdBRmvVZLPTSWWNGCs_1f_3lrsyHu','Leche sedosa · Sirope de caramelo tostado','$3.990')"
           class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
           Gratis · Agregar
         </button>
+      </div>
+
+      <!-- MOCACCINO — full width horizontal -->
+      <div class="md:col-span-12 group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.005]">
+        <div class="flex flex-col md:flex-row h-full">
+          <div class="md:w-1/3 h-56 md:h-auto overflow-hidden">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8"
+              alt="Mocaccino">
+          </div>
+          <div class="md:w-2/3 p-8 flex flex-col justify-center">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="bg-tertiary text-white text-[10px] px-2 py-1 rounded-full uppercase tracking-tight font-bold">Especial del día</span>
+            </div>
+            <h3 class="font-headline text-3xl font-bold mb-3 text-on-surface">Mocaccino</h3>
+            <p class="text-on-surface-variant mb-6 leading-relaxed max-w-lg">La indulgencia máxima. Chocolate Valrhona oscuro fundido en espresso con leche vaporizada y micro-espuma. El favorito de la feria.</p>
+            <div class="flex items-center gap-6">
+              <span class="text-2xl font-bold text-primary">$4.500</span>
+              <button onclick="addToCart('Mocaccino','https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8','Chocolate Valrhona · Espresso · Micro-espuma','$4.500')"
+                class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-4 rounded-xl font-bold flex items-center gap-2 active:scale-95 transition-transform hover:opacity-90">
+                <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+                Gratis · Agregar
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- CTA promo -->
@@ -460,104 +499,66 @@
 <div id="screen-payment" class="screen">
   <main class="pt-32 pb-20 px-6 max-w-md mx-auto animate-in">
 
-    <!-- Payment form view -->
-    <div id="payment-form-view">
+    <!-- Branding -->
+    <div class="text-center mb-8">
+      <h2 class="font-headline font-extrabold text-3xl text-primary tracking-tight mb-1">Tranquilo, Payku te invita</h2>
+      <p class="text-on-surface-variant font-medium mb-1">Continúa con el pago</p>
+      <p class="text-xs text-on-surface-variant/50">Pasarela de Pago Segura · SSL</p>
+    </div>
 
-      <!-- Payku branding -->
-      <div class="text-center mb-8">
-        <h2 class="font-headline font-extrabold text-3xl text-primary tracking-tight mb-1">Tranquilo, Payku te invita</h2>
-        <p class="text-on-surface-variant font-medium mb-1">Continúa con el pago</p>
-        <p class="text-xs text-on-surface-variant/50">Pasarela de Pago Segura · SSL</p>
+    <!-- Order banner -->
+    <div class="bg-secondary-container/30 rounded-xl p-4 mb-7 flex items-center gap-4">
+      <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 shadow">
+        <img id="payment-img" src="" alt="Café" class="w-full h-full object-cover">
       </div>
-
-      <!-- Order banner -->
-      <div class="bg-secondary-container/30 rounded-xl p-4 mb-7 flex items-center gap-4">
-        <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 shadow">
-          <img id="payment-img" src="" alt="Café" class="w-full h-full object-cover">
-        </div>
-        <div class="flex-1">
-          <p class="text-xs text-on-surface-variant uppercase tracking-widest font-semibold mb-0.5">Pagando por</p>
-          <p class="font-headline font-bold text-primary text-lg leading-tight" id="payment-coffee-name">—</p>
-          <div class="flex items-baseline gap-2 mt-1">
-            <span class="font-headline font-extrabold text-xl text-primary" id="payment-original">—</span>
-            <span class="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">Payku paga</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card visual -->
-      <div class="card-gradient rounded-xl p-6 mb-7 text-white relative overflow-hidden shadow-xl">
-        <!-- Payku logo en esquina superior izquierda -->
-        <div class="absolute top-4 left-5 z-10 opacity-90">
-          <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
-            alt="Payku" class="h-5 w-auto brightness-0 invert">
-        </div>
-        <div class="flex justify-between items-start mb-8 relative z-10 mt-6">
-          <div>
-            <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Número</p>
-            <p class="font-mono text-base tracking-widest" id="card-display">4241 2412 2422 3142</p>
-          </div>
-          <div class="flex items-center gap-0.5 opacity-90">
-            <div class="w-7 h-7 bg-red-400 rounded-full"></div>
-            <div class="w-7 h-7 bg-yellow-400 rounded-full -ml-2.5"></div>
-          </div>
-        </div>
-        <div class="flex justify-between items-end relative z-10">
-          <div>
-            <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Nombre</p>
-            <p class="font-semibold text-sm uppercase tracking-wider" id="card-name-display">PAYKU SPA</p>
-          </div>
-          <div class="text-right">
-            <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Vence</p>
-            <p class="font-mono text-sm" id="card-exp-display">12/28</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card form -->
-      <div class="bg-surface-container-lowest rounded-xl p-7 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] space-y-6">
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Número de Tarjeta</label>
-          <input type="tel" id="card-number" maxlength="19" value="4241 2412 2422 3142"
-            disabled class="field font-mono opacity-60 cursor-not-allowed select-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Nombre en Tarjeta</label>
-          <input type="text" id="card-holder" value="Payku SpA"
-            disabled class="field opacity-60 cursor-not-allowed select-none">
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Vencimiento</label>
-            <input type="tel" id="card-exp" maxlength="5" value="12/28"
-              disabled class="field font-mono opacity-60 cursor-not-allowed select-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">CVV</label>
-            <input type="tel" id="card-cvv" maxlength="3" value="•••"
-              disabled class="field font-mono opacity-60 cursor-not-allowed select-none">
-          </div>
-        </div>
-
-        <div id="pay-error" class="hidden text-sm text-error font-medium"></div>
-
-        <button onclick="processPay()" id="pay-btn"
-          class="w-full py-5 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg shadow-xl transition-transform active:scale-95 hover:opacity-90">
-          Confirmar · Pagar $0
-        </button>
-
-        <div class="flex items-center justify-center gap-2 text-on-surface-variant/40 text-xs pt-1">
-          <span class="material-symbols-outlined text-sm">lock</span>
-          Transacción cifrada · Powered by Payku
+      <div class="flex-1">
+        <p class="text-xs text-on-surface-variant uppercase tracking-widest font-semibold mb-0.5">Pagando con Payku</p>
+        <p class="font-headline font-bold text-primary text-lg leading-tight" id="payment-coffee-name">—</p>
+        <div class="flex items-baseline gap-2 mt-1">
+          <span class="font-headline font-extrabold text-xl text-primary" id="payment-original">—</span>
+          <span class="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">Payku paga</span>
         </div>
       </div>
     </div>
 
-    <!-- Processing view -->
-    <div id="payment-processing-view" class="hidden text-center py-24 animate-in">
-      <div class="w-16 h-16 border-4 border-surface-container-high border-t-primary-container rounded-full spin mx-auto mb-8"></div>
-      <h2 class="font-headline font-extrabold text-2xl text-primary mb-2">Procesando tu pedido…</h2>
-      <p class="text-on-surface-variant text-sm leading-relaxed">Conectando con la red de pago segura de Payku.<br>Un momento por favor.</p>
+    <!-- Card visual -->
+    <div class="card-gradient rounded-xl p-6 mb-7 text-white relative overflow-hidden shadow-xl">
+      <div class="absolute top-4 left-5 z-10 opacity-90">
+        <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
+          alt="Payku" class="h-5 w-auto brightness-0 invert">
+      </div>
+      <div class="flex justify-between items-start mb-8 relative z-10 mt-6">
+        <div>
+          <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Número</p>
+          <p class="font-mono text-base tracking-widest">4242 4242 4242 4242</p>
+        </div>
+        <div class="flex items-center gap-0.5 opacity-90">
+          <div class="w-7 h-7 bg-red-400 rounded-full"></div>
+          <div class="w-7 h-7 bg-yellow-400 rounded-full -ml-2.5"></div>
+        </div>
+      </div>
+      <div class="flex justify-between items-end relative z-10">
+        <div>
+          <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Nombre</p>
+          <p class="font-semibold text-sm uppercase tracking-wider">PAYKU SPA</p>
+        </div>
+        <div class="text-right">
+          <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Vence</p>
+          <p class="font-mono text-sm">12/28</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Processing -->
+    <div class="text-center py-6">
+      <div class="w-12 h-12 border-4 border-surface-container-high border-t-primary-container rounded-full spin mx-auto mb-5"></div>
+      <p class="font-headline font-bold text-primary mb-1">Procesando tu pago…</p>
+      <p class="text-on-surface-variant text-sm">Conectando con la red segura de Payku.</p>
+    </div>
+
+    <div class="flex items-center justify-center gap-2 text-on-surface-variant/40 text-xs mt-2">
+      <span class="material-symbols-outlined text-sm">lock</span>
+      Transacción cifrada · Powered by Payku
     </div>
 
   </main>
@@ -575,9 +576,11 @@
     </div>
 
     <h1 class="font-headline font-extrabold text-5xl md:text-6xl text-primary tracking-tight mb-3">¡Gracias!</h1>
-    <p class="text-xl text-on-surface-variant leading-relaxed mb-2">
+    <p class="text-xl text-on-surface-variant leading-relaxed mb-3">
       Tu compra fue exitosa, <span class="font-bold text-on-surface" id="thanks-name">amigo</span>.
     </p>
+    <p class="text-sm text-on-surface-variant/70 mb-2">Confirmación enviada a</p>
+    <p class="font-semibold text-primary mb-10 text-base" id="thanks-email">—</p>
     <p class="text-on-surface-variant leading-relaxed mb-12">
       Muestra esta pantalla en el stand de Payku para retirar tu café. ☕
     </p>
@@ -834,54 +837,21 @@ async function handleRegister(e) {
   btn.textContent = 'Continuar al Pago';
   btn.disabled = false;
   goTo('payment');
-}
 
-// ── Payment helpers ────────────────────────────────────
-function fmtCard(input) {
-  let v = input.value.replace(/\D/g, '').slice(0, 16);
-  v = v.match(/.{1,4}/g)?.join(' ') || v;
-  input.value = v;
-  const pad = (v.replace(/\s/g, '') + '•'.repeat(16)).slice(0, 16);
-  const display = pad.match(/.{1,4}/g).join(' ');
-  document.getElementById('card-display').textContent = display;
-}
-
-function fmtExp(input) {
-  let v = input.value.replace(/\D/g, '').slice(0, 4);
-  if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
-  input.value = v;
-  document.getElementById('card-exp-display').textContent = v || 'MM/AA';
-}
-
-// ── Process fake payment ───────────────────────────────
-function processPay() {
-  document.getElementById('pay-error').classList.add('hidden');
-
-  // Swap to processing view
-  document.getElementById('payment-form-view').classList.add('hidden');
-  document.getElementById('payment-processing-view').classList.remove('hidden');
-
-  // Simulate network delay
+  // Arranca el procesamiento automáticamente
   setTimeout(() => {
-    // Populate thank-you screen
     if (cart) {
-      document.getElementById('thanks-coffee-img').src   = cart.image;
-      document.getElementById('thanks-coffee-name').textContent = cart.name;
-      document.getElementById('thanks-coffee-desc').textContent = cart.desc;
+      document.getElementById('thanks-coffee-img').src            = cart.image;
+      document.getElementById('thanks-coffee-name').textContent   = cart.name;
+      document.getElementById('thanks-coffee-desc').textContent   = cart.desc;
     }
     if (currentUser) {
-      document.getElementById('thanks-name').textContent = currentUser.name.split(' ')[0];
+      document.getElementById('thanks-name').textContent  = currentUser.name.split(' ')[0];
+      document.getElementById('thanks-email').textContent = currentUser.email;
     }
-
     goTo('thanks');
     launchConfetti();
-
-    // Reset payment view for potential next use
-    setTimeout(() => {
-      document.getElementById('payment-form-view').classList.remove('hidden');
-      document.getElementById('payment-processing-view').classList.add('hidden');
-    }, 500);
-  }, 2800);
+  }, 3000);
 }
 
 // ── Confetti ───────────────────────────────────────────
@@ -913,10 +883,6 @@ function resetAll() {
 
   document.getElementById('cart-badge').style.display = 'none';
   document.getElementById('register-form').reset();
-  document.getElementById('card-display').textContent     = '4242 4242 4242 4242';
-  document.getElementById('card-name-display').textContent = 'PAYKU SPA';
-  document.getElementById('card-exp-display').textContent  = '12/28';
-  document.getElementById('pay-error').classList.add('hidden');
   document.getElementById('register-error').classList.add('hidden');
 
   renderCartItem();

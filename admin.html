@@ -96,6 +96,99 @@
 </head>
 <body>
 
+<!-- ============ MODAL AGREGAR MANUAL ============ -->
+<div id="manual-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background:rgba(49,0,101,0.25);backdrop-filter:blur(4px)">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h3 class="font-headline font-extrabold text-xl text-[#310065]">Agregar registro manual</h3>
+        <p class="text-xs text-[#4a4452] mt-0.5">Para cafés entregados en el stand sin pasar por la app</p>
+      </div>
+      <button onclick="closeManual()" class="material-symbols-outlined text-[#4a4452] hover:text-[#310065] transition-colors">close</button>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Nombre <span class="text-red-400">*</span></label>
+        <input id="manual-name" type="text" placeholder="Ej: Juan Pérez"
+          class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Correo</label>
+        <input id="manual-email" type="email" placeholder="opcional@empresa.com"
+          class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Empresa</label>
+        <input id="manual-company" type="text" placeholder="Ej: Payku (Equipo interno)"
+          class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Cargo</label>
+        <input id="manual-job" type="text" placeholder="Ej: Staff Payku"
+          class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Café elegido</label>
+        <select id="manual-coffee"
+          class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm text-[#1d1a21]">
+          <option value="">— Seleccionar —</option>
+          <option>Espresso</option>
+          <option>Americano</option>
+          <option>Cortado</option>
+          <option>Cappuccino</option>
+          <option>Latte Vainilla</option>
+          <option>Latte Caramelo</option>
+          <option>Mocaccino</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Comentario</label>
+        <input id="manual-comment" type="text" placeholder="Nota opcional..."
+          class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+    </div>
+    <div id="manual-error" class="hidden mt-3 text-xs text-red-500 font-semibold"></div>
+    <div class="flex gap-3 mt-7">
+      <button onclick="closeManual()" class="flex-1 py-3 rounded-xl border border-[#cdc3d4]/40 text-[#4a4452] font-bold text-sm hover:bg-[#f3ebf6] transition-colors">Cancelar</button>
+      <button onclick="saveManual()" id="manual-btn" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#310065] to-[#4A148C] text-white font-bold text-sm hover:opacity-90 transition-opacity">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL EDITAR ============ -->
+<div id="edit-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background:rgba(49,0,101,0.25);backdrop-filter:blur(4px)">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 animate-fadeIn">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="font-headline font-extrabold text-xl text-[#310065]">Editar registro</h3>
+      <button onclick="closeEdit()" class="material-symbols-outlined text-[#4a4452] hover:text-[#310065] transition-colors">close</button>
+    </div>
+    <input type="hidden" id="edit-id">
+    <div class="space-y-5">
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Nombre</label>
+        <input id="edit-name" type="text" class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Correo</label>
+        <input id="edit-email" type="email" class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Empresa</label>
+        <input id="edit-company" type="text" class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-[#4a4452] uppercase tracking-widest mb-1">Cargo</label>
+        <input id="edit-job" type="text" class="w-full bg-[#f9f1fb] border-b-2 border-[#cdc3d4]/40 focus:border-[#4A148C] rounded-t-lg px-4 py-3 outline-none transition-colors text-sm">
+      </div>
+    </div>
+    <div id="edit-error" class="hidden mt-3 text-xs text-red-500 font-semibold"></div>
+    <div class="flex gap-3 mt-8">
+      <button onclick="closeEdit()" class="flex-1 py-3 rounded-xl border border-[#cdc3d4]/40 text-[#4a4452] font-bold text-sm hover:bg-[#f3ebf6] transition-colors">Cancelar</button>
+      <button onclick="saveEdit()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#310065] to-[#4A148C] text-white font-bold text-sm hover:opacity-90 transition-opacity">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ DASHBOARD ============ -->
 <div id="dashboard">
 
@@ -175,6 +268,11 @@
           <input id="search-input" type="text" placeholder="Buscar por nombre, empresa..."
             oninput="filterTable()"
             class="text-sm bg-[#f9f1fb] border border-[#cdc3d4]/30 rounded-lg px-3 py-2 outline-none focus:border-[#4A148C] w-56 transition-colors">
+          <button onclick="openManual()"
+            class="flex items-center gap-1.5 text-xs font-bold bg-gradient-to-r from-[#310065] to-[#4A148C] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap">
+            <span class="material-symbols-outlined text-base">add</span>
+            Agregar manual
+          </button>
         </div>
       </div>
 
@@ -204,6 +302,7 @@
               <th>Fecha</th>
               <th style="text-align:center">Interesado</th>
               <th>Comentario</th>
+              <th style="text-align:center">Acciones</th>
             </tr>
           </thead>
           <tbody id="leads-body"></tbody>
@@ -325,6 +424,18 @@ function renderTable(leads) {
             onkeydown="if(event.key==='Enter') this.blur()">
           <span class="save-dot" id="dot-com-${lead.id}"></span>
         </td>
+        <td style="text-align:center;white-space:nowrap">
+          <button onclick="openEdit('${lead.id}')"
+            class="inline-flex items-center gap-1 text-xs font-bold text-[#4A148C] hover:bg-[#f3ebf6] px-2 py-1.5 rounded-lg transition-colors">
+            <span class="material-symbols-outlined" style="font-size:15px">edit</span>
+            Editar
+          </button>
+          <button onclick="deleteLead('${lead.id}', '${esc(lead.name)}')"
+            class="inline-flex items-center gap-1 text-xs font-bold text-red-500 hover:bg-red-50 px-2 py-1.5 rounded-lg transition-colors ml-1">
+            <span class="material-symbols-outlined" style="font-size:15px">delete</span>
+            Eliminar
+          </button>
+        </td>
       </tr>`;
   }).join('');
 }
@@ -415,6 +526,162 @@ function flashDot(dot) {
   dot.classList.add('show');
   setTimeout(() => dot.classList.remove('show'), 1800);
 }
+
+// ── Edit modal ────────────────────────────────────────
+function openEdit(id) {
+  const lead = allLeads.find(l => l.id === id);
+  if (!lead) return;
+  document.getElementById('edit-id').value      = id;
+  document.getElementById('edit-name').value    = lead.name    || '';
+  document.getElementById('edit-email').value   = lead.email   || '';
+  document.getElementById('edit-company').value = lead.company || '';
+  document.getElementById('edit-job').value     = lead.job_title || '';
+  document.getElementById('edit-error').classList.add('hidden');
+  const modal = document.getElementById('edit-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeEdit() {
+  const modal = document.getElementById('edit-modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+async function saveEdit() {
+  const id      = document.getElementById('edit-id').value;
+  const name    = document.getElementById('edit-name').value.trim();
+  const email   = document.getElementById('edit-email').value.trim();
+  const company = document.getElementById('edit-company').value.trim();
+  const job     = document.getElementById('edit-job').value.trim();
+  const errEl   = document.getElementById('edit-error');
+
+  if (!name || !email || !company || !job) {
+    errEl.textContent = 'Todos los campos son obligatorios.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  try {
+    const { error } = await db.from('leads').update({
+      name, email, company, job_title: job
+    }).eq('id', id);
+    if (error) throw error;
+
+    // Update local state
+    const lead = allLeads.find(l => l.id === id);
+    if (lead) Object.assign(lead, { name, email, company, job_title: job });
+
+    closeEdit();
+    renderTable(allLeads);
+  } catch (err) {
+    errEl.textContent = 'Error al guardar: ' + err.message;
+    errEl.classList.remove('hidden');
+  }
+}
+
+// ── Delete ────────────────────────────────────────────
+async function deleteLead(id, name) {
+  if (!confirm(`¿Eliminar el registro de "${name}"?\nEsta acción no se puede deshacer.`)) return;
+  try {
+    const { error } = await db.from('leads').delete().eq('id', id);
+    if (error) throw error;
+    allLeads = allLeads.filter(l => l.id !== id);
+    renderStats();
+    renderTable(allLeads);
+  } catch (err) {
+    alert('Error al eliminar: ' + err.message);
+  }
+}
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeEdit();
+});
+
+// ── Manual add modal ──────────────────────────────────
+function openManual() {
+  // Clear previous values
+  ['manual-name','manual-email','manual-company','manual-job','manual-comment'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('manual-coffee').value = '';
+  document.getElementById('manual-error').classList.add('hidden');
+  document.getElementById('manual-btn').disabled = false;
+  document.getElementById('manual-btn').textContent = 'Guardar';
+  const modal = document.getElementById('manual-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  document.getElementById('manual-name').focus();
+}
+
+function closeManual() {
+  const modal = document.getElementById('manual-modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+async function saveManual() {
+  const name     = document.getElementById('manual-name').value.trim();
+  const email    = document.getElementById('manual-email').value.trim();
+  const company  = document.getElementById('manual-company').value.trim();
+  const job      = document.getElementById('manual-job').value.trim();
+  const cafe     = document.getElementById('manual-coffee').value;
+  const comment  = document.getElementById('manual-comment').value.trim();
+  const errEl    = document.getElementById('manual-error');
+  const btn      = document.getElementById('manual-btn');
+
+  errEl.classList.add('hidden');
+
+  if (!name) {
+    errEl.textContent = 'El nombre es obligatorio.';
+    errEl.classList.remove('hidden');
+    document.getElementById('manual-name').focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Guardando…';
+
+  const coffeeDescs = {
+    'Espresso':       'Intenso y concentrado',
+    'Americano':      'Suave y equilibrado',
+    'Cortado':        'Espresso con leche',
+    'Cappuccino':     'Cremoso y esponjoso',
+    'Latte Vainilla': 'Dulce y aromático',
+    'Latte Caramelo': 'Dulce y caramelizado',
+    'Mocaccino':      'Chocolate y café'
+  };
+
+  try {
+    const { data, error } = await db.from('leads').insert({
+      name,
+      email:      email || '—',
+      company:    company || '—',
+      job_title:  job || '—',
+      coffee_name: cafe || null,
+      coffee_desc: cafe ? (coffeeDescs[cafe] || '') : null,
+      interested: false,
+      comment
+    }).select().single();
+
+    if (error) throw error;
+
+    allLeads.unshift(data);
+    renderStats();
+    renderTable(allLeads);
+    closeManual();
+  } catch (err) {
+    errEl.textContent = 'Error al guardar: ' + err.message;
+    errEl.classList.remove('hidden');
+    btn.disabled = false;
+    btn.textContent = 'Guardar';
+  }
+}
+
+document.getElementById('manual-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeManual();
+});
 
 // Cargar datos al abrir la página
 loadData();
