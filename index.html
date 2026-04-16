@@ -506,21 +506,6 @@
       <p class="text-xs text-on-surface-variant/50">Pasarela de Pago Segura · SSL</p>
     </div>
 
-    <!-- Order banner -->
-    <div class="bg-secondary-container/30 rounded-xl p-4 mb-7 flex items-center gap-4">
-      <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 shadow">
-        <img id="payment-img" src="" alt="Café" class="w-full h-full object-cover">
-      </div>
-      <div class="flex-1">
-        <p class="text-xs text-on-surface-variant uppercase tracking-widest font-semibold mb-0.5">Pagando con Payku</p>
-        <p class="font-headline font-bold text-primary text-lg leading-tight" id="payment-coffee-name">—</p>
-        <div class="flex items-baseline gap-2 mt-1">
-          <span class="font-headline font-extrabold text-xl text-primary" id="payment-original">—</span>
-          <span class="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">Payku paga</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Card visual -->
     <div class="card-gradient rounded-xl p-6 mb-7 text-white relative overflow-hidden shadow-xl">
       <div class="absolute top-4 left-5 z-10 opacity-90">
@@ -634,38 +619,17 @@
 <!-- JAVASCRIPT                                      -->
 <!-- ================================================ -->
 <script>
-// ──────────────────────────────────────────────────────
-// SUPABASE CONFIGURATION
-// 1. Crea una cuenta gratis en https://supabase.com
-// 2. Crea un proyecto nuevo
-// 3. En Settings → API copia la URL del proyecto y el anon/public key
-// 4. Ve a SQL Editor y ejecuta:
-//
-//    CREATE TABLE leads (
-//      id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-//      name text NOT NULL,
-//      email text NOT NULL,
-//      company text NOT NULL,
-//      job_title text NOT NULL,
-//      coffee_name text,
-//      coffee_desc text,
-//      created_at timestamptz DEFAULT now()
-//    );
-//    ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
-//    CREATE POLICY "public insert" ON leads FOR INSERT WITH CHECK (true);
-//
-// 5. Reemplaza los valores de abajo con los tuyos:
-// ──────────────────────────────────────────────────────
+
 const SUPABASE_URL      = 'https://wlkwvzwxshbkwyeyhncd.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsa3d2end4c2hia3d5ZXlobmNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTExODgsImV4cCI6MjA5MTkyNzE4OH0.6w0wyItdfgBUxwdhSL5rSjRG51AA_-in82Sr6unp0VQ';
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ── State ──────────────────────────────────────────────
+//  State ─
 let cart = null;          // { name, image, desc, price }
 let currentUser = null;   // { name, email, company, job }
 
-// ── Navigation ─────────────────────────────────────────
+//  Navigation ─
 function goTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const el = document.getElementById('screen-' + screenId);
@@ -675,7 +639,7 @@ function goTo(screenId) {
   }
 }
 
-// ── Email validation ───────────────────────────────────
+//  Email validation ─
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function validateEmail(input, isBlur = false) {
@@ -683,7 +647,6 @@ function validateEmail(input, isBlur = false) {
   const fb      = document.getElementById('email-feedback');
   const isEmpty = val.length === 0;
 
-  // Don't show anything while field is still empty and user hasn't left it
   if (isEmpty && !isBlur) {
     fb.classList.add('hidden');
     input.style.borderBottomColor = '';
@@ -702,7 +665,7 @@ function validateEmail(input, isBlur = false) {
     showEmailFeedback('ok', 'Correo válido');
     input.style.borderBottomColor = '#16a34a'; // green-600
   } else {
-    // Show specific hint depending on what's missing
+   
     let msg = 'Correo inválido';
     if (!val.includes('@'))           msg = 'Falta el símbolo @';
     else if (val.endsWith('@'))       msg = 'Falta el dominio después de @';
@@ -726,7 +689,7 @@ function showEmailFeedback(type, message) {
   }
 }
 
-// ── Cart ───────────────────────────────────────────────
+// Cart 
 function addToCart(name, image, desc, price) {
   cart = { name, image, desc, price };
 
@@ -787,7 +750,7 @@ function removeFromCart() {
   renderCartItem();
 }
 
-// ── Registration ───────────────────────────────────────
+// Registration 
 async function handleRegister(e) {
   e.preventDefault();
 
@@ -854,7 +817,7 @@ async function handleRegister(e) {
   }, 3000);
 }
 
-// ── Confetti ───────────────────────────────────────────
+//  Confetti
 function launchConfetti() {
   const colors = ['#310065','#4A148C','#6c509c','#c9aafe','#ffdcc5','#ffb782','#ffffff'];
   for (let i = 0; i < 70; i++) {
@@ -876,7 +839,7 @@ function launchConfetti() {
   }
 }
 
-// ── Reset ──────────────────────────────────────────────
+//  Reset ─
 function resetAll() {
   cart = null;
   currentUser = null;
@@ -889,7 +852,7 @@ function resetAll() {
   goTo('catalog');
 }
 
-// ── Stock check on load ────────────────────────────────
+//  Stock check on load 
 async function checkStock() {
   try {
     const [invRes, countRes] = await Promise.all([
