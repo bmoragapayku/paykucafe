@@ -60,6 +60,22 @@
     .comment-input:focus { border-bottom-color: #4A148C; }
     .comment-input::placeholder { color: rgba(74,68,82,0.35); }
 
+    /* Mobile card comment input */
+    .comment-input-card {
+      border: none;
+      border-bottom: 1.5px solid rgba(205,195,212,0.4);
+      background: transparent;
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      color: #1d1a21;
+      outline: none;
+      width: 100%;
+      padding: 4px 2px;
+      transition: border-color 0.2s;
+    }
+    .comment-input-card:focus { border-bottom-color: #4A148C; }
+    .comment-input-card::placeholder { color: rgba(74,68,82,0.35); }
+
     /* Save indicator */
     .save-dot {
       display: inline-block;
@@ -92,13 +108,19 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+
+    /* Responsive table/card switcher */
+    .show-desktop { display: none; }
+    .show-mobile  { display: none; }
+    @media (min-width: 768px) { .show-desktop { display: block; overflow-x: auto; } }
+    @media (max-width: 767px) { .show-mobile  { display: block; } }
   </style>
 </head>
 <body>
 
 <!-- ============ MODAL AGREGAR MANUAL ============ -->
-<div id="manual-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background:rgba(49,0,101,0.25);backdrop-filter:blur(4px)">
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+<div id="manual-modal" class="fixed inset-0 z-50 hidden items-end sm:items-center justify-center p-0 sm:p-4" style="background:rgba(49,0,101,0.25);backdrop-filter:blur(4px)">
+  <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-md p-5 sm:p-8 max-h-[90vh] overflow-y-auto">
     <div class="flex justify-between items-center mb-6">
       <div>
         <h3 class="font-headline font-extrabold text-xl text-[#310065]">Agregar registro manual</h3>
@@ -156,8 +178,8 @@
 </div>
 
 <!-- ============ MODAL EDITAR ============ -->
-<div id="edit-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background:rgba(49,0,101,0.25);backdrop-filter:blur(4px)">
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 animate-fadeIn">
+<div id="edit-modal" class="fixed inset-0 z-50 hidden items-end sm:items-center justify-center p-0 sm:p-4" style="background:rgba(49,0,101,0.25);backdrop-filter:blur(4px)">
+  <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-md p-5 sm:p-8 animate-fadeIn max-h-[90vh] overflow-y-auto">
     <div class="flex justify-between items-center mb-6">
       <h3 class="font-headline font-extrabold text-xl text-[#310065]">Editar registro</h3>
       <button onclick="closeEdit()" class="material-symbols-outlined text-[#4a4452] hover:text-[#310065] transition-colors">close</button>
@@ -194,51 +216,51 @@
 
   <!-- Nav -->
   <nav class="sticky top-0 z-50 bg-[#fef7ff]/90 backdrop-blur-md shadow-[0px_4px_20px_rgba(49,0,101,0.06)]">
-    <div class="flex justify-between items-center px-6 py-3 max-w-screen-xl mx-auto">
-      <div class="flex items-center gap-3">
+    <div class="flex justify-between items-center px-4 md:px-6 py-3 max-w-screen-xl mx-auto">
+      <div class="flex items-center gap-2 md:gap-3">
         <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
-          alt="Payku" class="h-7">
-        <span class="text-xs font-bold text-[#4a4452] uppercase tracking-widest border-l border-[#cdc3d4]/40 pl-3">Admin · Feria</span>
+          alt="Payku" class="h-6 md:h-7">
+        <span class="text-xs font-bold text-[#4a4452] uppercase tracking-widest border-l border-[#cdc3d4]/40 pl-2 md:pl-3">Admin · Feria</span>
       </div>
-      <div class="flex items-center gap-3">
-        <span id="last-refresh" class="text-xs text-[#4a4452]/60 hidden md:block"></span>
-        <button onclick="loadData()" class="flex items-center gap-1.5 text-xs font-bold text-[#310065] hover:opacity-70 transition-opacity">
+      <div class="flex items-center gap-2 md:gap-3">
+        <span id="last-refresh" class="text-xs text-[#4a4452]/60 hidden lg:block"></span>
+        <button onclick="loadData()" class="flex items-center gap-1 text-xs font-bold text-[#310065] hover:opacity-70 transition-opacity px-2 py-2 rounded-lg hover:bg-[#f3ebf6]">
           <span class="material-symbols-outlined text-base" id="refresh-icon">refresh</span>
-          Actualizar
+          <span class="hidden sm:inline">Actualizar</span>
         </button>
-        <button onclick="exportCSV()" class="flex items-center gap-1.5 text-xs font-bold bg-[#f3ebf6] text-[#4A148C] px-3 py-2 rounded-lg hover:bg-[#e8dcf8] transition-colors">
+        <button onclick="exportCSV()" class="flex items-center gap-1 text-xs font-bold bg-[#f3ebf6] text-[#4A148C] px-2 sm:px-3 py-2 rounded-lg hover:bg-[#e8dcf8] transition-colors">
           <span class="material-symbols-outlined text-base">download</span>
-          Exportar CSV
+          <span class="hidden sm:inline">Exportar CSV</span>
         </button>
       </div>
     </div>
   </nav>
 
-  <main class="max-w-screen-xl mx-auto px-6 py-8">
+  <main class="max-w-screen-xl mx-auto px-4 md:px-6 py-5 md:py-8">
 
     <!-- Stats row -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 fade-in">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-5 md:mb-8 fade-in">
 
-      <div class="bg-white rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
+      <div class="bg-white rounded-xl p-4 md:p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
         <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-1">Cafés entregados</p>
         <p class="font-headline font-extrabold text-3xl text-[#310065]" id="stat-delivered">—</p>
       </div>
 
-      <div class="bg-white rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
+      <div class="bg-white rounded-xl p-4 md:p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
         <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-1">Disponibles</p>
         <p class="font-headline font-extrabold text-3xl text-[#310065]" id="stat-remaining">—</p>
       </div>
 
-      <div class="bg-white rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
+      <div class="bg-white rounded-xl p-4 md:p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
         <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-1">Interesados</p>
         <p class="font-headline font-extrabold text-3xl text-[#4A148C]" id="stat-interested">—</p>
       </div>
 
-      <div class="bg-[#f3ebf6] rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
-        <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-2">Total cafés a repartir</p>
+      <div class="bg-[#f3ebf6] rounded-xl p-4 md:p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
+        <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-2">Total a repartir</p>
         <div class="flex items-center gap-2">
           <input id="total-input" type="number" min="1"
-            class="w-20 bg-white border border-[#cdc3d4]/40 rounded-lg px-3 py-1.5 font-headline font-bold text-lg text-[#310065] outline-none focus:border-[#4A148C] transition-colors">
+            class="w-16 md:w-20 bg-white border border-[#cdc3d4]/40 rounded-lg px-2 md:px-3 py-1.5 font-headline font-bold text-lg text-[#310065] outline-none focus:border-[#4A148C] transition-colors">
           <button onclick="saveTotal()"
             class="bg-[#310065] text-white text-xs font-bold px-3 py-2 rounded-lg hover:opacity-80 transition-opacity">
             Guardar
@@ -250,7 +272,7 @@
     </div>
 
     <!-- Progress bar -->
-    <div class="bg-white rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)] mb-8 fade-in">
+    <div class="bg-white rounded-xl p-4 md:p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)] mb-5 md:mb-8 fade-in">
       <div class="flex justify-between items-center mb-3">
         <span class="text-xs font-bold text-[#4a4452] uppercase tracking-wider">Progreso de entrega</span>
         <span class="text-sm font-bold text-[#310065]" id="progress-label">0 / 0</span>
@@ -260,18 +282,20 @@
       </div>
     </div>
 
-    <!-- Table -->
+    <!-- Table / Cards panel -->
     <div class="bg-white rounded-xl shadow-[0px_8px_24px_rgba(49,0,101,0.06)] overflow-hidden fade-in">
-      <div class="flex justify-between items-center px-6 py-4 border-b border-[#f3ebf6]">
+
+      <!-- Panel header -->
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 px-4 md:px-6 py-4 border-b border-[#f3ebf6]">
         <h2 class="font-headline font-bold text-[#310065] text-lg">Registros</h2>
-        <div class="flex items-center gap-3">
-          <input id="search-input" type="text" placeholder="Buscar por nombre, empresa..."
+        <div class="flex items-center gap-2">
+          <input id="search-input" type="text" placeholder="Buscar nombre, empresa..."
             oninput="filterTable()"
-            class="text-sm bg-[#f9f1fb] border border-[#cdc3d4]/30 rounded-lg px-3 py-2 outline-none focus:border-[#4A148C] w-56 transition-colors">
+            class="text-sm bg-[#f9f1fb] border border-[#cdc3d4]/30 rounded-lg px-3 py-2 outline-none focus:border-[#4A148C] flex-1 sm:w-52 transition-colors">
           <button onclick="openManual()"
-            class="flex items-center gap-1.5 text-xs font-bold bg-gradient-to-r from-[#310065] to-[#4A148C] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap">
+            class="flex items-center gap-1 text-xs font-bold bg-gradient-to-r from-[#310065] to-[#4A148C] text-white px-3 py-2 rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap">
             <span class="material-symbols-outlined text-base">add</span>
-            Agregar manual
+            <span class="hidden sm:inline">Agregar manual</span>
           </button>
         </div>
       </div>
@@ -288,8 +312,8 @@
         <p class="text-sm text-[#4a4452]">Aún no hay registros</p>
       </div>
 
-      <!-- Table -->
-      <div id="table-wrap" class="hidden table-wrap">
+      <!-- Desktop table (md+) -->
+      <div id="table-wrap" class="table-wrap">
         <table id="leads-table">
           <thead>
             <tr>
@@ -308,6 +332,10 @@
           <tbody id="leads-body"></tbody>
         </table>
       </div>
+
+      <!-- Mobile cards (< md) -->
+      <div id="cards-wrap" class="divide-y divide-[#f3ebf6]"></div>
+
     </div>
 
   </main>
@@ -378,6 +406,7 @@ function renderStats() {
 // ── Table ─────────────────────────────────────────────
 function renderTable(leads) {
   const body    = document.getElementById('leads-body');
+  const cards   = document.getElementById('cards-wrap');
   const loading = document.getElementById('table-loading');
   const empty   = document.getElementById('table-empty');
   const wrap    = document.getElementById('table-wrap');
@@ -386,58 +415,127 @@ function renderTable(leads) {
 
   if (!leads.length) {
     empty.classList.remove('hidden');
-    wrap.classList.add('hidden');
+    wrap.classList.remove('show-desktop');
+    cards.classList.remove('show-mobile');
     return;
   }
 
   empty.classList.add('hidden');
-  wrap.classList.remove('hidden');
+  wrap.classList.add('show-desktop');
+  cards.classList.add('show-mobile');
 
-  body.innerHTML = leads.map((lead, i) => {
+  // Clear previous content
+  body.innerHTML = '';
+  cards.innerHTML = '';
+
+  leads.forEach((lead, i) => {
     const date = new Date(lead.created_at).toLocaleString('es-CL', {
       day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
     });
     const coffeePill = lead.coffee_name
-      ? `<span class="pill bg-[#f3ebf6] text-[#4A148C]">${lead.coffee_name}</span>`
+      ? `<span class="pill bg-[#f3ebf6] text-[#4A148C]">${esc(lead.coffee_name)}</span>`
       : '<span class="text-[#cdc3d4]">—</span>';
 
-    return `
-      <tr id="row-${lead.id}">
-        <td class="text-[#4a4452]/50 font-mono text-xs">${leads.length - i}</td>
-        <td class="font-semibold text-[#310065]">${esc(lead.name)}</td>
-        <td class="text-[#4a4452]">${esc(lead.email)}</td>
-        <td>${esc(lead.company)}</td>
-        <td class="text-[#4a4452]">${esc(lead.job_title)}</td>
-        <td>${coffeePill}</td>
-        <td class="text-xs text-[#4a4452]/70 whitespace-nowrap">${date}</td>
-        <td style="text-align:center">
+    // ── Desktop row ──
+    const tr = document.createElement('tr');
+    tr.id = 'row-' + lead.id;
+    tr.innerHTML = `
+      <td class="text-[#4a4452]/50 font-mono text-xs">${leads.length - i}</td>
+      <td class="font-semibold text-[#310065]">${esc(lead.name)}</td>
+      <td class="text-[#4a4452]">${esc(lead.email)}</td>
+      <td>${esc(lead.company)}</td>
+      <td class="text-[#4a4452]">${esc(lead.job_title)}</td>
+      <td>${coffeePill}</td>
+      <td class="text-xs text-[#4a4452]/70 whitespace-nowrap">${date}</td>
+      <td style="text-align:center">
+        <input type="checkbox" class="check-interested"
+          ${lead.interested ? 'checked' : ''}
+          onchange="toggleInterested('${lead.id}', this.checked)">
+        <span class="save-dot" id="dot-int-${lead.id}"></span>
+      </td>
+      <td>
+        <input type="text" class="comment-input"
+          value="${esc(lead.comment || '')}"
+          placeholder="Agregar nota…"
+          onblur="saveComment('${lead.id}', this.value)"
+          onkeydown="if(event.key==='Enter') this.blur()">
+        <span class="save-dot" id="dot-com-${lead.id}"></span>
+      </td>
+      <td style="text-align:center;white-space:nowrap">
+        <button onclick="openEdit('${lead.id}')"
+          class="inline-flex items-center gap-1 text-xs font-bold text-[#4A148C] hover:bg-[#f3ebf6] px-2 py-1.5 rounded-lg transition-colors">
+          <span class="material-symbols-outlined" style="font-size:15px">edit</span>
+          Editar
+        </button>
+        <button onclick="deleteLead('${lead.id}', '${esc(lead.name)}')"
+          class="inline-flex items-center gap-1 text-xs font-bold text-red-500 hover:bg-red-50 px-2 py-1.5 rounded-lg transition-colors ml-1">
+          <span class="material-symbols-outlined" style="font-size:15px">delete</span>
+          Eliminar
+        </button>
+      </td>`;
+    body.appendChild(tr);
+
+    // ── Mobile card ──
+    const card = document.createElement('div');
+    card.id = 'card-' + lead.id;
+    card.className = 'p-4 fade-in';
+    card.innerHTML = `
+      <div class="flex justify-between items-start gap-2 mb-1">
+        <div class="min-w-0">
+          <p class="font-semibold text-[#310065] text-sm truncate">${esc(lead.name)}</p>
+          <p class="text-xs text-[#4a4452]/70 truncate">${esc(lead.email)}</p>
+        </div>
+        ${coffeePill}
+      </div>
+      <div class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[#4a4452]/70 mb-3">
+        <span>${esc(lead.company)}</span>
+        ${lead.job_title && lead.job_title !== '—' ? `<span>· ${esc(lead.job_title)}</span>` : ''}
+        <span class="ml-auto">${date}</span>
+      </div>
+      <div class="mb-3">
+        <input type="text" class="comment-input-card"
+          value="${esc(lead.comment || '')}"
+          placeholder="Agregar nota…"
+          onblur="saveComment('${lead.id}', this.value)"
+          onkeydown="if(event.key==='Enter') this.blur()">
+        <span class="save-dot" id="dot-com-card-${lead.id}"></span>
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="flex items-center gap-2 cursor-pointer select-none">
           <input type="checkbox" class="check-interested"
             ${lead.interested ? 'checked' : ''}
-            onchange="toggleInterested('${lead.id}', this.checked)">
-          <span class="save-dot" id="dot-int-${lead.id}"></span>
-        </td>
-        <td>
-          <input type="text" class="comment-input"
-            value="${esc(lead.comment || '')}"
-            placeholder="Agregar nota…"
-            onblur="saveComment('${lead.id}', this.value)"
-            onkeydown="if(event.key==='Enter') this.blur()">
-          <span class="save-dot" id="dot-com-${lead.id}"></span>
-        </td>
-        <td style="text-align:center;white-space:nowrap">
+            onchange="toggleInterestedCard('${lead.id}', this.checked)">
+          <span class="save-dot" id="dot-int-card-${lead.id}"></span>
+          <span class="text-xs text-[#4a4452] font-semibold">Interesado</span>
+        </label>
+        <div class="flex gap-1">
           <button onclick="openEdit('${lead.id}')"
             class="inline-flex items-center gap-1 text-xs font-bold text-[#4A148C] hover:bg-[#f3ebf6] px-2 py-1.5 rounded-lg transition-colors">
             <span class="material-symbols-outlined" style="font-size:15px">edit</span>
             Editar
           </button>
           <button onclick="deleteLead('${lead.id}', '${esc(lead.name)}')"
-            class="inline-flex items-center gap-1 text-xs font-bold text-red-500 hover:bg-red-50 px-2 py-1.5 rounded-lg transition-colors ml-1">
+            class="inline-flex items-center gap-1 text-xs font-bold text-red-500 hover:bg-red-50 px-2 py-1.5 rounded-lg transition-colors">
             <span class="material-symbols-outlined" style="font-size:15px">delete</span>
-            Eliminar
           </button>
-        </td>
-      </tr>`;
-  }).join('');
+        </div>
+      </div>`;
+    cards.appendChild(card);
+  });
+}
+
+// Mobile card interested toggle (syncs desktop dot too)
+async function toggleInterestedCard(id, value) {
+  const dot = document.getElementById('dot-int-card-' + id);
+  try {
+    await db.from('leads').update({ interested: value }).eq('id', id);
+    flashDot(dot);
+    const lead = allLeads.find(l => l.id === id);
+    if (lead) lead.interested = value;
+    renderStats();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 // ── Filter ────────────────────────────────────────────
@@ -456,10 +554,10 @@ function filterTable() {
 
 // ── Toggle interested ─────────────────────────────────
 async function toggleInterested(id, value) {
-  const dot = document.getElementById('dot-int-' + id);
   try {
     await db.from('leads').update({ interested: value }).eq('id', id);
-    flashDot(dot);
+    const dot = document.getElementById('dot-int-' + id);
+    if (dot) flashDot(dot);
     const lead = allLeads.find(l => l.id === id);
     if (lead) lead.interested = value;
     renderStats();
@@ -470,10 +568,12 @@ async function toggleInterested(id, value) {
 
 // ── Save comment ──────────────────────────────────────
 async function saveComment(id, value) {
-  const dot = document.getElementById('dot-com-' + id);
   try {
     await db.from('leads').update({ comment: value }).eq('id', id);
-    flashDot(dot);
+    const dotDesktop = document.getElementById('dot-com-' + id);
+    const dotCard    = document.getElementById('dot-com-card-' + id);
+    if (dotDesktop) flashDot(dotDesktop);
+    if (dotCard)    flashDot(dotCard);
     const lead = allLeads.find(l => l.id === id);
     if (lead) lead.comment = value;
   } catch (err) {
