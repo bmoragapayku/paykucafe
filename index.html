@@ -790,12 +790,7 @@ async function handleRegister(e) {
 
   currentUser = { name, email, company, job };
 
-  // Populate payment screen
-  if (cart) {
-    document.getElementById('payment-coffee-name').textContent = cart.name;
-    document.getElementById('payment-img').src = cart.image;
-    document.getElementById('payment-original').textContent = cart.price;
-  }
+  // (payment banner removed)
 
   btn.textContent = 'Continuar al Pago';
   btn.disabled = false;
