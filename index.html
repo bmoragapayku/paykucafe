@@ -167,6 +167,30 @@
 <body class="bg-surface font-body text-on-surface min-h-screen">
 
 <!-- ================================================ -->
+<!-- SCREEN: SIN STOCK                               -->
+<!-- ================================================ -->
+<div id="screen-nostock" class="screen">
+  <main class="min-h-screen flex items-center justify-center px-6">
+    <div class="text-center max-w-md animate-in">
+      <img src="https://payku.com/images/noto.png" alt="Payku" class="w-28 mx-auto mb-6 opacity-60">
+      <h1 class="font-headline font-extrabold text-4xl text-primary tracking-tight mb-3">
+        ¡Gracias por visitarnos!
+      </h1>
+      <p class="text-on-surface-variant text-lg leading-relaxed mb-6">
+        Los cafés de hoy ya fueron todos reclamados. 🎉
+      </p>
+      <p class="text-on-surface-variant text-base leading-relaxed">
+        Pasa por el stand de Payku y conversamos igual. Tenemos mucho que contarte sobre pagos simples para tu negocio.
+      </p>
+      <div class="mt-10 inline-flex items-center gap-2 bg-secondary-container/40 text-on-secondary-container px-5 py-3 rounded-full text-sm font-semibold">
+        <span class="material-symbols-outlined text-base">storefront</span>
+        Visita nuestro stand
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ================================================ -->
 <!-- NAV — always visible                             -->
 <!-- ================================================ -->
 <nav class="fixed top-0 w-full z-50 bg-[#fef7ff]/80 backdrop-blur-md shadow-[0px_12px_32px_rgba(49,0,101,0.06)]">
@@ -629,8 +653,8 @@
 //
 // 5. Reemplaza los valores de abajo con los tuyos:
 // ──────────────────────────────────────────────────────
-const SUPABASE_URL      = 'https://TU_PROJECT_ID.supabase.co';
-const SUPABASE_ANON_KEY = 'TU_ANON_KEY_AQUI';
+const SUPABASE_URL      = 'https://wlkwvzwxshbkwyeyhncd.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsa3d2end4c2hia3d5ZXlobmNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTExODgsImV4cCI6MjA5MTkyNzE4OH0.6w0wyItdfgBUxwdhSL5rSjRG51AA_-in82Sr6unp0VQ';
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -889,7 +913,7 @@ function resetAll() {
 
   document.getElementById('cart-badge').style.display = 'none';
   document.getElementById('register-form').reset();
-  document.getElementById('card-display').textContent     = '4241 2412 2422 3142';
+  document.getElementById('card-display').textContent     = '4242 4242 4242 4242';
   document.getElementById('card-name-display').textContent = 'PAYKU SPA';
   document.getElementById('card-exp-display').textContent  = '12/28';
   document.getElementById('pay-error').classList.add('hidden');
@@ -899,8 +923,30 @@ function resetAll() {
   goTo('catalog');
 }
 
-// Init cart display
+// ── Stock check on load ────────────────────────────────
+async function checkStock() {
+  try {
+    const [invRes, countRes] = await Promise.all([
+      db.from('coffee_inventory').select('total').eq('id', 1).single(),
+      db.from('leads').select('id', { count: 'exact', head: true })
+    ]);
+    const total     = invRes.data?.total ?? 0;
+    const delivered = countRes.count ?? 0;
+    if (total > 0 && delivered >= total) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-nostock').classList.add('active');
+      // Hide nav cart button when no stock
+      document.getElementById('cart-btn-nav') && (document.getElementById('cart-btn-nav').style.display = 'none');
+    }
+  } catch (err) {
+    // Si falla la verificación no bloqueamos la experiencia
+    console.warn('Stock check failed:', err.message);
+  }
+}
+
+// Init
 renderCartItem();
+checkStock();
 </script>
 
 </body>
