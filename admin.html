@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payku · Admin Feria</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    body { font-family: 'Manrope', sans-serif; background: #fef7ff; color: #1d1a21; }
+    .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    /* Scrollable table */
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; min-width: 900px; }
+    thead th {
+      background: #f3ebf6;
+      color: #4a4452;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 12px 14px;
+      text-align: left;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(205,195,212,0.25);
+      transition: background 0.15s;
+    }
+    tbody tr:hover { background: #f9f1fb; }
+    td { padding: 12px 14px; font-size: 13px; vertical-align: middle; }
+
+    /* Checkbox custom */
+    .check-interested {
+      width: 18px; height: 18px;
+      accent-color: #4A148C;
+      cursor: pointer;
+    }
+
+    /* Comment input */
+    .comment-input {
+      border: none;
+      border-bottom: 1.5px solid rgba(205,195,212,0.4);
+      background: transparent;
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
+      color: #1d1a21;
+      outline: none;
+      width: 180px;
+      padding: 4px 2px;
+      transition: border-color 0.2s;
+    }
+    .comment-input:focus { border-bottom-color: #4A148C; }
+    .comment-input::placeholder { color: rgba(74,68,82,0.35); }
+
+    /* Save indicator */
+    .save-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #16a34a;
+      opacity: 0;
+      transition: opacity 0.3s;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+    .save-dot.show { opacity: 1; }
+
+    /* Tag pills */
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+
+    /* Spin */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin 0.8s linear infinite; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+  </style>
+</head>
+<body>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard">
+
+  <!-- Nav -->
+  <nav class="sticky top-0 z-50 bg-[#fef7ff]/90 backdrop-blur-md shadow-[0px_4px_20px_rgba(49,0,101,0.06)]">
+    <div class="flex justify-between items-center px-6 py-3 max-w-screen-xl mx-auto">
+      <div class="flex items-center gap-3">
+        <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
+          alt="Payku" class="h-7">
+        <span class="text-xs font-bold text-[#4a4452] uppercase tracking-widest border-l border-[#cdc3d4]/40 pl-3">Admin · Feria</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="last-refresh" class="text-xs text-[#4a4452]/60 hidden md:block"></span>
+        <button onclick="loadData()" class="flex items-center gap-1.5 text-xs font-bold text-[#310065] hover:opacity-70 transition-opacity">
+          <span class="material-symbols-outlined text-base" id="refresh-icon">refresh</span>
+          Actualizar
+        </button>
+        <button onclick="exportCSV()" class="flex items-center gap-1.5 text-xs font-bold bg-[#f3ebf6] text-[#4A148C] px-3 py-2 rounded-lg hover:bg-[#e8dcf8] transition-colors">
+          <span class="material-symbols-outlined text-base">download</span>
+          Exportar CSV
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-screen-xl mx-auto px-6 py-8">
+
+    <!-- Stats row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 fade-in">
+
+      <div class="bg-white rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
+        <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-1">Cafés entregados</p>
+        <p class="font-headline font-extrabold text-3xl text-[#310065]" id="stat-delivered">—</p>
+      </div>
+
+      <div class="bg-white rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
+        <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-1">Disponibles</p>
+        <p class="font-headline font-extrabold text-3xl text-[#310065]" id="stat-remaining">—</p>
+      </div>
+
+      <div class="bg-white rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
+        <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-1">Interesados</p>
+        <p class="font-headline font-extrabold text-3xl text-[#4A148C]" id="stat-interested">—</p>
+      </div>
+
+      <div class="bg-[#f3ebf6] rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)]">
+        <p class="text-xs font-bold text-[#4a4452] uppercase tracking-wider mb-2">Total cafés a repartir</p>
+        <div class="flex items-center gap-2">
+          <input id="total-input" type="number" min="1"
+            class="w-20 bg-white border border-[#cdc3d4]/40 rounded-lg px-3 py-1.5 font-headline font-bold text-lg text-[#310065] outline-none focus:border-[#4A148C] transition-colors">
+          <button onclick="saveTotal()"
+            class="bg-[#310065] text-white text-xs font-bold px-3 py-2 rounded-lg hover:opacity-80 transition-opacity">
+            Guardar
+          </button>
+          <span id="total-saved" class="save-dot"></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Progress bar -->
+    <div class="bg-white rounded-xl p-5 shadow-[0px_8px_24px_rgba(49,0,101,0.06)] mb-8 fade-in">
+      <div class="flex justify-between items-center mb-3">
+        <span class="text-xs font-bold text-[#4a4452] uppercase tracking-wider">Progreso de entrega</span>
+        <span class="text-sm font-bold text-[#310065]" id="progress-label">0 / 0</span>
+      </div>
+      <div class="w-full bg-[#f3ebf6] rounded-full h-3">
+        <div id="progress-bar" class="bg-gradient-to-r from-[#310065] to-[#6c509c] h-3 rounded-full transition-all duration-500" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-xl shadow-[0px_8px_24px_rgba(49,0,101,0.06)] overflow-hidden fade-in">
+      <div class="flex justify-between items-center px-6 py-4 border-b border-[#f3ebf6]">
+        <h2 class="font-headline font-bold text-[#310065] text-lg">Registros</h2>
+        <div class="flex items-center gap-3">
+          <input id="search-input" type="text" placeholder="Buscar por nombre, empresa..."
+            oninput="filterTable()"
+            class="text-sm bg-[#f9f1fb] border border-[#cdc3d4]/30 rounded-lg px-3 py-2 outline-none focus:border-[#4A148C] w-56 transition-colors">
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="table-loading" class="py-16 text-center">
+        <div class="w-8 h-8 border-2 border-[#f3ebf6] border-t-[#4A148C] rounded-full spin mx-auto mb-3"></div>
+        <p class="text-sm text-[#4a4452]">Cargando registros…</p>
+      </div>
+
+      <!-- Empty -->
+      <div id="table-empty" class="hidden py-16 text-center">
+        <span class="material-symbols-outlined text-4xl text-[#cdc3d4] block mb-2">coffee</span>
+        <p class="text-sm text-[#4a4452]">Aún no hay registros</p>
+      </div>
+
+      <!-- Table -->
+      <div id="table-wrap" class="hidden table-wrap">
+        <table id="leads-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Empresa</th>
+              <th>Cargo</th>
+              <th>Café</th>
+              <th>Fecha</th>
+              <th style="text-align:center">Interesado</th>
+              <th>Comentario</th>
+            </tr>
+          </thead>
+          <tbody id="leads-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── Config ────────────────────────────────────────────
+const SUPABASE_URL      = 'https://wlkwvzwxshbkwyeyhncd.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsa3d2end4c2hia3d5ZXlobmNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTExODgsImV4cCI6MjA5MTkyNzE4OH0.6w0wyItdfgBUxwdhSL5rSjRG51AA_-in82Sr6unp0VQ';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let allLeads = [];
+let totalCoffees = 0;
+
+// ── Load data ─────────────────────────────────────────
+async function loadData() {
+  const icon = document.getElementById('refresh-icon');
+  icon.classList.add('spin');
+
+  try {
+    // Load inventory
+    const { data: inv } = await db
+      .from('coffee_inventory')
+      .select('total')
+      .eq('id', 1)
+      .single();
+
+    totalCoffees = inv?.total ?? 0;
+    document.getElementById('total-input').value = totalCoffees;
+
+    // Load leads
+    const { data: leads, error } = await db
+      .from('leads')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    allLeads = leads || [];
+    renderStats();
+    renderTable(allLeads);
+
+    document.getElementById('last-refresh').textContent =
+      'Actualizado ' + new Date().toLocaleTimeString('es-CL');
+    document.getElementById('last-refresh').classList.remove('hidden');
+
+  } catch (err) {
+    console.error(err);
+    alert('Error al cargar datos: ' + err.message);
+  }
+
+  icon.classList.remove('spin');
+}
+
+// ── Stats ─────────────────────────────────────────────
+function renderStats() {
+  const delivered   = allLeads.length;
+  const interested  = allLeads.filter(l => l.interested).length;
+  const remaining   = Math.max(0, totalCoffees - delivered);
+  const pct         = totalCoffees > 0 ? Math.min(100, (delivered / totalCoffees) * 100) : 0;
+
+  document.getElementById('stat-delivered').textContent  = delivered;
+  document.getElementById('stat-remaining').textContent  = remaining;
+  document.getElementById('stat-interested').textContent = interested;
+  document.getElementById('progress-label').textContent  = `${delivered} / ${totalCoffees}`;
+  document.getElementById('progress-bar').style.width    = pct + '%';
+}
+
+// ── Table ─────────────────────────────────────────────
+function renderTable(leads) {
+  const body    = document.getElementById('leads-body');
+  const loading = document.getElementById('table-loading');
+  const empty   = document.getElementById('table-empty');
+  const wrap    = document.getElementById('table-wrap');
+
+  loading.classList.add('hidden');
+
+  if (!leads.length) {
+    empty.classList.remove('hidden');
+    wrap.classList.add('hidden');
+    return;
+  }
+
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+
+  body.innerHTML = leads.map((lead, i) => {
+    const date = new Date(lead.created_at).toLocaleString('es-CL', {
+      day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+    });
+    const coffeePill = lead.coffee_name
+      ? `<span class="pill bg-[#f3ebf6] text-[#4A148C]">${lead.coffee_name}</span>`
+      : '<span class="text-[#cdc3d4]">—</span>';
+
+    return `
+      <tr id="row-${lead.id}">
+        <td class="text-[#4a4452]/50 font-mono text-xs">${leads.length - i}</td>
+        <td class="font-semibold text-[#310065]">${esc(lead.name)}</td>
+        <td class="text-[#4a4452]">${esc(lead.email)}</td>
+        <td>${esc(lead.company)}</td>
+        <td class="text-[#4a4452]">${esc(lead.job_title)}</td>
+        <td>${coffeePill}</td>
+        <td class="text-xs text-[#4a4452]/70 whitespace-nowrap">${date}</td>
+        <td style="text-align:center">
+          <input type="checkbox" class="check-interested"
+            ${lead.interested ? 'checked' : ''}
+            onchange="toggleInterested('${lead.id}', this.checked)">
+          <span class="save-dot" id="dot-int-${lead.id}"></span>
+        </td>
+        <td>
+          <input type="text" class="comment-input"
+            value="${esc(lead.comment || '')}"
+            placeholder="Agregar nota…"
+            onblur="saveComment('${lead.id}', this.value)"
+            onkeydown="if(event.key==='Enter') this.blur()">
+          <span class="save-dot" id="dot-com-${lead.id}"></span>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ── Filter ────────────────────────────────────────────
+function filterTable() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  if (!q) { renderTable(allLeads); return; }
+  const filtered = allLeads.filter(l =>
+    (l.name      || '').toLowerCase().includes(q) ||
+    (l.email     || '').toLowerCase().includes(q) ||
+    (l.company   || '').toLowerCase().includes(q) ||
+    (l.job_title || '').toLowerCase().includes(q) ||
+    (l.coffee_name || '').toLowerCase().includes(q)
+  );
+  renderTable(filtered);
+}
+
+// ── Toggle interested ─────────────────────────────────
+async function toggleInterested(id, value) {
+  const dot = document.getElementById('dot-int-' + id);
+  try {
+    await db.from('leads').update({ interested: value }).eq('id', id);
+    flashDot(dot);
+    const lead = allLeads.find(l => l.id === id);
+    if (lead) lead.interested = value;
+    renderStats();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// ── Save comment ──────────────────────────────────────
+async function saveComment(id, value) {
+  const dot = document.getElementById('dot-com-' + id);
+  try {
+    await db.from('leads').update({ comment: value }).eq('id', id);
+    flashDot(dot);
+    const lead = allLeads.find(l => l.id === id);
+    if (lead) lead.comment = value;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// ── Save total coffees ────────────────────────────────
+async function saveTotal() {
+  const val = parseInt(document.getElementById('total-input').value);
+  if (isNaN(val) || val < 1) return;
+  const dot = document.getElementById('total-saved');
+  try {
+    await db.from('coffee_inventory').upsert({ id: 1, total: val });
+    totalCoffees = val;
+    renderStats();
+    flashDot(dot);
+  } catch (err) {
+    alert('Error al guardar: ' + err.message);
+  }
+}
+
+// ── Export CSV ────────────────────────────────────────
+function exportCSV() {
+  if (!allLeads.length) return;
+  const headers = ['#','Nombre','Correo','Empresa','Cargo','Café','Interesado','Comentario','Fecha'];
+  const rows = allLeads.map((l, i) => [
+    allLeads.length - i,
+    l.name, l.email, l.company, l.job_title,
+    l.coffee_name || '',
+    l.interested ? 'Sí' : 'No',
+    (l.comment || '').replace(/,/g, ';'),
+    new Date(l.created_at).toLocaleString('es-CL')
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `payku-feria-${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+}
+
+// ── Helpers ───────────────────────────────────────────
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function flashDot(dot) {
+  dot.classList.add('show');
+  setTimeout(() => dot.classList.remove('show'), 1800);
+}
+
+// Cargar datos al abrir la página
+loadData();
+</script>
+
+</body>
+</html>
