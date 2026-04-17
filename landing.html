@@ -35,10 +35,8 @@
     /* ─── NAV ─────────────────────────────────────── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(7,0,26,0.25);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(7,0,26,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
     /* ─── GRADIENT TEXT ───────────────────────────── */
@@ -455,19 +453,19 @@
       <div class="text-center md:text-left">
         <div class="chip mb-6" id="hero-chip">
           <span style="width:6px;height:6px;border-radius:50%;background:#E040FB;display:inline-block;animation:pulse 1.5s ease-in-out infinite"></span>
-          Pasarela de Pagos LATAM
+          La plataforma de pagos más completa de Chile y Perú
         </div>
         <style>@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}</style>
 
         <h1 class="font-headline hero-headline" style="font-size:clamp(3rem,6vw,5.5rem);font-weight:900;line-height:1.05;margin-bottom:1.5rem" id="hero-title">
           <span class="ag-word grad-text text-glow" style="--dur:3.2s;--delay:0s;--rise-a:-14px;--rise-b:-7px;--rot-a:-1deg;--rot-b:0.5deg;--rot-c:-0.5deg">Cobra.</span><br>
           <span class="ag-word" style="--dur:3.8s;--delay:0.3s;--rise-a:-10px;--rise-b:-18px;--rot-a:0.5deg;--rot-b:-0.8deg;--rot-c:0.3deg">Suscribe.</span><br>
-          <span class="ag-word" style="--dur:2.9s;--delay:0.6s;--rise-a:-20px;--rise-b:-8px;--rot-a:-0.3deg;--rot-b:1deg;--rot-c:-0.6deg">Dispersa.</span>
+          <span class="ag-word" style="--dur:2.9s;--delay:0.6s;--rise-a:-20px;--rise-b:-8px;--rot-a:-0.3deg;--rot-b:1deg;--rot-c:-0.6deg">Paga.</span>
         </h1>
 
         <p class="text-white/60 text-lg md:text-xl leading-relaxed mb-10" style="max-width:500px" id="hero-sub">
-          Acepta pagos online con <span class="text-white font-semibold">tarjetas, transferencias y más</span>.
-          Integra en minutos. Sin mantención. Con la tecnología detrás de miles de negocios en LATAM.
+          Débito, crédito, transferencias, suscripciones, links de pago y más.
+          <span class="text-white font-semibold">Sin cobro de mantención.</span> Disponible en Chile y Perú.
         </p>
 
         <div class="flex flex-wrap gap-4 mb-12" id="hero-ctas">
@@ -481,18 +479,18 @@
         <!-- Mini stats -->
         <div class="flex flex-wrap gap-6 md:gap-8" id="hero-stats">
           <div>
-            <p class="font-headline font-black text-2xl text-white" id="cnt-merchants">0</p>
-            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Comercios activos</p>
+            <p class="font-headline font-black text-2xl text-white">2016</p>
+            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Fundada en Chile</p>
           </div>
           <div class="stat-sep hidden md:block" style="width:1px;background:rgba(255,255,255,0.1)"></div>
           <div>
-            <p class="font-headline font-black text-2xl text-white" id="cnt-countries">0</p>
-            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Países</p>
+            <p class="font-headline font-black text-2xl text-white">CL · PE</p>
+            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Presencia LATAM</p>
           </div>
           <div class="stat-sep hidden md:block" style="width:1px;background:rgba(255,255,255,0.1)"></div>
           <div>
-            <p class="font-headline font-black text-2xl text-white" id="cnt-uptime">0</p>
-            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Uptime</p>
+            <p class="font-headline font-black text-2xl text-white">$0</p>
+            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Costo de mantención</p>
           </div>
         </div>
       </div>
@@ -614,18 +612,18 @@
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      <!-- 1: Link de Pago -->
+      <!-- 1: Botón / Link de Pago -->
       <div class="product-card reveal" style="transition-delay:0.05s">
         <div class="card-icon" style="background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(224,64,251,0.2))">🔗</div>
         <div class="chip mb-3" style="font-size:9px">MÁS POPULAR</div>
-        <h3 class="font-headline font-black text-xl text-white mb-3">Link de Pago</h3>
+        <h3 class="font-headline font-black text-xl text-white mb-3">Botón de Pago</h3>
         <p class="text-white/55 text-sm leading-relaxed mb-6">
-          Crea un link de cobro en segundos y compártelo por WhatsApp, email o redes sociales. Sin tienda online, sin complicaciones.
+          Crea botones de pago y compártelos por email, WhatsApp o redes sociales. Sin necesidad de tener un sitio web.
         </p>
         <div class="space-y-0">
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Link personalizado con tu marca</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Sin necesidad de sitio web</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">QR descargable para punto de venta</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Link personalizado para cada cobro</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Compatible con email y redes sociales</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Cupones de descuento incluidos</p></div>
         </div>
       </div>
 
@@ -634,12 +632,12 @@
         <div class="card-icon" style="background:linear-gradient(135deg,rgba(59,130,246,0.3),rgba(99,102,241,0.2))">🔁</div>
         <h3 class="font-headline font-black text-xl text-white mb-3">Cobros Recurrentes</h3>
         <p class="text-white/55 text-sm leading-relaxed mb-6">
-          Automatiza suscripciones y cobros periódicos. Configura el ciclo, monto y duración. Payku hace el cobro automáticamente.
+          Recibe pagos recurrentes para tus clientes: suscripciones, membresías y pagos periódicos de forma automática.
         </p>
         <div class="space-y-0">
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Ciclos: mensual, anual, personalizado</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Notificaciones automáticas</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Gestión de reintentos fallidos</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Suscripciones y membresías</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Ciclos de cobro configurables</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Fecha de expiración por plan</p></div>
         </div>
       </div>
 
@@ -648,12 +646,12 @@
         <div class="card-icon" style="background:linear-gradient(135deg,rgba(16,185,129,0.3),rgba(5,150,105,0.2))">⚡</div>
         <h3 class="font-headline font-black text-xl text-white mb-3">API REST</h3>
         <p class="text-white/55 text-sm leading-relaxed mb-6">
-          Integra Payku directo en tu plataforma con nuestra API RESTful. Documentación completa, SDKs y ambiente de pruebas incluido.
+          Integra Payku directamente en tu plataforma. PayIn y PayOut en una sola API, con ambiente de pruebas incluido.
         </p>
         <div class="space-y-0">
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">PayIn + PayOut en una sola API</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Webhooks en tiempo real</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Sandbox para pruebas</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">PayIn (cobros) y PayOut (pagos)</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Tarjetas de prueba para desarrollo</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Ambiente sandbox disponible</p></div>
         </div>
       </div>
 
@@ -662,12 +660,12 @@
         <div class="card-icon" style="background:linear-gradient(135deg,rgba(245,158,11,0.3),rgba(239,68,68,0.2))">🏪</div>
         <h3 class="font-headline font-black text-xl text-white mb-3">Marketplace</h3>
         <p class="text-white/55 text-sm leading-relaxed mb-6">
-          Solución multi-vendedor para plataformas que necesitan dividir pagos entre múltiples proveedores o vendedores en forma automática.
+          Divide los pagos entre varias cuentas en distintos porcentajes. Ideal para eventos, plataformas y negocios multi-vendedor.
         </p>
         <div class="space-y-0">
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Split de pagos automático</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Comisiones configurables</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Panel multi-comercio</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">División de pagos por porcentaje</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Soporte para múltiples cuentas</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Para eventos y plataformas</p></div>
         </div>
       </div>
 
@@ -676,26 +674,26 @@
         <div class="card-icon" style="background:linear-gradient(135deg,rgba(236,72,153,0.3),rgba(168,85,247,0.2))">💸</div>
         <h3 class="font-headline font-black text-xl text-white mb-3">Payouts</h3>
         <p class="text-white/55 text-sm leading-relaxed mb-6">
-          Dispersa pagos masivos a proveedores, trabajadores o ganadores. Desde tu panel o directamente desde la API con un clic.
+          Realiza pagos y dispersiones desde tu plataforma. Liquida a tus proveedores, trabajadores o colaboradores directo desde Payku.
         </p>
         <div class="space-y-0">
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Transferencias masivas</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">A cualquier banco en Chile</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Trazabilidad y reportes</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Pagos salientes desde tu cuenta</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Via API o desde el panel</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Disponible en Chile y Perú</p></div>
         </div>
       </div>
 
-      <!-- 6: Wallet -->
+      <!-- 6: Donaciones -->
       <div class="product-card reveal" style="transition-delay:0.3s;background:linear-gradient(135deg,rgba(74,20,140,0.2),rgba(49,0,101,0.3));border-color:rgba(124,58,237,0.3)">
-        <div class="card-icon" style="background:linear-gradient(135deg,rgba(224,64,251,0.3),rgba(124,58,237,0.2))">👛</div>
-        <h3 class="font-headline font-black text-xl text-white mb-3">Payku Wallet</h3>
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(224,64,251,0.3),rgba(124,58,237,0.2))">❤️</div>
+        <h3 class="font-headline font-black text-xl text-white mb-3">Donaciones</h3>
         <p class="text-white/55 text-sm leading-relaxed mb-6">
-          Billetera virtual integrada. Mantén tu dinero en la plataforma, realiza reembolsos instantáneos y retira cuando quieras.
+          Recibe donaciones online de forma simple y segura. Ideal para fundaciones, causas sociales y campañas de recaudación.
         </p>
         <div class="space-y-0">
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Reembolsos a clientes en segundos</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Retiros a tu cuenta bancaria</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Historial completo de movimientos</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Monto libre o fijo</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Link compartible al instante</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Sin necesidad de sitio web</p></div>
         </div>
       </div>
 
@@ -710,16 +708,16 @@
   <div class="max-w-7xl mx-auto px-6">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
       <div class="stat-card reveal" style="transition-delay:0.05s">
-        <p class="stat-num" data-target="10000" data-suffix="+">0</p>
-        <p class="text-white/40 text-sm font-semibold mt-2">Comercios activos</p>
+        <p class="stat-num">2016</p>
+        <p class="text-white/40 text-sm font-semibold mt-2">Fundada en Santiago</p>
       </div>
       <div class="stat-card reveal" style="transition-delay:0.1s">
-        <p class="stat-num" data-target="3" data-suffix=" países">0</p>
-        <p class="text-white/40 text-sm font-semibold mt-2">Presencia LATAM</p>
+        <p class="stat-num">CL · PE</p>
+        <p class="text-white/40 text-sm font-semibold mt-2">Chile y Perú</p>
       </div>
       <div class="stat-card reveal" style="transition-delay:0.15s">
-        <p class="stat-num" data-target="99.9" data-suffix="%" data-decimals="1">0</p>
-        <p class="text-white/40 text-sm font-semibold mt-2">Uptime garantizado</p>
+        <p class="stat-num" data-target="7" data-suffix="">0</p>
+        <p class="text-white/40 text-sm font-semibold mt-2">Medios de pago</p>
       </div>
       <div class="stat-card reveal" style="transition-delay:0.2s">
         <p class="stat-num" data-target="1" data-suffix=" día">0</p>
@@ -741,7 +739,7 @@
           Conecta con tu<br>plataforma favorita
         </h2>
         <p class="text-white/55 text-base leading-relaxed mb-8">
-          Plugins oficiales para los e-commerce más populares, o integra directamente via API REST en cualquier stack tecnológico.
+          Plugins oficiales para WooCommerce, PrestaShop, OpenCart y WHMCS. O integra directamente vía API REST. También compatible con Floid, la nueva tecnología de Open Finance.
         </p>
         <div class="flex flex-col gap-3">
           <div class="sec-badge">
@@ -771,15 +769,12 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div class="int-logo">🛒 WooCommerce</div>
           <div class="int-logo">🏪 PrestaShop</div>
-          <div class="int-logo">🔶 Magento</div>
           <div class="int-logo">⭕ OpenCart</div>
-          <div class="int-logo">🌐 Wix</div>
+          <div class="int-logo">🖥️ WHMCS</div>
           <div class="int-logo">⚡ API REST</div>
-          <div class="int-logo col-span-2 sm:col-span-1">📱 iOS / Android</div>
-          <div class="int-logo">🐍 Python SDK</div>
-          <div class="int-logo">📦 Node.js SDK</div>
+          <div class="int-logo">🏦 Floid</div>
         </div>
-        <p class="text-white/30 text-xs text-center mt-4 font-semibold">+ cualquier lenguaje vía API REST</p>
+        <p class="text-white/30 text-xs text-center mt-4 font-semibold">+ integración directa vía API REST en cualquier stack</p>
       </div>
     </div>
   </div>
@@ -803,15 +798,15 @@
       <!-- Transferencia -->
       <div class="price-card reveal" style="transition-delay:0.05s">
         <div class="text-3xl mb-4">🏦</div>
-        <h3 class="font-headline font-black text-xl text-white mb-2">Transferencia</h3>
-        <p class="text-white/40 text-sm mb-6">El método más económico</p>
+        <h3 class="font-headline font-black text-xl text-white mb-2">Transferencia bancaria</h3>
+        <p class="text-white/40 text-sm mb-6">El medio más económico</p>
         <div class="mb-6">
           <span class="font-headline font-black text-4xl text-white">1,79%</span>
           <span class="text-white/40 text-sm ml-1">+ IVA</span>
         </div>
         <p class="text-white/50 text-xs mb-6">Liquidación a 3 días hábiles</p>
         <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Todos los bancos de Chile</p></div>
-        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Confirmación automática</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Sin cobro de mantención mensual</p></div>
       </div>
 
       <!-- Webpay FEATURED -->
@@ -825,29 +820,30 @@
           <span class="text-white/40 text-sm ml-1">+ IVA</span>
         </div>
         <p class="text-white/50 text-xs mb-6">Liquidación a 1 o 3 días hábiles</p>
-        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Visa, Mastercard, Amex, Magna</p></div>
-        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Redcompra y Onepay</p></div>
-        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">3D Secure incluido</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Visa, Mastercard, Amex, Magna, Diners</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Redcompra (débito) y Onepay</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">La comisión puede trasladarse al cliente</p></div>
       </div>
 
-      <!-- Enterprise -->
+      <!-- No necesitas empresa -->
       <div class="price-card reveal" style="transition-delay:0.15s">
-        <div class="text-3xl mb-4">🏢</div>
-        <h3 class="font-headline font-black text-xl text-white mb-2">Enterprise</h3>
-        <p class="text-white/40 text-sm mb-6">Alto volumen de transacciones</p>
+        <div class="text-3xl mb-4">🙌</div>
+        <h3 class="font-headline font-black text-xl text-white mb-2">Sin empresa formal</h3>
+        <p class="text-white/40 text-sm mb-6">Para personas y negocios</p>
         <div class="mb-6">
-          <span class="font-headline font-black text-4xl grad-text-gold">A medida</span>
+          <span class="font-headline font-black text-4xl grad-text-gold">$0</span>
+          <span class="text-white/40 text-sm ml-1">mantención</span>
         </div>
-        <p class="text-white/50 text-xs mb-6">Tarifas negociadas según volumen</p>
-        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">SLA y soporte dedicado</p></div>
-        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Integraciones personalizadas</p></div>
-        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Marketplace y Payouts</p></div>
+        <p class="text-white/50 text-xs mb-6">Solo necesitas una cuenta bancaria</p>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">No necesitas empresa constituida</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Pagas solo cuando vendes</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Activación inmediata</p></div>
       </div>
 
     </div>
 
     <p class="text-center text-white/30 text-sm reveal">
-      * Tarifas en CLP + IVA. Liquidación en 1 día hábil disponible en algunos planes. Consulta con el equipo Payku.
+      * Tarifas en CLP + IVA. Liquidación en 1 día hábil disponible según método de pago. Sin cobros de mantención mensual ni anual.
     </p>
   </div>
 </section>
@@ -918,7 +914,7 @@
         <span class="grad-text">Tranquilo,</span><br>Payku lo hace fácil
       </h2>
       <p class="text-white/55 text-lg mb-10" style="max-width:480px;margin:0 auto 2.5rem">
-        Únete a más de 10.000 comercios que ya cobran con Payku. Crea tu cuenta gratis y empieza a recibir pagos hoy.
+        La plataforma de pagos online más completa de Chile y Perú. Sin mantención, sin empresa constituida. Empieza a cobrar hoy.
       </p>
       <div class="flex flex-wrap gap-4 justify-center">
         <a href="https://www.payku.com" class="btn-primary" style="font-size:16px;padding:16px 36px">
