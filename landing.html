@@ -1198,7 +1198,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   function setFlame(goingRight, diagonalUp) {
     // Diagonal hacia arriba: llama más abajo y girada para seguir la inercia
     const topPct     = diagonalUp ? 72 : 50;
-    const flameRot   = diagonalUp ? (goingRight ? 28 : -28) : 0;
+    const flameRot   = diagonalUp ? 28 : 0;
     flame.style.top       = topPct + '%';
     flame.style.transform = `translateY(-50%) rotate(${flameRot}deg)`;
 
