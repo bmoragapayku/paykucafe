@@ -378,32 +378,47 @@
       width: 160px;
       opacity: 0;
       will-change: transform, opacity;
-      isolation: isolate; /* contiene el stacking context — z-index:-1 queda DENTRO */
+    }
+    /* Contenedor de chispas — antes del inner en DOM, siempre detrás del perezoso */
+    #bg-sloth-trail {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    /* Inner wrapper — recibe la rotación+flip para que llama y perezoso giren juntos */
+    #bg-sloth-inner {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      isolation: isolate;
     }
     #bg-sloth-img {
       width: 100%;
-      position: relative; /* z-index: auto → encima del -1 de la llama */
+      display: block;
+      position: relative; /* asegura que quede sobre z-index:-1 (sparks y llama) */
+      z-index: 0;
       filter: drop-shadow(0 0 18px rgba(224,64,251,0.7))
               drop-shadow(0 0 35px rgba(124,58,237,0.5));
     }
-    /* Rocket flame — siempre detrás del img */
+    /* Rocket flame — posicionada relativa al inner wrapper, rota con él */
     #bg-sloth-flame {
       position: absolute;
       z-index: -1;
-      top: 50%;
+      top: 62%;
+      right: 100%;
       width: 90px;
       height: 30px;
       transform: translateY(-50%);
       border-radius: 50%;
       filter: blur(7px);
       pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,200,50,0.4), rgba(255,80,0,0.8), rgba(255,160,0,0.6), transparent);
     }
     /* Spark particles */
     .sloth-spark {
       position: absolute;
       border-radius: 50%;
       pointer-events: none;
-      z-index: -1;
       background: radial-gradient(circle, #FFD700, #FF8C00);
     }
 
@@ -459,8 +474,11 @@
 
 <!-- ════════════════════════════ BG SLOTH ════════════════════════════ -->
 <div id="bg-sloth">
-  <div id="bg-sloth-flame"></div>
-  <img src="https://payku.com/images/noto.png" alt="" id="bg-sloth-img">
+  <div id="bg-sloth-trail"></div><!-- chispas van aquí, antes del inner → siempre detrás -->
+  <div id="bg-sloth-inner">
+    <div id="bg-sloth-flame"></div>
+    <img src="https://payku.com/images/noto.png" alt="" id="bg-sloth-img">
+  </div>
 </div>
 
 <!-- ════════════════════════════ NAV ════════════════════════════ -->
@@ -1155,18 +1173,32 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 
-// ═══ BACKGROUND SLOTH SCROLL ANIMATION ═══
+//  BACKGROUND SLOTH SCROLL ANIMATION 
 (function () {
   const wrap  = document.getElementById('bg-sloth');
+  const trail = document.getElementById('bg-sloth-trail'); // contenedor de chispas (detrás del inner)
+  const inner = document.getElementById('bg-sloth-inner');
   const img   = document.getElementById('bg-sloth-img');
   const flame = document.getElementById('bg-sloth-flame');
+
+  // CONFIGURACIÓN DE LLAMA POR CASO 
+  // top   → posición vertical relativa al cuerpo del perezoso (0% = arriba, 100% = abajo)
+  // width → largo de la llama en px
+  const FLAME = {
+    //           top  → posición vertical (0%=arriba, 100%=abajo del perezoso)
+    //           width → largo de la llama en px
+    //           rotate → giro extra de la llama sobre su propio eje (grados)
+    horizontal:    { top: '92%', width: '90px', rotate:  -60 },
+    diagonal_up:   { top: '82%', width: '90px', rotate:  -50 },
+    diagonal_down: { top: '92%', width: '90px', rotate:  -70 },
+  };
+  // 
 
   let isAnimating = false;
   let lastScrollY = window.scrollY;
   let scrollAccum = 0;
-  const TRIGGER_PX = 120;
+  const TRIGGER_PX = 950;
 
-  // Alternate between 'horizontal' and 'diagonal' each pass
   let passType = 'horizontal';
 
   function spawnSparks(goingRight) {
@@ -1182,7 +1214,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         ${goingRight ? 'left:-' + ox + 'px' : 'right:-' + ox + 'px'};
         opacity:1;
       `;
-      wrap.appendChild(spark);
+      trail.appendChild(spark);
       gsap.to(spark, {
         x: goingRight ? -(30 + Math.random() * 60) : (30 + Math.random() * 60),
         y: (Math.random() - 0.5) * 30,
@@ -1194,22 +1226,15 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     }
   }
 
-  function setFlame(goingRight, diagonalUp) {
-    // Diagonal hacia arriba: llama más abajo y girada para seguir la inercia
-    const topPct     = diagonalUp ? 72 : 50;
-    const flameRot   = diagonalUp ? 28 : 0;
-    flame.style.top       = topPct + '%';
-    flame.style.transform = `translateY(-50%) rotate(${flameRot}deg)`;
-
-    if (goingRight) {
-      flame.style.right     = '100%';
-      flame.style.left      = '';
-      flame.style.background = 'linear-gradient(90deg, rgba(255,200,50,0.4), rgba(255,80,0,0.8), rgba(255,160,0,0.6), transparent)';
-    } else {
-      flame.style.left      = '100%';
-      flame.style.right     = '';
-      flame.style.background = 'linear-gradient(270deg, rgba(255,200,50,0.4), rgba(255,80,0,0.8), rgba(255,160,0,0.6), transparent)';
-    }
+  function setFlame(passKey) {
+    const cfg = FLAME[passKey] || FLAME.horizontal;
+    flame.style.top             = cfg.top;
+    flame.style.width           = cfg.width;
+    flame.style.right           = '100%';
+    flame.style.left            = '';
+    flame.style.transform       = `translateY(-50%) rotate(${cfg.rotate ?? 0}deg)`;
+    flame.style.transformOrigin = 'right center';
+    flame.style.background      = 'linear-gradient(90deg, rgba(255,200,50,0.4), rgba(255,80,0,0.8), rgba(255,160,0,0.6), transparent)';
   }
 
   function flySloth(direction) {
@@ -1241,29 +1266,22 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       endY   = diag ===  1 ? yBase           : yBase + ySpread;
     }
 
-    // Detectar si la trayectoria diagonal sube (dy < 0)
-    const diagonalUp = currentPass === 'diagonal' && (endY - startY) < 0;
-    setFlame(goingRight, diagonalUp);
+    const dy = endY - startY;
+    let passKey = 'horizontal';
+    if (currentPass === 'diagonal') passKey = dy < 0 ? 'diagonal_up' : 'diagonal_down';
+    setFlame(passKey);
 
-    // Rotation: horizontal → fixed tilt so it looks lying flat;
-    //           diagonal   → match the actual path angle
+    // Rotación del inner wrapper (perezoso + llama giran juntos)
     let rotDeg;
     if (currentPass === 'horizontal') {
-      rotDeg = 20; // acostado horizontalmente, 1/4 de vuelta
+      rotDeg = 20;
     } else {
-      const dy = endY - startY;
       const dx = Math.abs(endX - startX);
-      // Izquierda + diagonal hacia arriba (dy < 0): sin rotación, se ve bien natural
-      if (!goingRight && dy < 0) {
-        rotDeg = 0;
-      } else {
-        rotDeg = Math.atan2(dy, dx) * (180 / Math.PI);
-        rotDeg = Math.max(-45, Math.min(35, rotDeg));
-      }
+      rotDeg = Math.atan2(dy, dx) * (180 / Math.PI);
+      rotDeg = Math.max(-45, Math.min(35, rotDeg));
     }
-    // For going left the image is flipped (scaleX:-1), so negate rotation
-    // so the visual tilt is symmetrical in both directions
-    img.style.transform = goingRight
+    // El scaleX(-1) espeja todo el inner (perezoso + llama) para going left
+    inner.style.transform = goingRight
       ? `scaleX(1) rotate(${rotDeg}deg)`
       : `scaleX(-1) rotate(${rotDeg}deg)`;
 
