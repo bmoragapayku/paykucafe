@@ -1023,9 +1023,145 @@
         <div class="flag-strip"><span>🇵🇪</span> Perú</div>
         <!-- <div class="flag-strip"><span>🇻🇪</span> Venezuela</div> -->
       </div>
+    <!-- Tarjeta de presentación -->
+    <div class="max-w-sm mx-auto mt-8 reveal">
+      <a href="david-pineda.vcf" download="David-Pineda-Payku.vcf" style="text-decoration:none;display:block">
+        <div style="
+          background: linear-gradient(135deg, rgba(74,20,140,0.5) 0%, rgba(49,0,101,0.7) 100%);
+          border: 1px solid rgba(124,58,237,0.35);
+          border-radius: 20px;
+          padding: 1.5rem 1.75rem;
+          position: relative;
+          overflow: hidden;
+          cursor: pointer;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        " onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 20px 60px rgba(124,58,237,0.35)'"
+           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+
+          <!-- Glow de fondo -->
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(224,64,251,0.12),transparent);pointer-events:none"></div>
+
+          <!-- Header: logo + guardar -->
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+            <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
+              alt="Payku" style="height:22px;filter:brightness(0) invert(1);opacity:0.9">
+            <span style="
+              background:linear-gradient(135deg,#7C3AED,#E040FB);
+              color:#fff;font-size:10px;font-weight:800;
+              padding:4px 10px;border-radius:999px;
+              display:inline-flex;align-items:center;gap:5px;
+              letter-spacing:0.05em;text-transform:uppercase;
+            ">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Guardar contacto
+            </span>
+          </div>
+
+          <!-- Foto + datos -->
+          <div style="display:flex;align-items:center;gap:1rem">
+            <img src="https://payku.com/images/noto.png" alt="David Pineda"
+              style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid rgba(124,58,237,0.5);background:rgba(74,20,140,0.4);filter:drop-shadow(0 4px 12px rgba(224,64,251,0.4))">
+            <div>
+              <p class="font-headline font-black text-white" style="font-size:1.05rem;line-height:1.2">David Pineda</p>
+              <p style="color:#c084fc;font-size:12px;font-weight:700;margin-top:2px">CEO · Payku</p>
+            </div>
+          </div>
+
+          <!-- Datos de contacto -->
+          <div style="margin-top:1.1rem;display:flex;flex-direction:column;gap:6px;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.07)">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.55)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16l.19.92z"/></svg>
+              +56 9 7654 3211
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.55)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              david@payku.cl
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.55)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              payku.com
+            </div>
+          </div>
+
+        </div>
+      </a>
     </div>
+
   </div>
 </section>
+
+<!-- ════════════════════════════ CERTIFICACIONES + MEMBRESÍAS ════════════════════════════ -->
+<section class="py-10 md:py-14">
+  <div class="max-w-7xl mx-auto px-5 md:px-6">
+
+    <!-- Certificaciones -->
+    <p class="text-xs font-black uppercase tracking-widest text-white/40 mb-5">Certificaciones de Seguridad</p>
+    <div class="grid sm:grid-cols-2 gap-3 mb-10">
+
+      <!-- PCI DSS -->
+      <div class="sec-badge gap-4 py-5 reveal" style="transition-delay:0.05s">
+        <div class="sec-icon flex-shrink-0" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(74,20,140,0.6),rgba(124,58,237,0.6))">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap mb-1">
+            <p class="font-bold text-sm text-white">Certificación PCI DSS</p>
+            <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+              Verificado
+            </span>
+          </div>
+          <p class="text-xs text-white/40">Payment Card Industry Data Security Standard</p>
+        </div>
+      </div>
+
+      <!-- SOC 2 -->
+      <div class="sec-badge gap-4 py-5 reveal" style="transition-delay:0.1s">
+        <div class="sec-icon flex-shrink-0" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(59,130,246,0.5),rgba(99,102,241,0.5))">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap mb-1">
+            <p class="font-bold text-sm text-white">Certificación SOC 2</p>
+            <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+              Verificado
+            </span>
+          </div>
+          <p class="text-xs text-white/40">System and Organization Controls</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Membresías -->
+    <div class="section-divider mb-8"></div>
+    <div class="flex flex-col sm:flex-row items-center gap-6 reveal">
+      <div class="flex items-center gap-5 flex-shrink-0">
+        <!-- FinteChile -->
+        <img src="https://www.payku.com/images/fintechile.svg" alt="FinteChile"
+          class="h-8 brightness-0 invert opacity-70"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span style="display:none;align-items:center;gap:6px;opacity:0.7;font-weight:800;font-size:15px;letter-spacing:-0.02em">
+          <span style="color:#7C3AED;font-size:20px">⬡</span>FinteChile
+        </span>
+        <!-- Peru Payments -->
+        <img src="https://www.payku.com/images/peru-payments.svg" alt="Peru Payments Association"
+          class="h-8 brightness-0 invert opacity-70"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span style="display:none;align-items:center;gap:6px;opacity:0.7;font-weight:800;font-size:13px">
+          🇵🇪 Peru Payments Association
+        </span>
+      </div>
+      <p class="text-white/40 text-sm text-center sm:text-left">
+        Payku es miembro de <a href="https://www.fintechile.org" target="_blank" rel="noopener" class="text-white/70 hover:text-white underline underline-offset-2 transition-colors">Fintechile</a>,
+        la asociación de empresas Fintech de Chile y la Peru Payments Association.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
 
 <!-- ════════════════════════════ FOOTER ════════════════════════════ -->
 <footer class="py-8 md:py-12 border-t border-white/5">

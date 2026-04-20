@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Pineda;David;;;
+FN:David Pineda
+ORG:Payku
+TITLE:CEO
+TEL;TYPE=CELL:+56976543211
+EMAIL;TYPE=WORK:david@payku.cl
+URL:https://www.payku.com
+PHOTO;VALUE=URI:https://payku.com/images/noto.png
+END:VCARD
