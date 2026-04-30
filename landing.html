@@ -1636,6 +1636,18 @@ function getStoredLanguage() {
   }
 }
 
+function detectBrowserLanguage() {
+  const supported = { es: 'es', en: 'en', pt: 'pt', zh: 'zh', ru: 'ru' };
+  const langs = navigator.languages && navigator.languages.length
+    ? navigator.languages
+    : [navigator.language || 'en'];
+  for (const l of langs) {
+    const prefix = l.toLowerCase().split('-')[0];
+    if (supported[prefix]) return supported[prefix];
+  }
+  return 'en';
+}
+
 function storeLanguage(lang) {
   try {
     localStorage.setItem('paykuLandingLang', lang);
@@ -1768,7 +1780,7 @@ document.querySelectorAll('.lang-btn').forEach(button => {
   };
 })();
 
-applyLanguage(getStoredLanguage() || 'es');
+applyLanguage(getStoredLanguage() || detectBrowserLanguage());
 
 // Particulas
 (function initParticles() {
