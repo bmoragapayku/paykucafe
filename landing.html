@@ -886,7 +886,7 @@
         <div class="card-icon" style="background:linear-gradient(135deg,rgba(59,130,246,0.3),rgba(99,102,241,0.2))">🔁</div>
         <h3 class="font-headline font-black text-xl text-white mb-3">Cobros Recurrentes</h3>
         <p class="text-white/55 text-sm leading-relaxed mb-6">
-          Recibe pagos recurrentes para tus clientes: suscripciones, membresías y pagos periódicos de forma automática.
+          Recibe pagos recurrentes de tus clientes: suscripciones de monto fijo y variable, automáticas y por consumo, en CLP y en UF.
         </p>
         <div class="space-y-0">
           <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Suscripciones y membresías</p></div>
@@ -906,6 +906,7 @@
           <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">PayIn (cobros) y PayOut (pagos)</p></div>
           <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Tarjetas de prueba para desarrollo</p></div>
           <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Ambiente sandbox disponible</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Anulaciones</p></div>
         </div>
       </div>
 
@@ -945,9 +946,9 @@
           Recibe donaciones online de forma simple y segura. Ideal para fundaciones, causas sociales y campañas de recaudación.
         </p>
         <div class="space-y-0">
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Monto libre o fijo</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Formulario adaptado a tu sitio web</p></div>
           <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Link compartible al instante</p></div>
-          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Sin necesidad de sitio web</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Colectas digitales</p></div>
         </div>
       </div>
 
@@ -1115,7 +1116,7 @@
           <span class="text-white/40 text-sm ml-1">mantención</span>
         </div>
         <p class="text-white/50 text-xs mb-6">Solo necesitas una cuenta bancaria</p>
-        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">No necesitas empresa constituida</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Registro en simples pasos</p></div>
         <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Pagas solo cuando vendes</p></div>
         <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Activación inmediata</p></div>
       </div>
@@ -1212,92 +1213,127 @@
         <div class="flag-strip"><span>🇵🇪</span> Perú</div>
         <!-- <div class="flag-strip"><span>🇻🇪</span> Venezuela</div> -->
       </div>
-    <!-- Tarjeta de presentación estilo Payku -->
+    <!-- Tarjetas de presentación estilo Payku -->
     <div class="max-w-md mx-auto mt-10 reveal">
       <br><br>
-      <p class="text-center text-xs font-black uppercase tracking-widest text-white/30 mb-4">Tarjeta de contacto</p><br>
-      <a href="david-pineda.vcf" download="David-Pineda-Payku.vcf" style="text-decoration:none;display:block">
-        <div style="
-          background: linear-gradient(135deg, #2d0060 0%, #1a003a 60%, #310065 100%);
-          border-radius: 18px;
-          padding: 1.6rem 1.8rem;
-          position: relative;
-          overflow: hidden;
-          cursor: pointer;
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-          box-shadow: 0 8px 40px rgba(74,20,140,0.5);
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          min-height: 200px;
-        " onmouseover="this.style.transform='translateY(-5px) scale(1.01)';this.style.boxShadow='0 24px 60px rgba(124,58,237,0.5)'"
-           onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 8px 40px rgba(74,20,140,0.5)'">
+      <p class="text-center text-xs font-black uppercase tracking-widest text-white/30 mb-6">Tarjeta de contacto</p>
+      <div style="display:flex;flex-direction:column;gap:1rem">
 
-          <!-- Círculos decorativos de fondo (como las tarjetas físicas) -->
-          <div style="position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.25),transparent 70%);top:-80px;right:-60px;pointer-events:none"></div>
-          <div style="position:absolute;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(224,64,251,0.15),transparent 70%);bottom:-60px;left:-40px;pointer-events:none"></div>
-          <!-- Línea decorativa diagonal sutil -->
-          <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 50%);pointer-events:none"></div>
-
-          <!-- Fila superior: logo + badge guardar -->
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
-            <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
-              alt="Payku" style="height:20px;filter:brightness(0) invert(1);opacity:0.95">
-            <span style="
-              background:rgba(255,255,255,0.12);
-              border:1px solid rgba(255,255,255,0.2);
-              color:rgba(255,255,255,0.8);
-              font-size:9px;font-weight:800;
-              padding:3px 9px;border-radius:999px;
-              display:inline-flex;align-items:center;gap:4px;
-              letter-spacing:0.06em;text-transform:uppercase;
-            ">
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-              Guardar contacto
-            </span>
-          </div>
-
-          <!-- Fila inferior: datos izq + QR der -->
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative">
-
-            <!-- Datos personales -->
-            <div>
-              <!-- Perezoso pequeño -->
-              <img src="https://payku.com/images/noto.png" alt=""
-                style="width:36px;height:36px;object-fit:contain;margin-bottom:8px;filter:drop-shadow(0 2px 8px rgba(224,64,251,0.5))">
-              <p style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:1.15rem;color:#fff;line-height:1.15;letter-spacing:-0.01em">David Pineda</p>
-              <p style="font-size:11px;font-weight:600;color:rgba(192,132,252,0.9);margin-top:2px;margin-bottom:14px">CEO</p>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:rgba(255,255,255,0.6)">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16l.19.92z"/></svg>
-                  +56 9 7654 3211
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:rgba(255,255,255,0.6)">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                  david@payku.cl
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:rgba(255,255,255,0.6)">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/></svg>
-                  payku.com
+        <!-- Kristina Guido -->
+        <a href="kristina-guido.vcf" download="Kristina-Guido-Payku.vcf" style="text-decoration:none;display:block">
+          <div style="
+            background: linear-gradient(135deg, #2d0060 0%, #1a003a 60%, #310065 100%);
+            border-radius: 18px;
+            padding: 1.4rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 8px 40px rgba(74,20,140,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 200px;
+          " onmouseover="this.style.transform='translateY(-5px) scale(1.01)';this.style.boxShadow='0 24px 60px rgba(124,58,237,0.5)'"
+             onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 8px 40px rgba(74,20,140,0.5)'">
+            <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.25),transparent 70%);top:-80px;right:-60px;pointer-events:none"></div>
+            <div style="position:absolute;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(224,64,251,0.15),transparent 70%);bottom:-50px;left:-30px;pointer-events:none"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 50%);pointer-events:none"></div>
+            <!-- Logo + badge -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+              <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
+                alt="Payku" style="height:18px;filter:brightness(0) invert(1);opacity:0.95">
+              <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);font-size:8px;font-weight:800;padding:3px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;letter-spacing:0.06em;text-transform:uppercase;">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Guardar contacto
+              </span>
+            </div>
+            <!-- Datos + QR -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative;margin-top:1rem">
+              <div>
+                <img src="https://payku.com/images/noto.png" alt="" style="width:30px;height:30px;object-fit:contain;margin-bottom:6px;filter:drop-shadow(0 2px 8px rgba(224,64,251,0.5))">
+                <p style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:1rem;color:#fff;line-height:1.15;letter-spacing:-0.01em">Kristina Guido</p>
+                <div style="display:flex;flex-direction:column;gap:4px;margin-top:10px">
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16l.19.92z"/></svg>
+                    +56 9 8133 0709
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    kristina@payku.com
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    payku.com
+                  </div>
                 </div>
               </div>
+              <div style="background:#fff;border-radius:10px;padding:7px;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,0.3)">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Guido%3BKristina%3B%3B%3B%0AFN:Kristina%20Guido%0AORG:Payku%0ATEL%3BTYPE%3DCELL:%2B56981330709%0AEMAIL%3BTYPE%3DWORK:kristina%40payku.com%0AURL:https://www.payku.com%0AEND:VCARD&color=2d0060&bgcolor=ffffff"
+                  alt="QR Kristina" style="width:72px;height:72px;display:block;border-radius:5px">
+              </div>
             </div>
-
-            <!-- QR code -->
-            <div style="
-              background:#fff;
-              border-radius:12px;
-              padding:8px;
-              flex-shrink:0;
-              box-shadow:0 4px 20px rgba(0,0,0,0.3);
-            ">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Pineda%3BDavid%3B%3B%3B%0AFN:David%20Pineda%0AORG:Payku%0ATITLE:CEO%0ATEL%3BTYPE%3DCELL:%2B56976543211%0AEMAIL%3BTYPE%3DWORK:david%40payku.cl%0AURL:https://www.payku.com%0AEND:VCARD&color=2d0060&bgcolor=ffffff"
-                alt="QR Contacto" style="width:82px;height:82px;display:block;border-radius:6px">
-            </div>
-
           </div>
-        </div>
-      </a>
+        </a>
+
+        <!-- Daniel Naranjo -->
+        <a href="daniel-naranjo.vcf" download="Daniel-Naranjo-Payku.vcf" style="text-decoration:none;display:block">
+          <div style="
+            background: linear-gradient(135deg, #2d0060 0%, #1a003a 60%, #310065 100%);
+            border-radius: 18px;
+            padding: 1.4rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 8px 40px rgba(74,20,140,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 200px;
+          " onmouseover="this.style.transform='translateY(-5px) scale(1.01)';this.style.boxShadow='0 24px 60px rgba(124,58,237,0.5)'"
+             onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 8px 40px rgba(74,20,140,0.5)'">
+            <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.25),transparent 70%);top:-80px;right:-60px;pointer-events:none"></div>
+            <div style="position:absolute;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(224,64,251,0.15),transparent 70%);bottom:-50px;left:-30px;pointer-events:none"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 50%);pointer-events:none"></div>
+            <!-- Logo + badge -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+              <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
+                alt="Payku" style="height:18px;filter:brightness(0) invert(1);opacity:0.95">
+              <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);font-size:8px;font-weight:800;padding:3px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;letter-spacing:0.06em;text-transform:uppercase;">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Guardar contacto
+              </span>
+            </div>
+            <!-- Datos + QR -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative;margin-top:1rem">
+              <div>
+                <img src="https://payku.com/images/noto.png" alt="" style="width:30px;height:30px;object-fit:contain;margin-bottom:6px;filter:drop-shadow(0 2px 8px rgba(224,64,251,0.5))">
+                <p style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:1rem;color:#fff;line-height:1.15;letter-spacing:-0.01em">Daniel Naranjo</p>
+                <div style="display:flex;flex-direction:column;gap:4px;margin-top:10px">
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16l.19.92z"/></svg>
+                    +56 9 8133 3448
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    danielnaranjo@payku.com
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    payku.com
+                  </div>
+                </div>
+              </div>
+              <div style="background:#fff;border-radius:10px;padding:7px;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,0.3)">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Naranjo%3BDaniel%3B%3B%3B%0AFN:Daniel%20Naranjo%0AORG:Payku%0ATEL%3BTYPE%3DCELL:%2B56981333448%0AEMAIL%3BTYPE%3DWORK:danielnaranjo%40payku.com%0AURL:https://www.payku.com%0AEND:VCARD&color=2d0060&bgcolor=ffffff"
+                  alt="QR Daniel" style="width:72px;height:72px;display:block;border-radius:5px">
+              </div>
+            </div>
+          </div>
+        </a>
+
+      </div>
     </div>
 
           </div>
@@ -1567,7 +1603,12 @@ const I18N = {
   ', la asociación de empresas Fintech de Chile y la Peru Payments Association.': { en: ', the association of Fintech companies in Chile, and the Peru Payments Association.', pt: ', a associação de empresas Fintech do Chile, e da Peru Payments Association.', zh: '，智利金融科技企业协会，以及 Peru Payments Association。', ru: ', ассоциации финтех-компаний Чили, и Peru Payments Association.' },
   'Pasarela de Pagos LATAM · © 2026': { en: 'LATAM Payment Gateway · © 2026', pt: 'Gateway de Pagamentos LATAM · © 2026', zh: '拉美支付网关 · © 2026', ru: 'Платежный шлюз LATAM · © 2026' },
   'Documentación': { en: 'Documentation', pt: 'Documentação', zh: '文档', ru: 'Документация' },
-  'Registro': { en: 'Sign up', pt: 'Cadastro', zh: '注册', ru: 'Регистрация' }
+  'Registro': { en: 'Sign up', pt: 'Cadastro', zh: '注册', ru: 'Регистрация' },
+  'Anulaciones': { en: 'Reversals', pt: 'Estornos', zh: '撤销', ru: 'Аннулирования' },
+  'Colectas digitales': { en: 'Digital collections', pt: 'Coletas digitais', zh: '数字募款', ru: 'Цифровые сборы' },
+  'Formulario adaptado a tu sitio web': { en: 'Form adapted to your website', pt: 'Formulário adaptado ao seu site', zh: '适配你网站的表单', ru: 'Форма, адаптированная к вашему сайту' },
+  'Registro en simples pasos': { en: 'Registration in simple steps', pt: 'Cadastro em poucos passos', zh: '简单步骤完成注册', ru: 'Регистрация в несколько шагов' },
+  'Recibe pagos recurrentes de tus clientes: suscripciones de monto fijo y variable, automáticas y por consumo, en CLP y en UF.': { en: 'Receive recurring payments from your customers: fixed and variable amount subscriptions, automatic and usage-based, in CLP and UF.', pt: 'Receba pagamentos recorrentes dos seus clientes: assinaturas de valor fixo e variável, automáticas e por consumo, em CLP e UF.', zh: '接收来自客户的周期性付款：固定和浮动金额订阅、自动和按量计费，支持 CLP 和 UF。', ru: 'Принимайте регулярные платежи клиентов: подписки с фиксированной и переменной суммой, автоматические и по потреблению, в CLP и UF.' }
 };
 
 let currentLang = 'es';

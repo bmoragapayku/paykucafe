@@ -1,0 +1,9 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Naranjo;Daniel;;;
+FN:Daniel Naranjo
+ORG:Payku
+TEL;TYPE=CELL:+56981333448
+EMAIL;TYPE=WORK:danielnaranjo@payku.com
+URL:https://www.payku.com
+END:VCARD
