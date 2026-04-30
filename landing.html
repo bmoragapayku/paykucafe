@@ -38,6 +38,48 @@
       background: rgba(7,0,26,0.08);
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
+    .nav-shell {
+      gap: 1rem;
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+    .language-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(14px);
+      flex-shrink: 0;
+    }
+    .lang-btn {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      line-height: 1;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .lang-btn:hover,
+    .lang-btn.active {
+      background: rgba(124,58,237,0.45);
+      box-shadow: 0 0 18px rgba(224,64,251,0.25);
+      transform: translateY(-1px);
+    }
 
     /*  GRADIENT TEXT */
     .grad-text {
@@ -461,12 +503,29 @@
 
       /* Nav */
       nav .btn-primary { padding: 8px 14px; font-size: 12px; }
+      .nav-shell { gap: 0.5rem; padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+      .nav-logo { height: 1.5rem !important; }
+      .nav-actions { gap: 0.45rem; }
+      .language-switcher { gap: 2px; padding: 3px; }
+      .lang-btn { width: 24px; height: 24px; font-size: 13px; }
 
       /* Stats mb */
       .stats-mb { margin-bottom: 2rem !important; }
 
       /* Sections mb */
       .section-mb { margin-bottom: 2.5rem !important; }
+    }
+    @media (max-width: 420px) {
+      nav .btn-primary { padding: 8px 10px; font-size: 11px; gap: 5px; }
+      nav .btn-primary svg { width: 15px; height: 15px; }
+      .nav-logo { height: 1.25rem !important; }
+      .language-switcher { gap: 1px; padding: 2px; }
+      .lang-btn { width: 21px; height: 21px; font-size: 12px; }
+    }
+    @media (max-width: 360px) {
+      .nav-shell { flex-wrap: wrap; justify-content: center; }
+      .nav-actions { width: 100%; justify-content: center; }
+      .hero-bg { padding-top: 7.5rem !important; }
     }
   </style>
 </head>
@@ -483,19 +542,28 @@
 
 <!-- ════════════════════════════ NAV ════════════════════════════ -->
 <nav>
-  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+  <div class="nav-shell max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
     <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75"
-      alt="Payku" class="h-7 brightness-0 invert">
+      alt="Payku" class="nav-logo h-7 brightness-0 invert">
     <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-white/70">
       <a href="#productos" class="hover:text-white transition-colors">Productos</a>
       <a href="#metodos" class="hover:text-white transition-colors">Métodos de pago</a>
       <a href="#integraciones" class="hover:text-white transition-colors">Integraciones</a>
       <a href="#tarifas" class="hover:text-white transition-colors">Tarifas</a>
     </div>
-    <a href="https://calendly.com/payku/sobre-payku?back=1&month=2026-04" class="btn-primary text-sm py-2.5 px-5">
-      Agenda una cita
-      <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    <div class="nav-actions">
+      <div class="language-switcher" role="group" aria-label="Seleccionar idioma">
+        <button type="button" class="lang-btn active" data-lang="es" aria-label="Español" title="Español">🇨🇱</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English" title="English">🇺🇸</button>
+        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português" title="Português">🇧🇷</button>
+        <button type="button" class="lang-btn" data-lang="zh" aria-label="中文" title="中文">🇨🇳</button>
+        <button type="button" class="lang-btn" data-lang="ru" aria-label="Русский" title="Русский">🇷🇺</button>
+      </div>
+      <a href="https://calendly.com/payku/sobre-payku?back=1&month=2026-04" class="btn-primary text-sm py-2.5 px-5">
+        Agenda una cita
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
   </div>
 </nav>
 
@@ -787,7 +855,7 @@
         <p class="text-white/40 text-sm font-semibold mt-2">Medios de pago</p>
       </div>
       <div class="stat-card reveal" style="transition-delay:0.2s">
-        <p class="stat-num" data-target="1" data-suffix=" día">0</p>
+        <p class="stat-num" data-target="1" data-suffix=" día" data-suffix-key="day">0</p>
         <p class="text-white/40 text-sm font-semibold mt-2">Liquidación mínima</p>
       </div>
     </div>
@@ -1211,6 +1279,264 @@
 
 <!-- ════════════════════════════ SCRIPTS ════════════════════════════ -->
 <script>
+// Traducciones locales
+const LANGUAGES = {
+  es: { html: 'es', locale: 'es-CL', name: 'Español' },
+  en: { html: 'en', locale: 'en-US', name: 'English' },
+  pt: { html: 'pt-BR', locale: 'pt-BR', name: 'Português' },
+  zh: { html: 'zh-CN', locale: 'zh-CN', name: '中文' },
+  ru: { html: 'ru', locale: 'ru-RU', name: 'Русский' }
+};
+const PAGE_TITLES = {
+  es: 'Payku · Pasarela de Pagos LATAM',
+  en: 'Payku · LATAM Payment Gateway',
+  pt: 'Payku · Gateway de Pagamentos LATAM',
+  zh: 'Payku · 拉美支付网关',
+  ru: 'Payku · Платежный шлюз LATAM'
+};
+const SWITCHER_LABELS = {
+  es: 'Seleccionar idioma',
+  en: 'Select language',
+  pt: 'Selecionar idioma',
+  zh: '选择语言',
+  ru: 'Выбрать язык'
+};
+const COUNTER_SUFFIXES = {
+  day: { es: ' día', en: ' day', pt: ' dia', zh: ' 天', ru: ' день' }
+};
+const I18N = {
+  'Productos': { en: 'Products', pt: 'Produtos', zh: '产品', ru: 'Продукты' },
+  'Métodos de pago': { en: 'Payment methods', pt: 'Métodos de pagamento', zh: '支付方式', ru: 'Способы оплаты' },
+  'Integraciones': { en: 'Integrations', pt: 'Integrações', zh: '集成', ru: 'Интеграции' },
+  'Tarifas': { en: 'Pricing', pt: 'Tarifas', zh: '费率', ru: 'Тарифы' },
+  'Agenda una cita': { en: 'Book a call', pt: 'Agende', zh: '预约', ru: 'Записаться' },
+  'La plataforma de pagos más completa de Chile y Perú': { en: 'Chile and Peru’s most complete payment platform', pt: 'A plataforma de pagamentos mais completa do Chile e do Peru', zh: '智利和秘鲁最完整的支付平台', ru: 'Самая полная платежная платформа в Чили и Перу' },
+  'Cobra.': { en: 'Collect.', pt: 'Cobre.', zh: '收款。', ru: 'Принимай.' },
+  'Suscribe.': { en: 'Subscribe.', pt: 'Assine.', zh: '订阅。', ru: 'Подписки.' },
+  'Paga.': { en: 'Pay.', pt: 'Pague.', zh: '付款。', ru: 'Плати.' },
+  'Débito, crédito, transferencias, suscripciones, links de pago y más.': { en: 'Debit, credit, bank transfers, subscriptions, payment links and more.', pt: 'Débito, crédito, transferências, assinaturas, links de pagamento e mais.', zh: '借记卡、信用卡、转账、订阅、支付链接等。', ru: 'Дебет, кредит, переводы, подписки, платежные ссылки и многое другое.' },
+  'Sin cobro de mantención.': { en: 'No maintenance fee.', pt: 'Sem taxa de manutenção.', zh: '无维护费。', ru: 'Без платы за обслуживание.' },
+  'Disponible en Chile y Perú.': { en: 'Available in Chile and Peru.', pt: 'Disponível no Chile e no Peru.', zh: '可在智利和秘鲁使用。', ru: 'Доступно в Чили и Перу.' },
+  'Ver documentación': { en: 'View documentation', pt: 'Ver documentação', zh: '查看文档', ru: 'Документация' },
+  'Fundada en Chile': { en: 'Founded in Chile', pt: 'Fundada no Chile', zh: '创立于智利', ru: 'Основана в Чили' },
+  'Presencia LATAM': { en: 'LATAM presence', pt: 'Presença LATAM', zh: '拉美覆盖', ru: 'Присутствие в LATAM' },
+  'Costo de mantención': { en: 'Maintenance cost', pt: 'Custo de manutenção', zh: '维护成本', ru: 'Стоимость обслуживания' },
+  '💳 Medios de pago': { en: '💳 Payment methods', pt: '💳 Meios de pagamento', zh: '💳 支付方式', ru: '💳 Способы оплаты' },
+  '🔁 Suscripciones': { en: '🔁 Subscriptions', pt: '🔁 Assinaturas', zh: '🔁 订阅', ru: '🔁 Подписки' },
+  '🏦 Transferencia': { en: '🏦 Bank transfer', pt: '🏦 Transferência', zh: '🏦 转账', ru: '🏦 Перевод' },
+  '🔗 Link de Pago': { en: '🔗 Payment Link', pt: '🔗 Link de pagamento', zh: '🔗 支付链接', ru: '🔗 Платежная ссылка' },
+  'Scroll': { en: 'Scroll', pt: 'Role', zh: '滚动', ru: 'Прокрутите' },
+  'Métodos de pago aceptados': { en: 'Accepted payment methods', pt: 'Métodos de pagamento aceitos', zh: '支持的支付方式', ru: 'Принимаемые способы оплаты' },
+  '💳 Visa Crédito': { en: '💳 Visa Credit', pt: '💳 Visa Crédito', zh: '💳 Visa 信用卡', ru: '💳 Visa кредитная' },
+  '🏦 Transferencia Bancaria': { en: '🏦 Bank Transfer', pt: '🏦 Transferência bancária', zh: '🏦 银行转账', ru: '🏦 Банковский перевод' },
+  '📱 Redcompra (Débito)': { en: '📱 Redcompra (Debit)', pt: '📱 Redcompra (Débito)', zh: '📱 Redcompra（借记卡）', ru: '📱 Redcompra (дебет)' },
+  '🇨🇱 Chile': { en: '🇨🇱 Chile', pt: '🇨🇱 Chile', zh: '🇨🇱 智利', ru: '🇨🇱 Чили' },
+  '🇵🇪 Perú': { en: '🇵🇪 Peru', pt: '🇵🇪 Peru', zh: '🇵🇪 秘鲁', ru: '🇵🇪 Перу' },
+  '🔒 Transacciones cifradas': { en: '🔒 Encrypted transactions', pt: '🔒 Transações criptografadas', zh: '🔒 加密交易', ru: '🔒 Зашифрованные транзакции' },
+  '⚡ Integración en minutos': { en: '⚡ Integration in minutes', pt: '⚡ Integração em minutos', zh: '⚡ 几分钟完成集成', ru: '⚡ Интеграция за минуты' },
+  '📊 Panel en tiempo real': { en: '📊 Real-time dashboard', pt: '📊 Painel em tempo real', zh: '📊 实时面板', ru: '📊 Панель в реальном времени' },
+  '💸 Sin cobro de mantención': { en: '💸 No maintenance fee', pt: '💸 Sem taxa de manutenção', zh: '💸 无维护费', ru: '💸 Без платы за обслуживание' },
+  '🔄 Cobros automáticos': { en: '🔄 Automatic charges', pt: '🔄 Cobranças automáticas', zh: '🔄 自动扣款', ru: '🔄 Автоматические списания' },
+  'Nuestros Productos': { en: 'Our Products', pt: 'Nossos Produtos', zh: '我们的产品', ru: 'Наши продукты' },
+  'Todo lo que necesitas': { en: 'Everything you need', pt: 'Tudo o que você precisa', zh: '你需要的一切', ru: 'Все, что нужно' },
+  'para cobrar online': { en: 'to accept online payments', pt: 'para cobrar online', zh: '在线收款', ru: 'для онлайн-платежей' },
+  'Desde un link de pago hasta una API completa. Elige la solución que se adapta a tu negocio.': { en: 'From a payment link to a full API. Choose the solution that fits your business.', pt: 'De um link de pagamento a uma API completa. Escolha a solução que se adapta ao seu negócio.', zh: '从支付链接到完整 API，选择适合你业务的方案。', ru: 'От платежной ссылки до полноценного API. Выберите решение для вашего бизнеса.' },
+  'MÁS POPULAR': { en: 'MOST POPULAR', pt: 'MAIS POPULAR', zh: '最受欢迎', ru: 'ПОПУЛЯРНО' },
+  'Botón de Pago': { en: 'Payment Button', pt: 'Botão de pagamento', zh: '支付按钮', ru: 'Кнопка оплаты' },
+  'Crea botones de pago y compártelos por email, WhatsApp o redes sociales. Sin necesidad de tener un sitio web.': { en: 'Create payment buttons and share them by email, WhatsApp or social media. No website needed.', pt: 'Crie botões de pagamento e compartilhe por email, WhatsApp ou redes sociais. Sem precisar de site.', zh: '创建支付按钮，并通过电子邮件、WhatsApp 或社交网络分享。无需网站。', ru: 'Создавайте кнопки оплаты и делитесь ими по email, WhatsApp или в соцсетях. Сайт не нужен.' },
+  'Link personalizado para cada cobro': { en: 'Custom link for each charge', pt: 'Link personalizado para cada cobrança', zh: '每笔收款都有专属链接', ru: 'Персональная ссылка для каждого платежа' },
+  'Compatible con email y redes sociales': { en: 'Works with email and social media', pt: 'Compatível com email e redes sociais', zh: '兼容电子邮件和社交网络', ru: 'Подходит для email и соцсетей' },
+  'Cupones de descuento incluidos': { en: 'Discount coupons included', pt: 'Cupons de desconto incluídos', zh: '包含折扣券', ru: 'Купоны на скидку включены' },
+  'Cobros Recurrentes': { en: 'Recurring Charges', pt: 'Cobranças recorrentes', zh: '周期性收款', ru: 'Регулярные платежи' },
+  'Recibe pagos recurrentes para tus clientes: suscripciones, membresías y pagos periódicos de forma automática.': { en: 'Receive recurring payments from your customers: subscriptions, memberships and scheduled payments automatically.', pt: 'Receba pagamentos recorrentes dos seus clientes: assinaturas, membresias e pagamentos periódicos automaticamente.', zh: '自动接收客户的周期性付款：订阅、会员和定期支付。', ru: 'Принимайте регулярные платежи клиентов: подписки, членства и периодические платежи автоматически.' },
+  'Suscripciones y membresías': { en: 'Subscriptions and memberships', pt: 'Assinaturas e membresias', zh: '订阅和会员', ru: 'Подписки и членства' },
+  'Ciclos de cobro configurables': { en: 'Configurable billing cycles', pt: 'Ciclos de cobrança configuráveis', zh: '可配置的计费周期', ru: 'Настраиваемые циклы списания' },
+  'Fecha de expiración por plan': { en: 'Expiration date by plan', pt: 'Data de expiração por plano', zh: '按计划设置到期日期', ru: 'Срок действия по плану' },
+  'Integra Payku directamente en tu plataforma. PayIn y PayOut en una sola API, con ambiente de pruebas incluido.': { en: 'Integrate Payku directly into your platform. PayIn and PayOut in one API, with a test environment included.', pt: 'Integre a Payku diretamente à sua plataforma. PayIn e PayOut em uma única API, com ambiente de testes incluído.', zh: '将 Payku 直接集成到你的平台。一个 API 支持 PayIn 和 PayOut，并包含测试环境。', ru: 'Интегрируйте Payku напрямую в вашу платформу. PayIn и PayOut в одном API, включая тестовую среду.' },
+  'PayIn (cobros) y PayOut (pagos)': { en: 'PayIn (collections) and PayOut (payments)', pt: 'PayIn (cobranças) e PayOut (pagamentos)', zh: 'PayIn（收款）和 PayOut（付款）', ru: 'PayIn (прием) и PayOut (выплаты)' },
+  'Tarjetas de prueba para desarrollo': { en: 'Test cards for development', pt: 'Cartões de teste para desenvolvimento', zh: '开发用测试卡', ru: 'Тестовые карты для разработки' },
+  'Ambiente sandbox disponible': { en: 'Sandbox environment available', pt: 'Ambiente sandbox disponível', zh: '提供沙盒环境', ru: 'Доступна sandbox-среда' },
+  'Marketplace': { en: 'Marketplace', pt: 'Marketplace', zh: '市场平台', ru: 'Маркетплейс' },
+  'Divide los pagos entre varias cuentas en distintos porcentajes. Ideal para eventos, plataformas y negocios multi-vendedor.': { en: 'Split payments across multiple accounts by percentage. Ideal for events, platforms and multi-vendor businesses.', pt: 'Divida pagamentos entre várias contas por porcentagem. Ideal para eventos, plataformas e negócios multivendedor.', zh: '按比例将付款拆分到多个账户。适合活动、平台和多商户业务。', ru: 'Разделяйте платежи между несколькими счетами по процентам. Идеально для мероприятий, платформ и мультивендорных бизнесов.' },
+  'División de pagos por porcentaje': { en: 'Payment split by percentage', pt: 'Divisão de pagamentos por porcentagem', zh: '按比例分账', ru: 'Разделение платежей по процентам' },
+  'Soporte para múltiples cuentas': { en: 'Support for multiple accounts', pt: 'Suporte para múltiplas contas', zh: '支持多个账户', ru: 'Поддержка нескольких счетов' },
+  'Para eventos y plataformas': { en: 'For events and platforms', pt: 'Para eventos e plataformas', zh: '适用于活动和平台', ru: 'Для мероприятий и платформ' },
+  'Payouts': { en: 'Payouts', pt: 'Payouts', zh: '付款', ru: 'Выплаты' },
+  'Realiza pagos y dispersiones desde tu plataforma. Liquida a tus proveedores, trabajadores o colaboradores directo desde Payku.': { en: 'Send payments and disbursements from your platform. Pay suppliers, workers or collaborators directly from Payku.', pt: 'Faça pagamentos e dispersões pela sua plataforma. Pague fornecedores, trabalhadores ou colaboradores direto pela Payku.', zh: '从你的平台发起付款和分账。通过 Payku 直接结算给供应商、员工或合作伙伴。', ru: 'Отправляйте платежи и распределения со своей платформы. Выплачивайте поставщикам, сотрудникам и партнерам прямо из Payku.' },
+  'Pagos salientes desde tu cuenta': { en: 'Outgoing payments from your account', pt: 'Pagamentos enviados da sua conta', zh: '从你的账户发起付款', ru: 'Исходящие платежи со счета' },
+  'Via API o desde el panel': { en: 'Via API or from the dashboard', pt: 'Via API ou pelo painel', zh: '通过 API 或面板操作', ru: 'Через API или из панели' },
+  'Disponible en Chile y Perú': { en: 'Available in Chile and Peru', pt: 'Disponível no Chile e no Peru', zh: '可在智利和秘鲁使用', ru: 'Доступно в Чили и Перу' },
+  'Donaciones': { en: 'Donations', pt: 'Doações', zh: '捐赠', ru: 'Пожертвования' },
+  'Recibe donaciones online de forma simple y segura. Ideal para fundaciones, causas sociales y campañas de recaudación.': { en: 'Receive online donations simply and securely. Ideal for foundations, social causes and fundraising campaigns.', pt: 'Receba doações online de forma simples e segura. Ideal para fundações, causas sociais e campanhas de arrecadação.', zh: '简单、安全地接收线上捐赠。适合基金会、公益项目和募款活动。', ru: 'Принимайте онлайн-пожертвования просто и безопасно. Подходит для фондов, социальных инициатив и сборов.' },
+  'Monto libre o fijo': { en: 'Free or fixed amount', pt: 'Valor livre ou fixo', zh: '自定义或固定金额', ru: 'Свободная или фиксированная сумма' },
+  'Link compartible al instante': { en: 'Shareable link instantly', pt: 'Link compartilhável instantaneamente', zh: '即时生成可分享链接', ru: 'Ссылка для мгновенного обмена' },
+  'Sin necesidad de sitio web': { en: 'No website needed', pt: 'Sem precisar de site', zh: '无需网站', ru: 'Сайт не нужен' },
+  'Fundada en Santiago': { en: 'Founded in Santiago', pt: 'Fundada em Santiago', zh: '创立于圣地亚哥', ru: 'Основана в Сантьяго' },
+  'Chile y Perú': { en: 'Chile and Peru', pt: 'Chile e Peru', zh: '智利和秘鲁', ru: 'Чили и Перу' },
+  'Medios de pago': { en: 'Payment methods', pt: 'Meios de pagamento', zh: '支付方式', ru: 'Способы оплаты' },
+  'Liquidación mínima': { en: 'Minimum settlement', pt: 'Liquidação mínima', zh: '最低结算时间', ru: 'Минимальное зачисление' },
+  'Conecta con tu': { en: 'Connect with your', pt: 'Conecte com sua', zh: '连接你的', ru: 'Подключите вашу' },
+  'plataforma favorita': { en: 'favorite platform', pt: 'plataforma favorita', zh: '常用平台', ru: 'любимую платформу' },
+  'Plugins oficiales para WooCommerce, PrestaShop, OpenCart y WHMCS. O integra directamente vía API REST. También compatible con Floid, la nueva tecnología de Open Finance.': { en: 'Official plugins for WooCommerce, PrestaShop, OpenCart and WHMCS. Or integrate directly through the REST API. Also compatible with Floid, the new Open Finance technology.', pt: 'Plugins oficiais para WooCommerce, PrestaShop, OpenCart e WHMCS. Ou integre diretamente via API REST. Também compatível com Floid, a nova tecnologia de Open Finance.', zh: '提供 WooCommerce、PrestaShop、OpenCart 和 WHMCS 官方插件。也可通过 REST API 直接集成，并兼容新的开放金融技术 Floid。', ru: 'Официальные плагины для WooCommerce, PrestaShop, OpenCart и WHMCS. Или прямая интеграция через REST API. Также совместимо с Floid, новой технологией Open Finance.' },
+  'Plugins listos en 5 minutos': { en: 'Plugins ready in 5 minutes', pt: 'Plugins prontos em 5 minutos', zh: '插件 5 分钟即可启用', ru: 'Плагины готовы за 5 минут' },
+  'Descarga, instala, activa y listo para cobrar': { en: 'Download, install, activate and start collecting', pt: 'Baixe, instale, ative e comece a cobrar', zh: '下载、安装、启用，即可开始收款', ru: 'Скачайте, установите, активируйте и принимайте платежи' },
+  'Documentación completa': { en: 'Complete documentation', pt: 'Documentação completa', zh: '完整文档', ru: 'Полная документация' },
+  'Guías paso a paso, ejemplos de código y soporte': { en: 'Step-by-step guides, code examples and support', pt: 'Guias passo a passo, exemplos de código e suporte', zh: '分步指南、代码示例和支持', ru: 'Пошаговые руководства, примеры кода и поддержка' },
+  'Ambiente de pruebas incluido': { en: 'Test environment included', pt: 'Ambiente de testes incluído', zh: '包含测试环境', ru: 'Тестовая среда включена' },
+  'Sandbox con tarjetas de test para validar tu integración': { en: 'Sandbox with test cards to validate your integration', pt: 'Sandbox com cartões de teste para validar sua integração', zh: '使用测试卡在沙盒中验证集成', ru: 'Sandbox с тестовыми картами для проверки интеграции' },
+  '+ integración directa vía API REST en cualquier stack': { en: '+ direct REST API integration in any stack', pt: '+ integração direta via API REST em qualquer stack', zh: '+ 可在任意技术栈通过 REST API 直接集成', ru: '+ прямая интеграция REST API в любом стеке' },
+  'Tarifas Transparentes': { en: 'Transparent Pricing', pt: 'Tarifas transparentes', zh: '透明费率', ru: 'Прозрачные тарифы' },
+  'Sin letra chica.': { en: 'No fine print.', pt: 'Sem letras miúdas.', zh: '无隐藏条款。', ru: 'Без мелкого шрифта.' },
+  'Sin sorpresas.': { en: 'No surprises.', pt: 'Sem surpresas.', zh: '无意外费用。', ru: 'Без сюрпризов.' },
+  'Sin cobro de mantención mensual. Pagas solo cuando vendes.': { en: 'No monthly maintenance fee. You pay only when you sell.', pt: 'Sem taxa mensal de manutenção. Você paga só quando vende.', zh: '无月度维护费。只有成交时才付费。', ru: 'Без ежемесячной платы за обслуживание. Платите только при продаже.' },
+  'Sin costos de incorporación': { en: 'No onboarding costs', pt: 'Sem custos de adesão', zh: '无入驻费用', ru: 'Без платы за подключение' },
+  'Regístrate gratis. Activa tu cuenta al instante.': { en: 'Register for free. Activate your account instantly.', pt: 'Cadastre-se grátis. Ative sua conta instantaneamente.', zh: '免费注册，即刻激活账户。', ru: 'Зарегистрируйтесь бесплатно. Активируйте аккаунт сразу.' },
+  'Transferencia bancaria': { en: 'Bank transfer', pt: 'Transferência bancária', zh: '银行转账', ru: 'Банковский перевод' },
+  'El medio más económico': { en: 'The most economical method', pt: 'O meio mais econômico', zh: '最经济的方式', ru: 'Самый экономичный способ' },
+  '+ IVA': { en: '+ VAT', pt: '+ IVA', zh: '+ 增值税', ru: '+ НДС' },
+  'Liquidación a 3 días hábiles': { en: 'Settlement in 3 business days', pt: 'Liquidação em 3 dias úteis', zh: '3 个工作日结算', ru: 'Зачисление за 3 рабочих дня' },
+  'Todos los bancos de Chile': { en: 'All banks in Chile', pt: 'Todos os bancos do Chile', zh: '智利所有银行', ru: 'Все банки Чили' },
+  'Sin cobro de mantención mensual': { en: 'No monthly maintenance fee', pt: 'Sem taxa mensal de manutenção', zh: '无月度维护费', ru: 'Без ежемесячной платы за обслуживание' },
+  'MÁS USADO': { en: 'MOST USED', pt: 'MAIS USADO', zh: '最常用', ru: 'ЧАСТО ИСПОЛЬЗУЕТСЯ' },
+  'Webpay / Tarjetas': { en: 'Webpay / Cards', pt: 'Webpay / Cartões', zh: 'Webpay / 银行卡', ru: 'Webpay / Карты' },
+  'Débito y crédito': { en: 'Debit and credit', pt: 'Débito e crédito', zh: '借记卡和信用卡', ru: 'Дебет и кредит' },
+  'Liquidación a 1 o 3 días hábiles': { en: 'Settlement in 1 or 3 business days', pt: 'Liquidação em 1 ou 3 dias úteis', zh: '1 或 3 个工作日结算', ru: 'Зачисление за 1 или 3 рабочих дня' },
+  'Visa, Mastercard, Amex, Magna, Diners': { en: 'Visa, Mastercard, Amex, Magna, Diners', pt: 'Visa, Mastercard, Amex, Magna, Diners', zh: 'Visa、Mastercard、Amex、Magna、Diners', ru: 'Visa, Mastercard, Amex, Magna, Diners' },
+  'Redcompra (débito) y Onepay': { en: 'Redcompra (debit) and Onepay', pt: 'Redcompra (débito) e Onepay', zh: 'Redcompra（借记卡）和 Onepay', ru: 'Redcompra (дебет) и Onepay' },
+  'La comisión puede trasladarse al cliente': { en: 'The fee can be passed on to the customer', pt: 'A comissão pode ser repassada ao cliente', zh: '手续费可转由客户承担', ru: 'Комиссию можно переложить на клиента' },
+  'Para personas y negocios': { en: 'For individuals and businesses', pt: 'Para pessoas e negócios', zh: '适用于个人和企业', ru: 'Для людей и бизнеса' },
+  'mantención': { en: 'maintenance', pt: 'manutenção', zh: '维护费', ru: 'обслуживание' },
+  'Solo necesitas una cuenta bancaria': { en: 'You only need a bank account', pt: 'Você só precisa de uma conta bancária', zh: '你只需要一个银行账户', ru: 'Нужен только банковский счет' },
+  'No necesitas empresa constituida': { en: 'No registered company required', pt: 'Não precisa ter empresa constituída', zh: '无需注册公司', ru: 'Компания не требуется' },
+  'Pagas solo cuando vendes': { en: 'You pay only when you sell', pt: 'Você paga só quando vende', zh: '只有成交时才付费', ru: 'Платите только при продаже' },
+  'Activación inmediata': { en: 'Immediate activation', pt: 'Ativação imediata', zh: '立即启用', ru: 'Мгновенная активация' },
+  '* Tarifas en CLP + IVA. Liquidación en 1 día hábil disponible según método de pago. Sin cobros de mantención mensual ni anual.': { en: '* Rates in CLP + VAT. Settlement in 1 business day available depending on payment method. No monthly or annual maintenance fees.', pt: '* Tarifas em CLP + IVA. Liquidação em 1 dia útil disponível conforme o método de pagamento. Sem cobranças de manutenção mensal ou anual.', zh: '* 费率以 CLP + 增值税计。根据支付方式可在 1 个工作日结算。无月费或年费。', ru: '* Тарифы в CLP + НДС. Зачисление за 1 рабочий день доступно в зависимости от способа оплаты. Без ежемесячной или годовой платы.' },
+  'Seguridad': { en: 'Security', pt: 'Segurança', zh: '安全', ru: 'Безопасность' },
+  'Protección en cada transacción': { en: 'Protection in every transaction', pt: 'Proteção em cada transação', zh: '每笔交易都有保护', ru: 'Защита каждой транзакции' },
+  'Encriptación SSL': { en: 'SSL encryption', pt: 'Criptografia SSL', zh: 'SSL 加密', ru: 'SSL-шифрование' },
+  'Datos cifrados en tránsito y en reposo': { en: 'Data encrypted in transit and at rest', pt: 'Dados criptografados em trânsito e em repouso', zh: '传输和存储数据均加密', ru: 'Данные шифруются при передаче и хранении' },
+  'Triple Validación': { en: 'Triple Validation', pt: 'Tripla validação', zh: '三重验证', ru: 'Тройная проверка' },
+  'Cada transacción es validada 3 veces': { en: 'Each transaction is validated 3 times', pt: 'Cada transação é validada 3 vezes', zh: '每笔交易验证 3 次', ru: 'Каждая транзакция проверяется 3 раза' },
+  'Autenticación adicional para pagos con tarjeta': { en: 'Additional authentication for card payments', pt: 'Autenticação adicional para pagamentos com cartão', zh: '银行卡支付的额外认证', ru: 'Дополнительная аутентификация для карточных платежей' },
+  'Respaldo bancario': { en: 'Banking support', pt: 'Respaldo bancário', zh: '银行支持', ru: 'Банковская поддержка' },
+  'Integración directa con la red bancaria chilena': { en: 'Direct integration with Chile’s banking network', pt: 'Integração direta com a rede bancária chilena', zh: '直接接入智利银行网络', ru: 'Прямая интеграция с банковской сетью Чили' },
+  'Empieza hoy': { en: 'Start today', pt: 'Comece hoje', zh: '今天开始', ru: 'Начните сегодня' },
+  'Tranquilo,': { en: 'Relax,', pt: 'Fique tranquilo,', zh: '放心，', ru: 'Спокойно,' },
+  'Payku lo hace fácil': { en: 'Payku makes it easy', pt: 'a Payku facilita', zh: 'Payku 让一切更简单', ru: 'Payku делает это просто' },
+  'La plataforma de pagos online más completa de Chile y Perú. Sin mantención, sin empresa constituida. Empieza a cobrar hoy.': { en: 'Chile and Peru’s most complete online payment platform. No maintenance fee, no registered company required. Start collecting today.', pt: 'A plataforma de pagamentos online mais completa do Chile e do Peru. Sem manutenção, sem empresa constituída. Comece a cobrar hoje.', zh: '智利和秘鲁最完整的在线支付平台。无维护费，无需注册公司。今天开始收款。', ru: 'Самая полная платформа онлайн-платежей в Чили и Перу. Без обслуживания, без регистрации компании. Начните принимать платежи сегодня.' },
+  'Conocer más': { en: 'Learn more', pt: 'Saiba mais', zh: '了解更多', ru: 'Узнать больше' },
+  'Chile': { en: 'Chile', pt: 'Chile', zh: '智利', ru: 'Чили' },
+  'Perú': { en: 'Peru', pt: 'Peru', zh: '秘鲁', ru: 'Перу' },
+  'Tarjeta de contacto': { en: 'Contact card', pt: 'Cartão de contato', zh: '联系人名片', ru: 'Карточка контакта' },
+  'Guardar contacto': { en: 'Save contact', pt: 'Salvar contato', zh: '保存联系人', ru: 'Сохранить контакт' },
+  'Certificaciones de Seguridad': { en: 'Security Certifications', pt: 'Certificações de segurança', zh: '安全认证', ru: 'Сертификаты безопасности' },
+  'Certificación PCI DSS': { en: 'PCI DSS Certification', pt: 'Certificação PCI DSS', zh: 'PCI DSS 认证', ru: 'Сертификация PCI DSS' },
+  'Verificado': { en: 'Verified', pt: 'Verificado', zh: '已验证', ru: 'Проверено' },
+  'Certificación SOC 2': { en: 'SOC 2 Certification', pt: 'Certificação SOC 2', zh: 'SOC 2 认证', ru: 'Сертификация SOC 2' },
+  'Payku es miembro de': { en: 'Payku is a member of', pt: 'A Payku é membro da', zh: 'Payku 是以下机构成员：', ru: 'Payku является участником' },
+  ', la asociación de empresas Fintech de Chile y la Peru Payments Association.': { en: ', the association of Fintech companies in Chile, and the Peru Payments Association.', pt: ', a associação de empresas Fintech do Chile, e da Peru Payments Association.', zh: '，智利金融科技企业协会，以及 Peru Payments Association。', ru: ', ассоциации финтех-компаний Чили, и Peru Payments Association.' },
+  'Pasarela de Pagos LATAM · © 2026': { en: 'LATAM Payment Gateway · © 2026', pt: 'Gateway de Pagamentos LATAM · © 2026', zh: '拉美支付网关 · © 2026', ru: 'Платежный шлюз LATAM · © 2026' },
+  'Documentación': { en: 'Documentation', pt: 'Documentação', zh: '文档', ru: 'Документация' },
+  'Registro': { en: 'Sign up', pt: 'Cadastro', zh: '注册', ru: 'Регистрация' }
+};
+
+let currentLang = 'es';
+const i18nTextNodes = [];
+
+function getStoredLanguage() {
+  try {
+    return localStorage.getItem('paykuLandingLang');
+  } catch (error) {
+    return null;
+  }
+}
+
+function storeLanguage(lang) {
+  try {
+    localStorage.setItem('paykuLandingLang', lang);
+  } catch (error) {
+    // localStorage puede no estar disponible en algunos navegadores al abrir HTML local.
+  }
+}
+
+function translateKey(key, lang) {
+  return lang === 'es' ? key : (I18N[key] && I18N[key][lang]) || key;
+}
+
+function collectI18nTextNodes() {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || parent.closest('script, style, svg, noscript')) return NodeFilter.FILTER_REJECT;
+      const key = node.nodeValue.trim();
+      return I18N[key] ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+
+  let node;
+  while ((node = walker.nextNode())) {
+    i18nTextNodes.push({ node, key: node.nodeValue.trim() });
+  }
+}
+
+function setTextPreservingWhitespace(node, value) {
+  const raw = node.nodeValue;
+  const leading = raw.match(/^\s*/)[0];
+  const trailing = raw.match(/\s*$/)[0];
+  node.nodeValue = `${leading}${value}${trailing}`;
+}
+
+function formatCounterNumber(value, decimals = 0, lang = currentLang) {
+  if (decimals > 0) return value.toFixed(decimals);
+  const locale = (LANGUAGES[lang] || LANGUAGES.es).locale;
+  return Math.round(value).toLocaleString(locale);
+}
+
+function updateCounterSuffixes(lang) {
+  document.querySelectorAll('[data-suffix-key]').forEach(el => {
+    const suffixKey = el.dataset.suffixKey;
+    const suffix = (COUNTER_SUFFIXES[suffixKey] && COUNTER_SUFFIXES[suffixKey][lang]) || el.dataset.suffix || '';
+    el.dataset.suffix = suffix;
+
+    if (el.dataset.counted === 'true' || el.textContent.trim() !== '0') {
+      const target = parseFloat(el.dataset.target || '0');
+      const decimals = parseInt(el.dataset.decimals || '0', 10);
+      el.textContent = formatCounterNumber(target, decimals, lang) + suffix;
+    }
+  });
+}
+
+function applyLanguage(lang) {
+  if (!LANGUAGES[lang]) lang = 'es';
+  currentLang = lang;
+  document.documentElement.lang = LANGUAGES[lang].html;
+  document.title = PAGE_TITLES[lang] || PAGE_TITLES.es;
+
+  i18nTextNodes.forEach(({ node, key }) => {
+    setTextPreservingWhitespace(node, translateKey(key, lang));
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(button => {
+    const isActive = button.dataset.lang === lang;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+    button.setAttribute('title', LANGUAGES[button.dataset.lang].name);
+    button.setAttribute('aria-label', LANGUAGES[button.dataset.lang].name);
+  });
+
+  const switcher = document.querySelector('.language-switcher');
+  if (switcher) switcher.setAttribute('aria-label', SWITCHER_LABELS[lang] || SWITCHER_LABELS.es);
+
+  updateCounterSuffixes(lang);
+  storeLanguage(lang);
+}
+
+collectI18nTextNodes();
+document.querySelectorAll('.lang-btn').forEach(button => {
+  button.addEventListener('click', () => applyLanguage(button.dataset.lang));
+});
+applyLanguage(getStoredLanguage() || 'es');
+
 // Particulas
 (function initParticles() {
   const canvas = document.getElementById('particle-canvas');
@@ -1281,8 +1607,12 @@ function animateCounter(el) {
     const progress = Math.min((now - start) / duration, 1);
     const eased    = 1 - Math.pow(1 - progress, 3);
     const value    = target * eased;
-    el.textContent = (decimals > 0 ? value.toFixed(decimals) : Math.round(value).toLocaleString('es-CL')) + suffix;
-    if (progress < 1) requestAnimationFrame(step);
+    el.textContent = formatCounterNumber(value, decimals, currentLang) + suffix;
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.dataset.counted = 'true';
+    }
   }
   requestAnimationFrame(step);
 }
