@@ -81,6 +81,90 @@
       transform: translateY(-1px);
     }
 
+    /* Mobile lang dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+    .lang-dropdown-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px 6px 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(14px);
+      cursor: pointer;
+      font-size: 18px;
+      color: #fff;
+      line-height: 1;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .lang-dropdown-trigger:hover {
+      border-color: rgba(124,58,237,0.5);
+      background: rgba(124,58,237,0.2);
+    }
+    .lang-dropdown-trigger svg {
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .lang-dropdown.open .lang-dropdown-trigger svg {
+      transform: rotate(180deg);
+    }
+    .lang-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(20,5,45,0.95);
+      border: 1px solid rgba(124,58,237,0.35);
+      border-radius: 16px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 140px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(224,64,251,0.08);
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 200;
+    }
+    .lang-dropdown.open .lang-dropdown-menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .lang-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.75);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Manrope', sans-serif;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, color 0.15s;
+    }
+    .lang-dropdown-item:hover {
+      background: rgba(124,58,237,0.3);
+      color: #fff;
+    }
+    .lang-dropdown-item.active {
+      background: rgba(124,58,237,0.4);
+      color: #fff;
+    }
+    .lang-dropdown-item .lang-flag {
+      font-size: 20px;
+      line-height: 1;
+    }
+
     /*  GRADIENT TEXT */
     .grad-text {
       background: linear-gradient(135deg, #fff 0%, #e8c7ff 40%, #E040FB 100%);
@@ -505,9 +589,7 @@
       nav .btn-primary { padding: 8px 14px; font-size: 12px; }
       .nav-shell { gap: 0.5rem; padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
       .nav-logo { height: 1.5rem !important; }
-      .nav-actions { gap: 0.45rem; }
-      .language-switcher { gap: 2px; padding: 3px; }
-      .lang-btn { width: 24px; height: 24px; font-size: 13px; }
+      .nav-actions { gap: 0.5rem; }
 
       /* Stats mb */
       .stats-mb { margin-bottom: 2rem !important; }
@@ -515,17 +597,23 @@
       /* Sections mb */
       .section-mb { margin-bottom: 2.5rem !important; }
     }
+    @media (max-width: 480px) {
+      .nav-shell {
+        justify-content: space-between;
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+      }
+      .nav-actions { justify-content: flex-end; }
+      .hero-bg { padding-top: 5rem !important; }
+    }
     @media (max-width: 420px) {
       nav .btn-primary { padding: 8px 10px; font-size: 11px; gap: 5px; }
       nav .btn-primary svg { width: 15px; height: 15px; }
       .nav-logo { height: 1.25rem !important; }
-      .language-switcher { gap: 1px; padding: 2px; }
-      .lang-btn { width: 21px; height: 21px; font-size: 12px; }
     }
     @media (max-width: 360px) {
-      .nav-shell { flex-wrap: wrap; justify-content: center; }
-      .nav-actions { width: 100%; justify-content: center; }
-      .hero-bg { padding-top: 7.5rem !important; }
+      .nav-actions { gap: 0.4rem; }
+      .hero-bg { padding-top: 5rem !important; }
     }
   </style>
 </head>
@@ -552,12 +640,37 @@
       <a href="#tarifas" class="hover:text-white transition-colors">Tarifas</a>
     </div>
     <div class="nav-actions">
-      <div class="language-switcher" role="group" aria-label="Seleccionar idioma">
+      <!-- Desktop: pill con todas las banderas -->
+      <div class="language-switcher hidden md:inline-flex" role="group" aria-label="Seleccionar idioma">
         <button type="button" class="lang-btn active" data-lang="es" aria-label="Español" title="Español">🇨🇱</button>
         <button type="button" class="lang-btn" data-lang="en" aria-label="English" title="English">🇺🇸</button>
         <button type="button" class="lang-btn" data-lang="pt" aria-label="Português" title="Português">🇧🇷</button>
         <button type="button" class="lang-btn" data-lang="zh" aria-label="中文" title="中文">🇨🇳</button>
         <button type="button" class="lang-btn" data-lang="ru" aria-label="Русский" title="Русский">🇷🇺</button>
+      </div>
+      <!-- Mobile: dropdown compacto -->
+      <div class="lang-dropdown md:hidden" id="langDropdown">
+        <button type="button" class="lang-dropdown-trigger" id="langDropdownTrigger" aria-haspopup="true" aria-expanded="false">
+          <span id="langDropdownFlag">🇨🇱</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="lang-dropdown-menu" id="langDropdownMenu" role="listbox">
+          <button type="button" class="lang-dropdown-item active" data-lang="es" role="option" aria-selected="true">
+            <span class="lang-flag">🇨🇱</span> Español
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="en" role="option" aria-selected="false">
+            <span class="lang-flag">🇺🇸</span> English
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="pt" role="option" aria-selected="false">
+            <span class="lang-flag">🇧🇷</span> Português
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="zh" role="option" aria-selected="false">
+            <span class="lang-flag">🇨🇳</span> 中文
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="ru" role="option" aria-selected="false">
+            <span class="lang-flag">🇷🇺</span> Русский
+          </button>
+        </div>
       </div>
       <a href="https://calendly.com/payku/sobre-payku?back=1&month=2026-04" class="btn-primary text-sm py-2.5 px-5">
         Agenda una cita
@@ -1353,6 +1466,7 @@ const I18N = {
   'Ciclos de cobro configurables': { en: 'Configurable billing cycles', pt: 'Ciclos de cobrança configuráveis', zh: '可配置的计费周期', ru: 'Настраиваемые циклы списания' },
   'Fecha de expiración por plan': { en: 'Expiration date by plan', pt: 'Data de expiração por plano', zh: '按计划设置到期日期', ru: 'Срок действия по плану' },
   'Integra Payku directamente en tu plataforma. PayIn y PayOut en una sola API, con ambiente de pruebas incluido.': { en: 'Integrate Payku directly into your platform. PayIn and PayOut in one API, with a test environment included.', pt: 'Integre a Payku diretamente à sua plataforma. PayIn e PayOut em uma única API, com ambiente de testes incluído.', zh: '将 Payku 直接集成到你的平台。一个 API 支持 PayIn 和 PayOut，并包含测试环境。', ru: 'Интегрируйте Payku напрямую в вашу платформу. PayIn и PayOut в одном API, включая тестовую среду.' },
+  'API REST': { en: 'REST API', pt: 'API REST', zh: 'REST 接口', ru: 'REST-интерфейс' },
   'PayIn (cobros) y PayOut (pagos)': { en: 'PayIn (collections) and PayOut (payments)', pt: 'PayIn (cobranças) e PayOut (pagamentos)', zh: 'PayIn（收款）和 PayOut（付款）', ru: 'PayIn (прием) и PayOut (выплаты)' },
   'Tarjetas de prueba para desarrollo': { en: 'Test cards for development', pt: 'Cartões de teste para desenvolvimento', zh: '开发用测试卡', ru: 'Тестовые карты для разработки' },
   'Ambiente sandbox disponible': { en: 'Sandbox environment available', pt: 'Ambiente sandbox disponível', zh: '提供沙盒环境', ru: 'Доступна sandbox-среда' },
@@ -1377,14 +1491,15 @@ const I18N = {
   'Liquidación mínima': { en: 'Minimum settlement', pt: 'Liquidação mínima', zh: '最低结算时间', ru: 'Минимальное зачисление' },
   'Conecta con tu': { en: 'Connect with your', pt: 'Conecte com sua', zh: '连接你的', ru: 'Подключите вашу' },
   'plataforma favorita': { en: 'favorite platform', pt: 'plataforma favorita', zh: '常用平台', ru: 'любимую платформу' },
-  'Plugins oficiales para WooCommerce, PrestaShop, OpenCart y WHMCS. O integra directamente vía API REST. También compatible con Floid, la nueva tecnología de Open Finance.': { en: 'Official plugins for WooCommerce, PrestaShop, OpenCart and WHMCS. Or integrate directly through the REST API. Also compatible with Floid, the new Open Finance technology.', pt: 'Plugins oficiais para WooCommerce, PrestaShop, OpenCart e WHMCS. Ou integre diretamente via API REST. Também compatível com Floid, a nova tecnologia de Open Finance.', zh: '提供 WooCommerce、PrestaShop、OpenCart 和 WHMCS 官方插件。也可通过 REST API 直接集成，并兼容新的开放金融技术 Floid。', ru: 'Официальные плагины для WooCommerce, PrestaShop, OpenCart и WHMCS. Или прямая интеграция через REST API. Также совместимо с Floid, новой технологией Open Finance.' },
+  'Plugins oficiales para WooCommerce, PrestaShop, OpenCart y WHMCS. O integra directamente vía API REST. También compatible con Floid, la nueva tecnología de Open Finance.': { en: 'Official plugins for WooCommerce, PrestaShop, OpenCart and WHMCS. Or integrate directly through the REST API. Also compatible with Floid, the new Open Finance technology.', pt: 'Plugins oficiais para WooCommerce, PrestaShop, OpenCart e WHMCS. Ou integre diretamente via API REST. Também compatível com Floid, a nova tecnologia de Open Finance.', zh: '提供 WooCommerce、PrestaShop、OpenCart 和 WHMCS 官方插件。也可通过 REST 接口直接集成，并兼容新的开放金融技术 Floid。', ru: 'Официальные плагины для WooCommerce, PrestaShop, OpenCart и WHMCS. Или прямая интеграция через REST-интерфейс. Также совместимо с Floid, новой технологией Open Finance.' },
+  '⚡ API REST': { en: '⚡ REST API', pt: '⚡ API REST', zh: '⚡ REST 接口', ru: '⚡ REST-интерфейс' },
   'Plugins listos en 5 minutos': { en: 'Plugins ready in 5 minutes', pt: 'Plugins prontos em 5 minutos', zh: '插件 5 分钟即可启用', ru: 'Плагины готовы за 5 минут' },
   'Descarga, instala, activa y listo para cobrar': { en: 'Download, install, activate and start collecting', pt: 'Baixe, instale, ative e comece a cobrar', zh: '下载、安装、启用，即可开始收款', ru: 'Скачайте, установите, активируйте и принимайте платежи' },
   'Documentación completa': { en: 'Complete documentation', pt: 'Documentação completa', zh: '完整文档', ru: 'Полная документация' },
   'Guías paso a paso, ejemplos de código y soporte': { en: 'Step-by-step guides, code examples and support', pt: 'Guias passo a passo, exemplos de código e suporte', zh: '分步指南、代码示例和支持', ru: 'Пошаговые руководства, примеры кода и поддержка' },
   'Ambiente de pruebas incluido': { en: 'Test environment included', pt: 'Ambiente de testes incluído', zh: '包含测试环境', ru: 'Тестовая среда включена' },
   'Sandbox con tarjetas de test para validar tu integración': { en: 'Sandbox with test cards to validate your integration', pt: 'Sandbox com cartões de teste para validar sua integração', zh: '使用测试卡在沙盒中验证集成', ru: 'Sandbox с тестовыми картами для проверки интеграции' },
-  '+ integración directa vía API REST en cualquier stack': { en: '+ direct REST API integration in any stack', pt: '+ integração direta via API REST em qualquer stack', zh: '+ 可在任意技术栈通过 REST API 直接集成', ru: '+ прямая интеграция REST API в любом стеке' },
+  '+ integración directa vía API REST en cualquier stack': { en: '+ direct REST API integration in any stack', pt: '+ integração direta via API REST em qualquer stack', zh: '+ 可在任意技术栈通过 REST 接口直接集成', ru: '+ прямая интеграция через REST-интерфейс в любом стеке' },
   'Tarifas Transparentes': { en: 'Transparent Pricing', pt: 'Tarifas transparentes', zh: '透明费率', ru: 'Прозрачные тарифы' },
   'Sin letra chica.': { en: 'No fine print.', pt: 'Sem letras miúdas.', zh: '无隐藏条款。', ru: 'Без мелкого шрифта.' },
   'Sin sorpresas.': { en: 'No surprises.', pt: 'Sem surpresas.', zh: '无意外费用。', ru: 'Без сюрпризов.' },
@@ -1417,6 +1532,7 @@ const I18N = {
   'Datos cifrados en tránsito y en reposo': { en: 'Data encrypted in transit and at rest', pt: 'Dados criptografados em trânsito e em repouso', zh: '传输和存储数据均加密', ru: 'Данные шифруются при передаче и хранении' },
   'Triple Validación': { en: 'Triple Validation', pt: 'Tripla validação', zh: '三重验证', ru: 'Тройная проверка' },
   'Cada transacción es validada 3 veces': { en: 'Each transaction is validated 3 times', pt: 'Cada transação é validada 3 vezes', zh: '每笔交易验证 3 次', ru: 'Каждая транзакция проверяется 3 раза' },
+  '3D Secure': { en: '3D Secure', pt: '3D Secure', zh: '3D 安全认证', ru: '3D-защита' },
   'Autenticación adicional para pagos con tarjeta': { en: 'Additional authentication for card payments', pt: 'Autenticação adicional para pagamentos com cartão', zh: '银行卡支付的额外认证', ru: 'Дополнительная аутентификация для карточных платежей' },
   'Respaldo bancario': { en: 'Banking support', pt: 'Respaldo bancário', zh: '银行支持', ru: 'Банковская поддержка' },
   'Integración directa con la red bancaria chilena': { en: 'Direct integration with Chile’s banking network', pt: 'Integração direta com a rede bancária chilena', zh: '直接接入智利银行网络', ru: 'Прямая интеграция с банковской сетью Чили' },
@@ -1432,7 +1548,9 @@ const I18N = {
   'Certificaciones de Seguridad': { en: 'Security Certifications', pt: 'Certificações de segurança', zh: '安全认证', ru: 'Сертификаты безопасности' },
   'Certificación PCI DSS': { en: 'PCI DSS Certification', pt: 'Certificação PCI DSS', zh: 'PCI DSS 认证', ru: 'Сертификация PCI DSS' },
   'Verificado': { en: 'Verified', pt: 'Verificado', zh: '已验证', ru: 'Проверено' },
+  'Payment Card Industry Data Security Standard': { en: 'Payment Card Industry Data Security Standard', pt: 'Padrão de Segurança de Dados da Indústria de Cartões de Pagamento', zh: '支付卡行业数据安全标准', ru: 'Стандарт безопасности данных индустрии платежных карт' },
   'Certificación SOC 2': { en: 'SOC 2 Certification', pt: 'Certificação SOC 2', zh: 'SOC 2 认证', ru: 'Сертификация SOC 2' },
+  'System and Organization Controls': { en: 'System and Organization Controls', pt: 'Controles de sistemas e organizações', zh: '系统与组织控制', ru: 'Контроли систем и организаций' },
   'Payku es miembro de': { en: 'Payku is a member of', pt: 'A Payku é membro da', zh: 'Payku 是以下机构成员：', ru: 'Payku является участником' },
   ', la asociación de empresas Fintech de Chile y la Peru Payments Association.': { en: ', the association of Fintech companies in Chile, and the Peru Payments Association.', pt: ', a associação de empresas Fintech do Chile, e da Peru Payments Association.', zh: '，智利金融科技企业协会，以及 Peru Payments Association。', ru: ', ассоциации финтех-компаний Чили, и Peru Payments Association.' },
   'Pasarela de Pagos LATAM · © 2026': { en: 'LATAM Payment Gateway · © 2026', pt: 'Gateway de Pagamentos LATAM · © 2026', zh: '拉美支付网关 · © 2026', ru: 'Платежный шлюз LATAM · © 2026' },
@@ -1463,19 +1581,23 @@ function translateKey(key, lang) {
   return lang === 'es' ? key : (I18N[key] && I18N[key][lang]) || key;
 }
 
+function normalizeI18nKey(value) {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
 function collectI18nTextNodes() {
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       const parent = node.parentElement;
       if (!parent || parent.closest('script, style, svg, noscript')) return NodeFilter.FILTER_REJECT;
-      const key = node.nodeValue.trim();
+      const key = normalizeI18nKey(node.nodeValue);
       return I18N[key] ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
     }
   });
 
   let node;
   while ((node = walker.nextNode())) {
-    i18nTextNodes.push({ node, key: node.nodeValue.trim() });
+    i18nTextNodes.push({ node, key: normalizeI18nKey(node.nodeValue) });
   }
 }
 
@@ -1535,6 +1657,50 @@ collectI18nTextNodes();
 document.querySelectorAll('.lang-btn').forEach(button => {
   button.addEventListener('click', () => applyLanguage(button.dataset.lang));
 });
+
+// Mobile dropdown
+(function initMobileLangDropdown() {
+  const dropdown = document.getElementById('langDropdown');
+  const trigger  = document.getElementById('langDropdownTrigger');
+  const flagEl   = document.getElementById('langDropdownFlag');
+  if (!dropdown || !trigger) return;
+
+  const FLAGS = { es: '🇨🇱', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', ru: '🇷🇺' };
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = dropdown.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  document.addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+  });
+
+  dropdown.querySelectorAll('.lang-dropdown-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const lang = item.dataset.lang;
+      applyLanguage(lang);
+      dropdown.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Sync dropdown when applyLanguage runs
+  const _orig = applyLanguage;
+  applyLanguage = function(lang) {
+    _orig(lang);
+    if (flagEl) flagEl.textContent = FLAGS[lang] || FLAGS.es;
+    dropdown.querySelectorAll('.lang-dropdown-item').forEach(item => {
+      const active = item.dataset.lang === lang;
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-selected', String(active));
+    });
+  };
+})();
+
 applyLanguage(getStoredLanguage() || 'es');
 
 // Particulas
