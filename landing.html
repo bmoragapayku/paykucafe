@@ -766,7 +766,7 @@
           </div>
 
           <!-- Fintech Forum logo card -->
-          <a href="https://www.chilefintechforum.com/" target="_blank" rel="noopener" style="
+          <a href="#" onclick="event.preventDefault();openFintechModal()" style="
             display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
             padding:18px 20px;
             border:1px solid rgba(255,255,255,0.1);
@@ -1493,7 +1493,7 @@
 
       <!-- Right: logo -->
       <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center">
-        <a href="https://www.chilefintechforum.com/" target="_blank" rel="noopener" style="
+        <a href="#" onclick="event.preventDefault();openFintechModal()" style="
           display:block;
           padding: 24px 36px;
           border: 1px solid rgba(255,255,255,0.1);
@@ -1516,6 +1516,97 @@
     </div>
   </div>
 </section>
+
+<!-- ════════════════════════════ FINTECH REDIRECT MODAL ════════════════════════════ -->
+<div id="fintech-modal" style="
+  position:fixed;inset:0;z-index:999;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.25s ease;
+">
+  <!-- Backdrop -->
+  <div onclick="closeFintechModal()" style="
+    position:absolute;inset:0;
+    background:rgba(7,0,26,0.75);
+    backdrop-filter:blur(8px);
+  "></div>
+
+  <!-- Card -->
+  <div style="
+    position:relative;z-index:1;
+    max-width:420px;width:100%;
+    background:linear-gradient(160deg,rgba(49,0,101,0.95) 0%,rgba(20,5,45,0.98) 100%);
+    border:1px solid rgba(124,58,237,0.35);
+    border-radius:28px;
+    padding:36px 32px 28px;
+    box-shadow:0 32px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(224,64,251,0.08),0 0 60px rgba(124,58,237,0.15);
+    transform:translateY(16px) scale(0.97);
+    transition:transform 0.25s ease;
+  " id="fintech-modal-card">
+
+    <!-- Logo -->
+    <div style="display:flex;justify-content:center;margin-bottom:24px">
+      <div style="
+        padding:16px 24px;
+        border:1px solid rgba(255,255,255,0.08);
+        border-radius:16px;
+        background:rgba(255,255,255,0.04);
+      ">
+        <img
+          src="https://cdn.prod.website-files.com/639cb0e2d924d44960172856/68c95b7efa1bc25794460ed4_CFF26-Logo_Light-p-2000.png"
+          alt="Chile Fintech Forum 2026"
+          style="height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:0.95;"
+        >
+      </div>
+    </div>
+
+    <!-- Text -->
+    <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.25rem;font-weight:800;color:#fff;text-align:center;margin-bottom:10px;line-height:1.3">
+      Visitar Chile Fintech Forum
+    </h3>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;text-align:center;line-height:1.6;margin-bottom:28px">
+      Serás redireccionado al sitio oficial del evento.<br>¿Deseas continuar?
+    </p>
+
+    <!-- Actions -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a id="fintech-modal-confirm" href="https://www.chilefintechforum.com/" target="_blank" rel="noopener"
+        onclick="closeFintechModal()"
+        style="
+          display:flex;align-items:center;justify-content:center;gap:8px;
+          padding:14px 20px;
+          border-radius:14px;
+          background:linear-gradient(135deg,#7C3AED,#E040FB);
+          color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.95rem;
+          text-decoration:none;
+          box-shadow:0 4px 20px rgba(224,64,251,0.35);
+          transition:opacity 0.2s,transform 0.2s;
+        "
+        onmouseover="this.style.opacity='0.88';this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'"
+      >
+        Ir al sitio
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+      <button onclick="closeFintechModal()" style="
+        padding:13px 20px;
+        border-radius:14px;
+        border:1px solid rgba(255,255,255,0.12);
+        background:rgba(255,255,255,0.05);
+        color:rgba(255,255,255,0.6);
+        font-family:'Manrope',sans-serif;font-weight:600;font-size:0.9rem;
+        cursor:pointer;
+        transition:background 0.2s,color 0.2s,border-color 0.2s;
+      "
+        onmouseover="this.style.background='rgba(255,255,255,0.09)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.2)'"
+        onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='rgba(255,255,255,0.6)';this.style.borderColor='rgba(255,255,255,0.12)'"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
 
 <div class="section-divider max-w-7xl mx-auto"></div>
 
@@ -2159,6 +2250,28 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     });
   });
 })();
+</script>
+
+<script>
+function openFintechModal() {
+  const modal = document.getElementById('fintech-modal');
+  const card  = document.getElementById('fintech-modal-card');
+  modal.style.opacity = '1';
+  modal.style.pointerEvents = 'auto';
+  card.style.transform = 'translateY(0) scale(1)';
+  document.body.style.overflow = 'hidden';
+}
+function closeFintechModal() {
+  const modal = document.getElementById('fintech-modal');
+  const card  = document.getElementById('fintech-modal-card');
+  modal.style.opacity = '0';
+  modal.style.pointerEvents = 'none';
+  card.style.transform = 'translateY(16px) scale(0.97)';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeFintechModal();
+});
 </script>
 </body>
 </html>
