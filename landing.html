@@ -745,28 +745,55 @@
 
       <!-- Right: sloth -->
       <div class="flex flex-col items-center justify-center order-first md:order-last mb-6 md:mb-0" id="hero-sloth">
-        <div style="position:relative">
-          <!-- Glow ring -->
-          <div style="
-            position:absolute;inset:-30px;border-radius:50%;
-            background:radial-gradient(circle,rgba(224,64,251,0.2),transparent 70%);
-            animation:glow-pulse 3s ease-in-out infinite;
-          "></div>
-          <style>@keyframes glow-pulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}</style>
 
-          <img src="https://payku.com/images/noto.png" alt="Noto el perezoso" class="sloth-hero">
+        <!-- Sloth + Fintech logo side by side -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:clamp(12px,3vw,28px)">
+
+          <!-- Sloth + shadow stacked -->
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="position:relative">
+              <!-- Glow ring -->
+              <div style="
+                position:absolute;inset:-30px;border-radius:50%;
+                background:radial-gradient(circle,rgba(224,64,251,0.2),transparent 70%);
+                animation:glow-pulse 3s ease-in-out infinite;
+              "></div>
+              <style>@keyframes glow-pulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}</style>
+
+              <img src="https://payku.com/images/noto.png" alt="Noto el perezoso" class="sloth-hero">
+            </div>
+            <div class="sloth-shadow mt-4"></div>
+          </div>
+
+          <!-- Fintech Forum logo card -->
+          <div style="
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+            padding:18px 20px;
+            border:1px solid rgba(255,255,255,0.1);
+            border-radius:20px;
+            background:rgba(255,255,255,0.04);
+            backdrop-filter:blur(20px);
+            box-shadow:0 0 32px rgba(224,64,251,0.1),inset 0 1px 0 rgba(255,255,255,0.07);
+            flex-shrink:0;
+          ">
+            <img
+              src="https://cdn.prod.website-files.com/639cb0e2d924d44960172856/68c95b7efa1bc25794460ed4_CFF26-Logo_Light-p-2000.png"
+              alt="Chile Fintech Forum 2026"
+              style="height:clamp(32px,5vw,48px);width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:0.9;"
+            >
+          </div>
+
         </div>
-        <div class="sloth-shadow mt-4"></div>
 
         <!-- Floating tags (desktop only — absolute positions overflow on mobile) -->
         <div class="hidden md:block" style="position:relative;width:100%;height:0">
           <a href="https://www.payku.com/#:~:text=M%C3%89TODOS%20DE%20PAGO%20SOPORTADOS" target="_blank" rel="noopener" class="pay-pill float-slow" style="position:absolute;top:-220px;left:-60px;animation-delay:0.5s;font-size:12px;padding:8px 14px;text-decoration:none;cursor:pointer">
             💳 Medios de pago
           </a>
-          <div class="pay-pill float-med" style="position:absolute;top:-280px;right:-40px;animation-delay:1s;font-size:12px;padding:8px 14px">
+          <div class="pay-pill float-med" style="position:absolute;top:-370px;left:35%;animation-delay:1s;font-size:12px;padding:8px 14px">
             🔁 Suscripciones
           </div>
-          <div class="pay-pill float-slow" style="position:absolute;top:-160px;right:-80px;animation-delay:1.8s;font-size:12px;padding:8px 14px">
+          <div class="pay-pill float-slow" style="position:absolute;top:-80px;left:40%;animation-delay:1.8s;font-size:12px;padding:8px 14px">
             🏦 Transferencia
           </div>
           <div class="pay-pill float-med" style="position:absolute;top:-100px;left:-80px;animation-delay:0.8s;font-size:12px;padding:8px 14px">
