@@ -140,6 +140,14 @@
     }
     .field:focus { border-bottom-color: #4A148C; }
     .field::placeholder { color: rgba(74,68,82,0.4); }
+    .price-currency {
+      font-size: 0.62em;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-left: 0.25rem;
+      opacity: 0.62;
+      text-transform: uppercase;
+    }
 
     /* Credit card */
     .card-gradient {
@@ -160,6 +168,134 @@
       width: 210px; height: 210px;
       background: rgba(255,255,255,0.04);
       border-radius: 50%;
+    }
+
+    /* Language controls */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .language-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid rgba(49,0,101,0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.72);
+      box-shadow: 0 8px 24px rgba(49,0,101,0.08);
+      backdrop-filter: blur(14px);
+      flex-shrink: 0;
+    }
+    .lang-btn {
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      line-height: 1;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .lang-btn:hover,
+    .lang-btn.active {
+      background: rgba(74,20,140,0.14);
+      box-shadow: 0 0 0 1px rgba(49,0,101,0.12);
+      transform: translateY(-1px);
+    }
+    .lang-dropdown {
+      position: relative;
+    }
+    .lang-dropdown-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 10px 7px 8px;
+      border: 1px solid rgba(49,0,101,0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.72);
+      box-shadow: 0 8px 24px rgba(49,0,101,0.08);
+      backdrop-filter: blur(14px);
+      cursor: pointer;
+      font-size: 18px;
+      color: #310065;
+      line-height: 1;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .lang-dropdown-trigger:hover {
+      border-color: rgba(74,20,140,0.35);
+      background: rgba(255,255,255,0.95);
+    }
+    .lang-dropdown-trigger svg {
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .lang-dropdown.open .lang-dropdown-trigger svg {
+      transform: rotate(180deg);
+    }
+    .lang-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(255,255,255,0.98);
+      border: 1px solid rgba(49,0,101,0.14);
+      border-radius: 16px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 142px;
+      box-shadow: 0 16px 40px rgba(49,0,101,0.18);
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 200;
+    }
+    .lang-dropdown.open .lang-dropdown-menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .lang-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #4a4452;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Manrope', sans-serif;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, color 0.15s;
+    }
+    .lang-dropdown-item:hover,
+    .lang-dropdown-item.active {
+      background: rgba(74,20,140,0.12);
+      color: #310065;
+    }
+    .lang-dropdown-item .lang-flag {
+      font-size: 20px;
+      line-height: 1;
+    }
+    @media (max-width: 420px) {
+      nav .max-w-7xl {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+      .nav-actions {
+        gap: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -198,10 +334,42 @@
     <button onclick="goTo('catalog')" class="focus:outline-none">
       <img src="https://dashboard.payku.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FlogoPayku.0gqfe29cr2epv.png&w=640&q=75" alt="Payku" class="h-8 w-auto">
     </button>
-    <button onclick="goTo('cart')" class="relative p-2 text-primary transition-transform active:scale-90">
-      <span class="material-symbols-outlined">shopping_bag</span>
-      <span id="cart-badge" class="hidden absolute top-0 right-0 bg-primary-container text-white text-[10px] font-bold w-4 h-4 rounded-full ring-2 ring-surface flex items-center justify-center">1</span>
-    </button>
+    <div class="nav-actions">
+      <div class="language-switcher hidden md:inline-flex" role="group" aria-label="Seleccionar idioma">
+        <button type="button" class="lang-btn active" data-lang="es" aria-label="Español" title="Español">🇨🇱</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English" title="English">🇺🇸</button>
+        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português" title="Português">🇧🇷</button>
+        <button type="button" class="lang-btn" data-lang="zh" aria-label="中文" title="中文">🇨🇳</button>
+        <button type="button" class="lang-btn" data-lang="ru" aria-label="Русский" title="Русский">🇷🇺</button>
+      </div>
+      <div class="lang-dropdown md:hidden" id="langDropdown">
+        <button type="button" class="lang-dropdown-trigger" id="langDropdownTrigger" aria-haspopup="true" aria-expanded="false">
+          <span id="langDropdownFlag">🇨🇱</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="lang-dropdown-menu" id="langDropdownMenu" role="listbox">
+          <button type="button" class="lang-dropdown-item active" data-lang="es" role="option" aria-selected="true">
+            <span class="lang-flag">🇨🇱</span> Español
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="en" role="option" aria-selected="false">
+            <span class="lang-flag">🇺🇸</span> English
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="pt" role="option" aria-selected="false">
+            <span class="lang-flag">🇧🇷</span> Português
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="zh" role="option" aria-selected="false">
+            <span class="lang-flag">🇨🇳</span> 中文
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="ru" role="option" aria-selected="false">
+            <span class="lang-flag">🇷🇺</span> Русский
+          </button>
+        </div>
+      </div>
+      <button onclick="goTo('cart')" class="relative p-2 text-primary transition-transform active:scale-90" aria-label="Carrito">
+        <span class="material-symbols-outlined">shopping_bag</span>
+        <span id="cart-badge" class="hidden absolute top-0 right-0 bg-primary-container text-white text-[10px] font-bold w-4 h-4 rounded-full ring-2 ring-surface flex items-center justify-center">1</span>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -224,160 +392,146 @@
       </p>
     </header>
 
-    <!-- Bento grid — 7 variedades -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+    <!-- Grid — 7 variedades -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
 
-      <!-- CORTADO — featured -->
-      <div class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-lowest shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.01]">
-        <div class="grid md:grid-cols-2 h-full">
-          <div class="relative h-64 md:h-full overflow-hidden">
-            <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiAVq8I9ZLAmcO4w29MA91KI2vGHtYH3CQ5tfi7gdqNiljgTOx2faLWGNFdHxn7LzXj5sT99NE-59Ae0h9BvxGni7K9Pwki6lN3wjRD7AwQrlfTI7lbTYrgqCIgzpymhpSBxV3xqowccFnDSDMMBkgPlfI1PhJEtYKuv9lEyYvDLzz0aOaLIXgzRzKcqIU-F6gHSo6hwggmSZCbXiY1aG3PpLoJNQuL0B3KNnAn8a7rvRRshAKvOpq8hWWbQR22g65gyTCCviJXLmE"
-              alt="Cortado">
+      <!-- CORTADO -->
+      <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-[4/3] overflow-hidden relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            src="https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/cortado.jpeg" alt="Cortado">
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-headline text-xl font-bold">Cortado</h3>
+            <span class="font-bold text-primary">$3.500<span class="price-currency">CLP</span></span>
           </div>
-          <div class="p-8 flex flex-col justify-between">
-            <div>
-              <div class="flex justify-between items-start mb-4">
-                <span class="bg-secondary-container text-on-secondary-container text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Elección del Editor</span>
-                <span class="text-2xl font-bold text-primary">$3.500</span>
-              </div>
-              <h2 class="font-headline text-3xl font-bold text-on-surface mb-3">Cortado</h2>
-              <p class="text-on-surface-variant mb-6 leading-relaxed">Partes iguales de espresso y leche al vapor. Equilibrado e intenso, para el paladar que aprecia la fuerza suavizada por textura aterciopelada.</p>
-              <div class="flex gap-2 mb-6">
-                <span class="px-3 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container text-xs font-semibold">Espresso</span>
-                <span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">Leche al vapor</span>
-              </div>
-            </div>
-            <button onclick="addToCart('Cortado','https://lh3.googleusercontent.com/aida-public/AB6AXuBiAVq8I9ZLAmcO4w29MA91KI2vGHtYH3CQ5tfi7gdqNiljgTOx2faLWGNFdHxn7LzXj5sT99NE-59Ae0h9BvxGni7K9Pwki6lN3wjRD7AwQrlfTI7lbTYrgqCIgzpymhpSBxV3xqowccFnDSDMMBkgPlfI1PhJEtYKuv9lEyYvDLzz0aOaLIXgzRzKcqIU-F6gHSo6hwggmSZCbXiY1aG3PpLoJNQuL0B3KNnAn8a7rvRRshAKvOpq8hWWbQR22g65gyTCCviJXLmE','Espresso + Leche al vapor · Cremoso','$3.500')"
-              class="bg-gradient-to-r from-primary to-primary-container text-on-primary py-4 px-8 rounded-xl font-bold flex items-center justify-center gap-2 transition-transform active:scale-95 hover:opacity-90">
-              <span class="material-symbols-outlined text-base">add_shopping_cart</span>
-              Agregar · Gratis hoy
-            </button>
-          </div>
+
+          <button onclick="addToCart('Cortado','https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/cortado.jpeg','Espresso + Leche al vapor · Cremoso','$3.500')"
+            class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform hover:opacity-90">
+            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+            Gratis · Agregar
+          </button>
         </div>
       </div>
 
       <!-- ESPRESSO -->
-      <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
-        <div class="aspect-square rounded-lg overflow-hidden mb-6">
+      <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-[4/3] overflow-hidden">
           <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIpHYJAJQtQ1nXAlq8n3s9xZINdHh3dTEeoMB-wyDdp4FfjsmRkALyFBBC_2p6OG67AEwzGnfLY_xwWy_zb8LNV7ExsWzWekycKn-PxMDGH_yxNufJ9cnh45-iPdw1y80i-02YH-5LnoZ_ixGEl8vlvw0qjcjsUPzSnxWj7oE_3XkcijaTHlj8hanuUk3wBbRf2UnmxQYB5nySxKQEXmJ4SJBJMR8_vAx6S7wC-NGtCrUUoTUinvN_s408b4hb7lonTl3kTFJk59Xm"
-            alt="Espresso">
+            src="https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/espresso.jpeg" alt="Espresso">
         </div>
-        <div class="flex justify-between items-baseline mb-2">
-          <h3 class="font-headline text-xl font-bold">Espresso</h3>
-          <span class="font-bold text-primary">$2.500</span>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-headline text-xl font-bold">Espresso</h3>
+            <span class="font-bold text-primary">$2.500<span class="price-currency">CLP</span></span>
+          </div>
+
+          <button onclick="addToCart('Espresso','https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/espresso.jpeg','Intenso · Notas de chocolate oscuro','$2.500')"
+            class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform hover:opacity-90">
+            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+            Gratis · Agregar
+          </button>
         </div>
-        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Extracción pura y concentrada. Intenso y profundo con notas de chocolate oscuro.</p>
-        <button onclick="addToCart('Espresso','https://lh3.googleusercontent.com/aida-public/AB6AXuCIpHYJAJQtQ1nXAlq8n3s9xZINdHh3dTEeoMB-wyDdp4FfjsmRkALyFBBC_2p6OG67AEwzGnfLY_xwWy_zb8LNV7ExsWzWekycKn-PxMDGH_yxNufJ9cnh45-iPdw1y80i-02YH-5LnoZ_ixGEl8vlvw0qjcjsUPzSnxWj7oE_3XkcijaTHlj8hanuUk3wBbRf2UnmxQYB5nySxKQEXmJ4SJBJMR8_vAx6S7wC-NGtCrUUoTUinvN_s408b4hb7lonTl3kTFJk59Xm','Intenso · Notas de chocolate oscuro','$2.500')"
-          class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
-          Gratis · Agregar
-        </button>
       </div>
 
       <!-- AMERICANO -->
-      <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
-        <div class="aspect-square rounded-lg overflow-hidden mb-6">
+      <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-[4/3] overflow-hidden">
           <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8"
-            alt="Americano">
+            src="https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/americano.jpeg" alt="Americano">
         </div>
-        <div class="flex justify-between items-baseline mb-2">
-          <h3 class="font-headline text-xl font-bold">Americano</h3>
-          <span class="font-bold text-primary">$2.800</span>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-headline text-xl font-bold">Americano</h3>
+            <span class="font-bold text-primary">$2.800<span class="price-currency">CLP</span></span>
+          </div>
+
+          <button onclick="addToCart('Americano','https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/americano.jpeg','Suave y aromático · Largo','$2.800')"
+            class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform hover:opacity-90">
+            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+            Gratis · Agregar
+          </button>
         </div>
-        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Espresso diluido en agua caliente. Suave y largo, con todo el aroma del grano sin la intensidad concentrada.</p>
-        <button onclick="addToCart('Americano','https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8','Suave y aromático · Largo','$2.800')"
-          class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
-          Gratis · Agregar
-        </button>
+      </div>
+
+      <!-- CAPPUCCINO -->
+      <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-[4/3] overflow-hidden">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            src="https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/capuccino.jpeg" alt="Cappuccino">
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-headline text-xl font-bold">Cappuccino</h3>
+            <span class="font-bold text-primary">$3.200<span class="price-currency">CLP</span></span>
+          </div>
+
+          <button onclick="addToCart('Cappuccino','https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/capuccino.jpeg','Espuma espesa · Cacao orgánico','$3.200')"
+            class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform hover:opacity-90">
+            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+            Gratis · Agregar
+          </button>
+        </div>
       </div>
 
       <!-- LATTE VAINILLA -->
-      <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
-        <div class="aspect-square rounded-lg overflow-hidden mb-6">
+      <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-[4/3] overflow-hidden">
           <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgoETbKphFsXqm6w2HIKuw5_eZHGsi34Aa8V1e5rR4_-vdWffQQYgQhzhX6DOeXXLFa9eZC1LhxWufM_MvbFHi08pjjfh16Qhg_Js7SOWloaROXoqccvb3blR5LyDfhCrCsGcuzabzA2VzZyPPFkkVzOJZ4ZEnlo61gQuf-8zlfb7sa0SJeHKSqu1LM0LhPJ-a_hGy1bIiiA_0pha1e3Fa4yJ5pQMAc4IkuGPlOpiS3K38IQI48zpy0TRBnmThUx53o_jKdO8q5Pt2"
-            alt="Latte Vainilla">
+            src="https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/latte-vainilla.jpeg" alt="Latte Vainilla">
         </div>
-        <div class="flex justify-between items-baseline mb-2">
-          <h3 class="font-headline text-xl font-bold">Latte Vainilla</h3>
-          <span class="font-bold text-primary">$3.990</span>
-        </div>
-        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Latte sedoso con sirope de vainilla natural. Dulce y aromático, perfecto para los que disfrutan un toque especial.</p>
-        <button onclick="addToCart('Latte Vainilla','https://lh3.googleusercontent.com/aida-public/AB6AXuDgoETbKphFsXqm6w2HIKuw5_eZHGsi34Aa8V1e5rR4_-vdWffQQYgQhzhX6DOeXXLFa9eZC1LhxWufM_MvbFHi08pjjfh16Qhg_Js7SOWloaROXoqccvb3blR5LyDfhCrCsGcuzabzA2VzZyPPFkkVzOJZ4ZEnlo61gQuf-8zlfb7sa0SJeHKSqu1LM0LhPJ-a_hGy1bIiiA_0pha1e3Fa4yJ5pQMAc4IkuGPlOpiS3K38IQI48zpy0TRBnmThUx53o_jKdO8q5Pt2','Leche sedosa · Sirope de vainilla','$3.990')"
-          class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
-          Gratis · Agregar
-        </button>
-      </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-headline text-xl font-bold">Latte Vainilla</h3>
+            <span class="font-bold text-primary">$3.990<span class="price-currency">CLP</span></span>
+          </div>
 
-      <!-- CAPPUCCINO — horizontal -->
-      <div class="md:col-span-8 group bg-surface-container-low rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.01]">
-        <div class="flex flex-col md:flex-row h-full">
-          <div class="md:w-1/2 p-8 flex flex-col justify-center">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="w-10 h-px bg-primary"></span>
-              <span class="text-xs font-bold tracking-widest uppercase text-primary">Perfección Clásica</span>
-            </div>
-            <h3 class="font-headline text-3xl font-bold mb-4 text-on-surface">Cappuccino</h3>
-            <p class="text-on-surface-variant mb-6 leading-relaxed">Tercios perfectos: espresso, leche al vapor y espuma espesa. Con cacao orgánico por encima.</p>
-            <div class="flex items-center gap-4">
-              <span class="text-2xl font-bold text-primary">$3.200</span>
-              <button onclick="addToCart('Cappuccino','https://lh3.googleusercontent.com/aida-public/AB6AXuB1itEXcEUL0vbamDCzdo_3OlnPf5tHmaBCAhW8uST8RcDKSVXWi6Ydu4o-vNl70pMOf2M5meEBgRwvcAo2Pnqo3Y8oIqe1paaO3Fs7WHYJzs0lg30GNQHWHA275VFexaX-Af2UqFzUTghabkZ3x6XnRyvVgAr13RYsvmSuYYTkgHLmqRu1PDUv2JUNjofnuth08j7FDv6Sfp6GUCfSlxHH5pXjWjoDOh0Ri_8eiPW9yteKtGqzlmCEA3TitfP_fwmD76QVlXXzp8VM','Espuma espesa · Cacao orgánico','$3.200')"
-                class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold active:scale-95 transition-transform hover:opacity-90">
-                Gratis · Agregar
-              </button>
-            </div>
-          </div>
-          <div class="md:w-1/2 h-56 md:h-auto overflow-hidden">
-            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1itEXcEUL0vbamDCzdo_3OlnPf5tHmaBCAhW8uST8RcDKSVXWi6Ydu4o-vNl70pMOf2M5meEBgRwvcAo2Pnqo3Y8oIqe1paaO3Fs7WHYJzs0lg30GNQHWHA275VFexaX-Af2UqFzUTghabkZ3x6XnRyvVgAr13RYsvmSuYYTkgHLmqRu1PDUv2JUNjofnuth08j7FDv6Sfp6GUCfSlxHH5pXjWjoDOh0Ri_8eiPW9yteKtGqzlmCEA3TitfP_fwmD76QVlXXzp8VM"
-              alt="Cappuccino">
-          </div>
+          <button onclick="addToCart('Latte Vainilla','https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/latte-vainilla.jpeg','Leche sedosa · Sirope de vainilla','$3.990')"
+            class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform hover:opacity-90">
+            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+            Gratis · Agregar
+          </button>
         </div>
       </div>
 
       <!-- LATTE CARAMELO -->
-      <div class="md:col-span-4 group bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
-        <div class="aspect-square rounded-lg overflow-hidden mb-6 relative">
+      <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-[4/3] overflow-hidden">
           <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM3CMwN-xlN3m_HhwaB4HblfUSTUDrrMnRq3MGAlCxTsSA5uYozVP9413xwdFylTFYC5Dy1FYk2a1_74gLeCsHwRZxb4OEfwAWlc2OOT7fP7ECaUpYg7TdAtUbxWN3EZQfpx7fBtpyKv_3jQtnYTCpuoGkczUf9rDL1KqjIYGByQbfioqWyymqdSdj0dP-e8jEVQI39G_rUqiHBRVnWIlLYLQVSHYYVR8uB_SEwkE7heV8GKevdBRmvVZLPTSWWNGCs_1f_3lrsyHu"
-            alt="Latte Caramelo">
+            src="https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/latte-caramelo.jpeg" alt="Latte Caramelo">
         </div>
-        <div class="flex justify-between items-baseline mb-2">
-          <h3 class="font-headline text-xl font-bold">Latte Caramelo</h3>
-          <span class="font-bold text-primary">$3.990</span>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-headline text-xl font-bold">Latte Caramelo</h3>
+            <span class="font-bold text-primary">$3.990<span class="price-currency">CLP</span></span>
+          </div>
+
+          <button onclick="addToCart('Latte Caramelo','https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/latte-caramelo.jpeg','Leche sedosa · Sirope de caramelo tostado','$3.990')"
+            class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform hover:opacity-90">
+            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+            Gratis · Agregar
+          </button>
         </div>
-        <p class="text-sm text-on-surface-variant mb-6 flex-grow leading-relaxed">Latte con sirope de caramelo tostado. Un equilibrio irresistible entre el amargor del espresso y la dulzura ahumada.</p>
-        <button onclick="addToCart('Latte Caramelo','https://lh3.googleusercontent.com/aida-public/AB6AXuAM3CMwN-xlN3m_HhwaB4HblfUSTUDrrMnRq3MGAlCxTsSA5uYozVP9413xwdFylTFYC5Dy1FYk2a1_74gLeCsHwRZxb4OEfwAWlc2OOT7fP7ECaUpYg7TdAtUbxWN3EZQfpx7fBtpyKv_3jQtnYTCpuoGkczUf9rDL1KqjIYGByQbfioqWyymqdSdj0dP-e8jEVQI39G_rUqiHBRVnWIlLYLQVSHYYVR8uB_SEwkE7heV8GKevdBRmvVZLPTSWWNGCs_1f_3lrsyHu','Leche sedosa · Sirope de caramelo tostado','$3.990')"
-          class="w-full border border-outline-variant/30 text-primary-container py-3 rounded-xl font-bold hover:bg-primary-container hover:text-white transition-colors">
-          Gratis · Agregar
-        </button>
       </div>
 
-      <!-- MOCACCINO — full width horizontal -->
-      <div class="md:col-span-12 group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.005]">
-        <div class="flex flex-col md:flex-row h-full">
-          <div class="md:w-1/3 h-56 md:h-auto overflow-hidden">
-            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8"
-              alt="Mocaccino">
+      <!-- MOKACCINO -->
+      <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(49,0,101,0.06)] transition-all duration-300 hover:scale-[1.02] flex flex-col">
+        <div class="aspect-[4/3] overflow-hidden relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            src="https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/mokaccino.jpeg" alt="Mokaccino">
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-headline text-xl font-bold">Mokaccino</h3>
+            <span class="font-bold text-primary">$4.500<span class="price-currency">CLP</span></span>
           </div>
-          <div class="md:w-2/3 p-8 flex flex-col justify-center">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="bg-tertiary text-white text-[10px] px-2 py-1 rounded-full uppercase tracking-tight font-bold">Especial del día</span>
-            </div>
-            <h3 class="font-headline text-3xl font-bold mb-3 text-on-surface">Mocaccino</h3>
-            <p class="text-on-surface-variant mb-6 leading-relaxed max-w-lg">La indulgencia máxima. Chocolate Valrhona oscuro fundido en espresso con leche vaporizada y micro-espuma. El favorito de la feria.</p>
-            <div class="flex items-center gap-6">
-              <span class="text-2xl font-bold text-primary">$4.500</span>
-              <button onclick="addToCart('Mocaccino','https://lh3.googleusercontent.com/aida-public/AB6AXuBZxsyLBKHIjtWemzagqkYYSKNZp_4huClafrtAMBk53xJwYOGFUQ2C9L6br-SnlV5ne45b3LM4YpBSvrqySJPOnE35pVxKc4yQFZdsM_6u5xfkqKZD7pVour9kxx1vPNOx0voZwvWnolnMYfEx0G1sryRb7Q-3xjV7oyfKpaCdF3KvLlkV9ofM_4IpZ2ioBH03QaNUsF_lLvyDBQBhr1PolypKsD_UnDaKyhn2Bp3oXrscDCp7Is777KkFh5cvEoFXl85e9AJwHwa8','Chocolate Valrhona · Espresso · Micro-espuma','$4.500')"
-                class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-4 rounded-xl font-bold flex items-center gap-2 active:scale-95 transition-transform hover:opacity-90">
-                <span class="material-symbols-outlined text-base">add_shopping_cart</span>
-                Gratis · Agregar
-              </button>
-            </div>
-          </div>
+
+          <button onclick="addToCart('Mokaccino','https://wlkwvzwxshbkwyeyhncd.supabase.co/storage/v1/object/public/cafes/mokaccino.jpeg','Chocolate · Espresso · Micro-espuma','$4.500')"
+            class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform hover:opacity-90">
+            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+            Gratis · Agregar
+          </button>
         </div>
       </div>
 
@@ -429,7 +583,7 @@
       </div>
       <div class="border-t border-outline-variant/30 pt-5 flex justify-between items-baseline">
         <span class="font-headline font-extrabold text-lg text-primary">Total a pagar</span>
-        <span class="font-headline font-extrabold text-3xl text-primary">$0</span>
+        <span class="font-headline font-extrabold text-3xl text-primary">$0<span class="price-currency">CLP</span></span>
       </div>
     </div>
 
@@ -515,7 +669,7 @@
       <div class="flex justify-between items-start mb-8 relative z-10 mt-6">
         <div>
           <p class="text-white/50 text-xs mb-1 uppercase tracking-wider">Número</p>
-          <p class="font-mono text-base tracking-widest">4242 4242 4242 4242</p>
+          <p class="font-mono text-base tracking-widest">3241 5462 6788 1432</p>
         </div>
         <div class="flex items-center gap-0.5 opacity-90">
           <div class="w-7 h-7 bg-red-400 rounded-full"></div>
@@ -564,7 +718,7 @@
     <p class="text-xl text-on-surface-variant leading-relaxed mb-3">
       Tu compra fue exitosa, <span class="font-bold text-on-surface" id="thanks-name">amigo</span>.
     </p>
-    <p class="text-sm text-on-surface-variant/70 mb-2">Confirmación enviada a</p>
+    <p class="text-sm text-on-surface-variant/70 mb-2">El correo registrado es:</p>
     <p class="font-semibold text-primary mb-10 text-base" id="thanks-email">—</p>
     <p class="text-on-surface-variant leading-relaxed mb-12">
       Muestra esta pantalla en el stand de Payku para retirar tu café. ☕
@@ -578,10 +732,10 @@
       <div class="p-7 text-left">
         <p class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold mb-1">Tu pedido confirmado</p>
         <h2 class="font-headline font-extrabold text-3xl text-primary mb-1" id="thanks-coffee-name">—</h2>
-        <p class="text-on-surface-variant text-sm mb-5" id="thanks-coffee-desc">—</p>
+        <p class="hidden" id="thanks-coffee-desc" aria-hidden="true">—</p>
         <div class="border-t border-outline-variant/20 pt-4 flex justify-between items-center">
           <span class="text-on-surface-variant text-sm font-medium">Total pagado</span>
-          <span class="font-headline font-extrabold text-2xl text-primary">$0</span>
+          <span class="font-headline font-extrabold text-2xl text-primary">$0<span class="price-currency">CLP</span></span>
         </div>
       </div>
     </div>
@@ -620,6 +774,287 @@
 <!-- ================================================ -->
 <script>
 
+const LANGUAGES = {
+  es: { html: 'es', locale: 'es-CL', name: 'Español' },
+  en: { html: 'en', locale: 'en-US', name: 'English' },
+  pt: { html: 'pt-BR', locale: 'pt-BR', name: 'Português' },
+  zh: { html: 'zh-CN', locale: 'zh-CN', name: '中文' },
+  ru: { html: 'ru', locale: 'ru-RU', name: 'Русский' }
+};
+
+const PAGE_TITLES = {
+  es: 'Payku Invita · Café Gratis en la Feria',
+  en: 'Payku Treats · Free Coffee at the Fair',
+  pt: 'Payku Convida · Café grátis na feira',
+  zh: 'Payku 请客 · 展会免费咖啡',
+  ru: 'Payku угощает · Бесплатный кофе на выставке'
+};
+
+const SWITCHER_LABELS = {
+  es: 'Seleccionar idioma',
+  en: 'Select language',
+  pt: 'Selecionar idioma',
+  zh: '选择语言',
+  ru: 'Выбрать язык'
+};
+
+const I18N = {
+  'Carrito': { en: 'Cart', pt: 'Carrinho', zh: '购物车', ru: 'Корзина' },
+  '¡Gracias por visitarnos!': { en: 'Thanks for visiting us!', pt: 'Obrigado pela visita!', zh: '感谢你的到访！', ru: 'Спасибо, что заглянули!' },
+  'Los cafés de hoy ya fueron todos reclamados. 🎉': { en: 'All coffees for today have already been claimed. 🎉', pt: 'Todos os cafés de hoje já foram resgatados. 🎉', zh: '今天的咖啡已经全部领取完毕。🎉', ru: 'Все кофе на сегодня уже забрали. 🎉' },
+  'Pasa por el stand de Payku y conversamos igual. Tenemos mucho que contarte sobre pagos simples para tu negocio.': { en: 'Stop by the Payku stand anyway. We have a lot to share about simple payments for your business.', pt: 'Passe pelo stand da Payku mesmo assim. Temos muito para contar sobre pagamentos simples para o seu negócio.', zh: '欢迎到 Payku 展位聊聊。我们有很多关于让你的业务收款更简单的内容可以分享。', ru: 'Все равно заходите на стенд Payku. Мы расскажем, как упростить платежи для вашего бизнеса.' },
+  'Visita nuestro stand': { en: 'Visit our stand', pt: 'Visite nosso stand', zh: '参观我们的展位', ru: 'Посетите наш стенд' },
+  'Fintech Forum · Tu café es gratis': { en: 'Fintech Forum · Your coffee is free', pt: 'Fintech Forum · Seu café é grátis', zh: '金融科技论坛 · 你的咖啡免费', ru: 'Fintech Forum · Ваш кофе бесплатно' },
+  'Payku te invita': { en: 'Payku treats you', pt: 'A Payku convida você', zh: 'Payku 请你', ru: 'Payku угощает' },
+  'a un café': { en: 'to a coffee', pt: 'para um café', zh: '喝一杯咖啡', ru: 'кофе' },
+  'Descubre cómo hacemos los pagos más simples.': { en: 'Discover how we make payments simpler.', pt: 'Descubra como tornamos os pagamentos mais simples.', zh: '了解我们如何让支付更简单。', ru: 'Узнайте, как мы упрощаем платежи.' },
+  'Gratis · Agregar': { en: 'Free · Add', pt: 'Grátis · Adicionar', zh: '免费 · 添加', ru: 'Бесплатно · Добавить' },
+  'Cortado': { en: 'Cortado', pt: 'Cortado', zh: '科尔塔多', ru: 'Кортадо' },
+  'Espresso': { en: 'Espresso', pt: 'Espresso', zh: '意式浓缩', ru: 'Эспрессо' },
+  'Americano': { en: 'Americano', pt: 'Americano', zh: '美式咖啡', ru: 'Американо' },
+  'Cappuccino': { en: 'Cappuccino', pt: 'Cappuccino', zh: '卡布奇诺', ru: 'Капучино' },
+  'Latte Vainilla': { en: 'Vanilla Latte', pt: 'Latte Baunilha', zh: '香草拿铁', ru: 'Ванильный латте' },
+  'Latte Caramelo': { en: 'Caramel Latte', pt: 'Latte Caramelo', zh: '焦糖拿铁', ru: 'Карамельный латте' },
+  'Mokaccino': { en: 'Mochaccino', pt: 'Mocaccino', zh: '摩卡奇诺', ru: 'Мокачино' },
+  'Espresso + Leche al vapor · Cremoso': { en: 'Espresso + steamed milk · Creamy', pt: 'Espresso + leite vaporizado · Cremoso', zh: '意式浓缩 + 蒸奶 · 顺滑', ru: 'Эспрессо + паровое молоко · Кремовый' },
+  'Intenso · Notas de chocolate oscuro': { en: 'Intense · Dark chocolate notes', pt: 'Intenso · Notas de chocolate amargo', zh: '浓郁 · 黑巧克力风味', ru: 'Насыщенный · Ноты темного шоколада' },
+  'Suave y aromático · Largo': { en: 'Smooth and aromatic · Long', pt: 'Suave e aromático · Longo', zh: '柔和芳香 · 长杯', ru: 'Мягкий и ароматный · Лунго' },
+  'Espuma espesa · Cacao orgánico': { en: 'Thick foam · Organic cocoa', pt: 'Espuma densa · Cacau orgânico', zh: '绵密奶泡 · 有机可可', ru: 'Плотная пенка · Органическое какао' },
+  'Leche sedosa · Sirope de vainilla': { en: 'Silky milk · Vanilla syrup', pt: 'Leite sedoso · Xarope de baunilha', zh: '丝滑牛奶 · 香草糖浆', ru: 'Шелковистое молоко · Ванильный сироп' },
+  'Leche sedosa · Sirope de caramelo tostado': { en: 'Silky milk · Toasted caramel syrup', pt: 'Leite sedoso · Xarope de caramelo tostado', zh: '丝滑牛奶 · 烤焦糖糖浆', ru: 'Шелковистое молоко · Сироп жареной карамели' },
+  'Chocolate · Espresso · Micro-espuma': { en: 'Chocolate · Espresso · Microfoam', pt: 'Chocolate · Espresso · Microespuma', zh: '巧克力 · 意式浓缩 · 微奶泡', ru: 'Шоколад · Эспрессо · Микропена' },
+  '¿Quieres saber cómo integrar pagos en minutos?': { en: 'Want to know how to integrate payments in minutes?', pt: 'Quer saber como integrar pagamentos em minutos?', zh: '想知道如何在几分钟内集成支付吗？', ru: 'Хотите узнать, как подключить платежи за минуты?' },
+  'Pide tu café gratis y pasa por el stand de Payku. Te mostramos cómo simplificar los cobros en tu negocio.': { en: 'Order your free coffee and stop by the Payku stand. We will show you how to simplify collections for your business.', pt: 'Peça seu café grátis e passe pelo stand da Payku. Mostramos como simplificar as cobranças do seu negócio.', zh: '领取免费咖啡并来到 Payku 展位。我们会向你展示如何简化业务收款。', ru: 'Закажите бесплатный кофе и приходите на стенд Payku. Покажем, как упростить прием платежей в вашем бизнесе.' },
+  'Elige tu café arriba': { en: 'Choose your coffee above', pt: 'Escolha seu café acima', zh: '在上方选择你的咖啡', ru: 'Выберите кофе выше' },
+  'Volver al catálogo': { en: 'Back to catalog', pt: 'Voltar ao catálogo', zh: '返回目录', ru: 'Назад к каталогу' },
+  'Tu Selección': { en: 'Your Selection', pt: 'Sua seleção', zh: '你的选择', ru: 'Ваш выбор' },
+  'Confirma tu café y continúa para registrarte.': { en: 'Confirm your coffee and continue to register.', pt: 'Confirme seu café e continue para se cadastrar.', zh: '确认你的咖啡并继续注册。', ru: 'Подтвердите кофе и продолжите регистрацию.' },
+  'Resumen del pedido': { en: 'Order summary', pt: 'Resumo do pedido', zh: '订单摘要', ru: 'Сводка заказа' },
+  'Precio del café': { en: 'Coffee price', pt: 'Preço do café', zh: '咖啡价格', ru: 'Цена кофе' },
+  'Payku paga por ti': { en: 'Payku pays for you', pt: 'A Payku paga por você', zh: 'Payku 为你支付', ru: 'Payku платит за вас' },
+  'Total a pagar': { en: 'Total to pay', pt: 'Total a pagar', zh: '应付总额', ru: 'Итого к оплате' },
+  'Continuar · Registrarme': { en: 'Continue · Register', pt: 'Continuar · Cadastrar-me', zh: '继续 · 注册', ru: 'Продолжить · Регистрация' },
+  'Volver al carro': { en: 'Back to cart', pt: 'Voltar ao carrinho', zh: '返回购物车', ru: 'Назад в корзину' },
+  'Paso 1 de 2 · Tus datos': { en: 'Step 1 of 2 · Your details', pt: 'Passo 1 de 2 · Seus dados', zh: '第 1 步，共 2 步 · 你的资料', ru: 'Шаг 1 из 2 · Ваши данные' },
+  'Cuéntanos de ti': { en: 'Tell us about yourself', pt: 'Conte-nos sobre você', zh: '告诉我们你的信息', ru: 'Расскажите о себе' },
+  'Solo necesitamos algunos datos para preparar tu café y conocerte mejor.': { en: 'We only need a few details to prepare your coffee and get to know you better.', pt: 'Só precisamos de alguns dados para preparar seu café e conhecer você melhor.', zh: '我们只需要一些信息来准备你的咖啡并更好地了解你。', ru: 'Нам нужно несколько данных, чтобы подготовить кофе и познакомиться с вами.' },
+  'Nombre Completo *': { en: 'Full Name *', pt: 'Nome completo *', zh: '全名 *', ru: 'Полное имя *' },
+  'Correo Electrónico *': { en: 'Email *', pt: 'Email *', zh: '电子邮箱 *', ru: 'Email *' },
+  'Empresa *': { en: 'Company *', pt: 'Empresa *', zh: '公司 *', ru: 'Компания *' },
+  'Cargo *': { en: 'Role *', pt: 'Cargo *', zh: '职位 *', ru: 'Должность *' },
+  'Ej: María González': { en: 'e.g. Mary Johnson', pt: 'Ex: Maria Gonzalez', zh: '例如：王小明', ru: 'Напр.: Мария Гонсалес' },
+  'nombre@empresa.com': { en: 'name@company.com', pt: 'nome@empresa.com', zh: 'nome@empresa.com', ru: 'name@company.com' },
+  'Nombre de tu empresa u organización': { en: 'Name of your company or organization', pt: 'Nome da sua empresa ou organização', zh: '你的公司或组织名称', ru: 'Название вашей компании или организации' },
+  'Ej: CTO, Gerente de Finanzas, Fundador...': { en: 'e.g. CTO, Finance Manager, Founder...', pt: 'Ex: CTO, Gerente financeiro, Fundador...', zh: '例如：CTO、财务经理、创始人...', ru: 'Напр.: CTO, финансовый директор, основатель...' },
+  'Continuar al Pago': { en: 'Continue to Payment', pt: 'Continuar para o pagamento', zh: '继续付款', ru: 'Перейти к оплате' },
+  'Tus datos son seguros y solo serán usados por el equipo de Payku.': { en: 'Your data is safe and will only be used by the Payku team.', pt: 'Seus dados estão seguros e serão usados apenas pela equipe da Payku.', zh: '你的数据是安全的，只会由 Payku 团队使用。', ru: 'Ваши данные в безопасности и будут использоваться только командой Payku.' },
+  'No enviaremos spam, te lo prometemos.': { en: 'We will not send spam, we promise.', pt: 'Não enviaremos spam, prometemos.', zh: '我们承诺不会发送垃圾邮件。', ru: 'Мы не будем отправлять спам, обещаем.' },
+  'Tranquilo, Payku te invita': { en: 'Relax, Payku treats you', pt: 'Fique tranquilo, a Payku convida', zh: '放心，Payku 请客', ru: 'Спокойно, Payku угощает' },
+  'Continúa con el pago': { en: 'Continue with payment', pt: 'Continue com o pagamento', zh: '继续付款', ru: 'Продолжите оплату' },
+  'Pasarela de Pago Segura · SSL': { en: 'Secure Payment Gateway · SSL', pt: 'Gateway de pagamento seguro · SSL', zh: '安全支付网关 · SSL', ru: 'Безопасный платежный шлюз · SSL' },
+  'Número': { en: 'Number', pt: 'Número', zh: '卡号', ru: 'Номер' },
+  'Nombre': { en: 'Name', pt: 'Nome', zh: '姓名', ru: 'Имя' },
+  'Vence': { en: 'Expires', pt: 'Vence', zh: '有效期', ru: 'Действует до' },
+  'Procesando tu pago…': { en: 'Processing your payment...', pt: 'Processando seu pagamento...', zh: '正在处理你的付款...', ru: 'Обработка платежа...' },
+  'Conectando con la red segura de Payku.': { en: 'Connecting to Payku’s secure network.', pt: 'Conectando à rede segura da Payku.', zh: '正在连接 Payku 安全网络。', ru: 'Подключение к защищенной сети Payku.' },
+  'Transacción cifrada · Powered by Payku': { en: 'Encrypted transaction · Powered by Payku', pt: 'Transação criptografada · Powered by Payku', zh: '加密交易 · Powered by Payku', ru: 'Зашифрованная транзакция · Powered by Payku' },
+  '¡Gracias!': { en: 'Thank you!', pt: 'Obrigado!', zh: '谢谢！', ru: 'Спасибо!' },
+  'Tu compra fue exitosa,': { en: 'Your purchase was successful,', pt: 'Sua compra foi concluída,', zh: '你的购买已成功，', ru: 'Покупка прошла успешно,' },
+  'amigo': { en: 'friend', pt: 'amigo', zh: '朋友', ru: 'друг' },
+  'El correo registrado es:': { en: 'The registered email is:', pt: 'O email registrado é:', zh: '注册邮箱是：', ru: 'Зарегистрированный email:' },
+  'Muestra esta pantalla en el stand de Payku para retirar tu café. ☕': { en: 'Show this screen at the Payku stand to pick up your coffee. ☕', pt: 'Mostre esta tela no stand da Payku para retirar seu café. ☕', zh: '请在 Payku 展位出示此页面领取咖啡。☕', ru: 'Покажите этот экран на стенде Payku, чтобы получить кофе. ☕' },
+  'Tu café': { en: 'Your coffee', pt: 'Seu café', zh: '你的咖啡', ru: 'Ваш кофе' },
+  'Tu pedido confirmado': { en: 'Your confirmed order', pt: 'Seu pedido confirmado', zh: '你的订单已确认', ru: 'Ваш заказ подтвержден' },
+  'Total pagado': { en: 'Total paid', pt: 'Total pago', zh: '已支付总额', ru: 'Итого оплачено' },
+  'Payku: pagos simples para tu negocio': { en: 'Payku: simple payments for your business', pt: 'Payku: pagamentos simples para o seu negócio', zh: 'Payku：让你的业务支付更简单', ru: 'Payku: простые платежи для бизнеса' },
+  'Integra cobros en minutos con nuestra API. Pregúntanos en el stand y te hacemos una demo en vivo.': { en: 'Integrate collections in minutes with our API. Ask us at the stand and we will give you a live demo.', pt: 'Integre cobranças em minutos com nossa API. Pergunte no stand e fazemos uma demo ao vivo.', zh: '使用我们的 API 几分钟内集成收款。到展位问我们，我们会现场演示。', ru: 'Подключите прием платежей за минуты через наш API. Спросите нас на стенде, и мы покажем демо.' },
+  'Volver al inicio': { en: 'Back to start', pt: 'Voltar ao início', zh: '返回开始', ru: 'Вернуться в начало' },
+  '© 2026 Payku. Pagos simples para tu negocio.': { en: '© 2026 Payku. Simple payments for your business.', pt: '© 2026 Payku. Pagamentos simples para o seu negócio.', zh: '© 2026 Payku。为你的业务提供简单支付。', ru: '© 2026 Payku. Простые платежи для бизнеса.' },
+  'Ingresa tu correo electrónico': { en: 'Enter your email address', pt: 'Digite seu email', zh: '请输入你的电子邮箱', ru: 'Введите ваш email' },
+  'Correo válido': { en: 'Valid email', pt: 'Email válido', zh: '邮箱有效', ru: 'Email корректный' },
+  'Correo inválido': { en: 'Invalid email', pt: 'Email inválido', zh: '邮箱无效', ru: 'Некорректный email' },
+  'Falta el símbolo @': { en: 'The @ symbol is missing', pt: 'Falta o símbolo @', zh: '缺少 @ 符号', ru: 'Не хватает символа @' },
+  'Falta el dominio después de @': { en: 'The domain after @ is missing', pt: 'Falta o domínio depois de @', zh: '@ 后缺少域名', ru: 'Не хватает домена после @' },
+  'Falta el dominio (ej: .com)': { en: 'The domain is missing (e.g. .com)', pt: 'Falta o domínio (ex: .com)', zh: '缺少域名（例如 .com）', ru: 'Не хватает домена (например, .com)' },
+  'Tu carrito está vacío': { en: 'Your cart is empty', pt: 'Seu carrinho está vazio', zh: '你的购物车是空的', ru: 'Ваша корзина пуста' },
+  'Elige un café del catálogo para continuar': { en: 'Choose a coffee from the catalog to continue', pt: 'Escolha um café do catálogo para continuar', zh: '从目录中选择一杯咖啡以继续', ru: 'Выберите кофе из каталога, чтобы продолжить' },
+  'Ver catálogo': { en: 'View catalog', pt: 'Ver catálogo', zh: '查看目录', ru: 'Открыть каталог' },
+  '1 unidad': { en: '1 item', pt: '1 unidade', zh: '1 件', ru: '1 шт.' },
+  'Payku paga': { en: 'Payku pays', pt: 'A Payku paga', zh: 'Payku 支付', ru: 'Payku платит' },
+  'Guardando…': { en: 'Saving...', pt: 'Salvando...', zh: '正在保存...', ru: 'Сохранение...' }
+};
+
+let currentLang = 'es';
+const i18nTextNodes = [];
+const i18nAttrNodes = [];
+
+function normalizeI18nKey(value) {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function t(key, lang = currentLang) {
+  return lang === 'es' ? key : (I18N[key] && I18N[key][lang]) || key;
+}
+
+function renderPrice(price) {
+  return `${price}<span class="price-currency">CLP</span>`;
+}
+
+function renderDiscountPrice(price) {
+  return `-${renderPrice(price)}`;
+}
+
+function getStoredLanguage() {
+  try {
+    return localStorage.getItem('paykuLandingLang');
+  } catch (error) {
+    return null;
+  }
+}
+
+function storeLanguage(lang) {
+  try {
+    localStorage.setItem('paykuLandingLang', lang);
+  } catch (error) {
+    // localStorage can be unavailable when opening the HTML directly in some browsers.
+  }
+}
+
+function detectBrowserLanguage() {
+  const supported = { es: 'es', en: 'en', pt: 'pt', zh: 'zh', ru: 'ru' };
+  const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'es'];
+  for (const lang of langs) {
+    const prefix = lang.toLowerCase().split('-')[0];
+    if (supported[prefix]) return supported[prefix];
+  }
+  return 'es';
+}
+
+function collectI18nTextNodes() {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || parent.closest('script, style, svg, noscript')) return NodeFilter.FILTER_REJECT;
+      const key = normalizeI18nKey(node.nodeValue);
+      return I18N[key] ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+
+  let node;
+  while ((node = walker.nextNode())) {
+    i18nTextNodes.push({ node, key: normalizeI18nKey(node.nodeValue) });
+  }
+
+  document.querySelectorAll('[placeholder]').forEach(el => {
+    const key = normalizeI18nKey(el.getAttribute('placeholder') || '');
+    if (I18N[key]) i18nAttrNodes.push({ el, attr: 'placeholder', key });
+  });
+}
+
+function setTextPreservingWhitespace(node, value) {
+  const raw = node.nodeValue;
+  const leading = raw.match(/^\s*/)[0];
+  const trailing = raw.match(/\s*$/)[0];
+  node.nodeValue = `${leading}${value}${trailing}`;
+}
+
+function syncLanguageControls(lang) {
+  document.querySelectorAll('.lang-btn').forEach(button => {
+    const isActive = button.dataset.lang === lang;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+    button.setAttribute('title', LANGUAGES[button.dataset.lang].name);
+    button.setAttribute('aria-label', LANGUAGES[button.dataset.lang].name);
+  });
+
+  const switcher = document.querySelector('.language-switcher');
+  if (switcher) switcher.setAttribute('aria-label', SWITCHER_LABELS[lang] || SWITCHER_LABELS.es);
+
+  const flags = { es: '🇨🇱', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', ru: '🇷🇺' };
+  const flagEl = document.getElementById('langDropdownFlag');
+  if (flagEl) flagEl.textContent = flags[lang] || flags.es;
+
+  document.querySelectorAll('.lang-dropdown-item').forEach(item => {
+    const isActive = item.dataset.lang === lang;
+    item.classList.toggle('active', isActive);
+    item.setAttribute('aria-selected', String(isActive));
+  });
+
+  const cartButton = document.querySelector('button[onclick="goTo(\'cart\')"]');
+  if (cartButton) cartButton.setAttribute('aria-label', t('Carrito', lang));
+}
+
+function updateDynamicTranslations() {
+  if (typeof renderCartItem === 'function') renderCartItem();
+
+  if (cart) {
+    const thanksImg = document.getElementById('thanks-coffee-img');
+    const thanksName = document.getElementById('thanks-coffee-name');
+    const thanksDesc = document.getElementById('thanks-coffee-desc');
+    if (thanksImg) thanksImg.alt = t('Tu café');
+    if (thanksName && thanksName.textContent !== '—') thanksName.textContent = t(cart.name);
+    if (thanksDesc) thanksDesc.textContent = '';
+  }
+
+  const emailInput = document.getElementById('field-email');
+  const emailFeedback = document.getElementById('email-feedback');
+  if (emailInput && emailFeedback && !emailFeedback.classList.contains('hidden')) {
+    validateEmail(emailInput, true);
+  }
+}
+
+function applyLanguage(lang) {
+  if (!LANGUAGES[lang]) lang = 'es';
+  currentLang = lang;
+  document.documentElement.lang = LANGUAGES[lang].html;
+  document.title = PAGE_TITLES[lang] || PAGE_TITLES.es;
+
+  i18nTextNodes.forEach(({ node, key }) => {
+    setTextPreservingWhitespace(node, t(key, lang));
+  });
+  i18nAttrNodes.forEach(({ el, attr, key }) => {
+    el.setAttribute(attr, t(key, lang));
+  });
+
+  syncLanguageControls(lang);
+  storeLanguage(lang);
+  updateDynamicTranslations();
+}
+
+function initLanguageControls() {
+  collectI18nTextNodes();
+
+  document.querySelectorAll('.lang-btn').forEach(button => {
+    button.addEventListener('click', () => applyLanguage(button.dataset.lang));
+  });
+
+  const dropdown = document.getElementById('langDropdown');
+  const trigger = document.getElementById('langDropdownTrigger');
+  if (dropdown && trigger) {
+    trigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isOpen = dropdown.classList.toggle('open');
+      trigger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.addEventListener('click', () => {
+      dropdown.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+
+    dropdown.querySelectorAll('.lang-dropdown-item').forEach(item => {
+      item.addEventListener('click', (event) => {
+        event.stopPropagation();
+        applyLanguage(item.dataset.lang);
+        dropdown.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  applyLanguage(getStoredLanguage() || detectBrowserLanguage());
+}
+
 const SUPABASE_URL      = 'https://wlkwvzwxshbkwyeyhncd.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indsa3d2end4c2hia3d5ZXlobmNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNTExODgsImV4cCI6MjA5MTkyNzE4OH0.6w0wyItdfgBUxwdhSL5rSjRG51AA_-in82Sr6unp0VQ';
 
@@ -654,7 +1089,7 @@ function validateEmail(input, isBlur = false) {
   }
 
   if (isEmpty) {
-    showEmailFeedback('error', 'Ingresa tu correo electrónico');
+    showEmailFeedback('error', t('Ingresa tu correo electrónico'));
     input.style.borderBottomColor = '#ba1a1a';
     return;
   }
@@ -662,14 +1097,14 @@ function validateEmail(input, isBlur = false) {
   const valid = EMAIL_RE.test(val);
 
   if (valid) {
-    showEmailFeedback('ok', 'Correo válido');
+    showEmailFeedback('ok', t('Correo válido'));
     input.style.borderBottomColor = '#16a34a'; // green-600
   } else {
    
-    let msg = 'Correo inválido';
-    if (!val.includes('@'))           msg = 'Falta el símbolo @';
-    else if (val.endsWith('@'))       msg = 'Falta el dominio después de @';
-    else if (!val.includes('.', val.indexOf('@'))) msg = 'Falta el dominio (ej: .com)';
+    let msg = t('Correo inválido');
+    if (!val.includes('@'))           msg = t('Falta el símbolo @');
+    else if (val.endsWith('@'))       msg = t('Falta el dominio después de @');
+    else if (!val.includes('.', val.indexOf('@'))) msg = t('Falta el dominio (ej: .com)');
     showEmailFeedback('error', msg);
     input.style.borderBottomColor = '#ba1a1a';
   }
@@ -706,11 +1141,15 @@ function renderCartItem() {
   const el = document.getElementById('cart-item-display');
   if (!cart) {
     el.innerHTML = `
-      <div class="text-center py-8 text-on-surface-variant">
-        <span class="material-symbols-outlined text-4xl block mb-2 text-outline">coffee_off</span>
-        <p class="text-sm mb-3">No has seleccionado ningún café</p>
-        <button onclick="goTo('catalog')" class="text-primary font-bold text-sm hover:underline underline-offset-4">
-          Ver catálogo →
+      <div class="text-center py-10 text-on-surface-variant">
+        <div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-3xl text-outline">local_cafe</span>
+        </div>
+        <p class="font-semibold text-on-surface mb-1">${t('Tu carrito está vacío')}</p>
+        <p class="text-sm mb-5">${t('Elige un café del catálogo para continuar')}</p>
+        <button onclick="goTo('catalog')" class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-transform hover:opacity-90">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          ${t('Ver catálogo')}
         </button>
       </div>`;
     document.getElementById('cart-original-price').textContent = '—';
@@ -724,24 +1163,24 @@ function renderCartItem() {
   el.innerHTML = `
     <div class="flex flex-col sm:flex-row gap-5">
       <div class="w-full sm:w-36 h-36 rounded-lg overflow-hidden flex-shrink-0">
-        <img src="${cart.image}" alt="${cart.name}" class="w-full h-full object-cover">
+        <img src="${cart.image}" alt="${t(cart.name)}" class="w-full h-full object-cover">
       </div>
       <div class="flex-grow py-1">
         <div class="flex justify-between items-start mb-1">
-          <h3 class="font-headline font-bold text-xl text-primary">${cart.name}</h3>
+          <h3 class="font-headline font-bold text-xl text-primary">${t(cart.name)}</h3>
           <button onclick="removeFromCart()" class="material-symbols-outlined text-outline hover:text-error transition-colors leading-none">close</button>
         </div>
-        <p class="text-sm text-on-surface-variant mb-3 leading-relaxed">${cart.desc}</p>
+
         <div class="flex flex-wrap items-center gap-2">
-          <span class="px-3 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container text-xs font-semibold">1 unidad</span>
-          <span class="font-headline font-bold text-primary text-sm">${cart.price}</span>
-          <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Payku paga</span>
+          <span class="px-3 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container text-xs font-semibold">${t('1 unidad')}</span>
+          <span class="font-headline font-bold text-primary text-sm">${renderPrice(cart.price)}</span>
+          <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">${t('Payku paga')}</span>
         </div>
       </div>
     </div>`;
 
-  document.getElementById('cart-original-price').textContent = cart.price;
-  document.getElementById('cart-discount').textContent = `-${cart.price}`;
+  document.getElementById('cart-original-price').innerHTML = renderPrice(cart.price);
+  document.getElementById('cart-discount').innerHTML = renderDiscountPrice(cart.price);
 }
 
 function removeFromCart() {
@@ -770,7 +1209,7 @@ async function handleRegister(e) {
   errEl.classList.add('hidden');
 
   const btn = document.getElementById('register-btn');
-  btn.textContent = 'Guardando…';
+  btn.textContent = t('Guardando…');
   btn.disabled = true;
 
   // Save lead to Supabase (non-blocking — demo continues regardless)
@@ -781,7 +1220,7 @@ async function handleRegister(e) {
       company,
       job_title: job,
       coffee_name: cart ? cart.name : null,
-      coffee_desc: cart ? cart.desc : null,
+      coffee_desc: null,
     }]);
     if (error) console.warn('[Supabase]', error.message);
   } catch (err) {
@@ -792,7 +1231,7 @@ async function handleRegister(e) {
 
   // (payment banner removed)
 
-  btn.textContent = 'Continuar al Pago';
+  btn.textContent = t('Continuar al Pago');
   btn.disabled = false;
   goTo('payment');
 
@@ -800,8 +1239,9 @@ async function handleRegister(e) {
   setTimeout(() => {
     if (cart) {
       document.getElementById('thanks-coffee-img').src            = cart.image;
-      document.getElementById('thanks-coffee-name').textContent   = cart.name;
-      document.getElementById('thanks-coffee-desc').textContent   = cart.desc;
+      document.getElementById('thanks-coffee-img').alt            = t('Tu café');
+      document.getElementById('thanks-coffee-name').textContent   = t(cart.name);
+      document.getElementById('thanks-coffee-desc').textContent   = '';
     }
     if (currentUser) {
       document.getElementById('thanks-name').textContent  = currentUser.name.split(' ')[0];
@@ -869,6 +1309,7 @@ async function checkStock() {
 }
 
 // Init
+initLanguageControls();
 renderCartItem();
 checkStock();
 </script>
