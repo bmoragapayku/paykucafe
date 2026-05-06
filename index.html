@@ -760,6 +760,24 @@
 </div>
 
 <!-- ================================================ -->
+<!-- MODAL · DUPLICATE EMAIL                         -->
+<!-- ================================================ -->
+<div id="duplicate-email-modal" class="fixed inset-0 z-[100] hidden items-end sm:items-center justify-center p-4 bg-[#310065]/30 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="duplicate-email-title">
+  <div class="w-full max-w-sm bg-surface-container-lowest rounded-xl shadow-[0px_24px_80px_rgba(49,0,101,0.22)] p-6 animate-in">
+    <div class="w-12 h-12 rounded-full bg-red-50 text-error flex items-center justify-center mb-5">
+      <span class="material-symbols-outlined">error</span>
+    </div>
+    <h2 id="duplicate-email-title" class="font-headline font-extrabold text-2xl text-primary tracking-tight mb-2">Correo ya registrado</h2>
+    <p class="text-on-surface-variant leading-relaxed mb-4">El correo ya se encuentra registrado.</p>
+    <p id="duplicate-email-value" class="font-semibold text-primary bg-surface-container-low rounded-lg px-4 py-3 text-sm break-all mb-6">—</p>
+    <button type="button" id="duplicate-email-close" onclick="hideDuplicateEmailModal()"
+      class="w-full py-4 rounded-xl bg-primary text-on-primary font-headline font-bold tracking-tight transition-transform active:scale-95 hover:opacity-90">
+      Entendido
+    </button>
+  </div>
+</div>
+
+<!-- ================================================ -->
 <!-- FOOTER                                          -->
 <!-- ================================================ -->
 <footer class="w-full border-t border-outline-variant/20 bg-surface">
@@ -876,6 +894,10 @@ const I18N = {
   'Falta el símbolo @': { en: 'The @ symbol is missing', pt: 'Falta o símbolo @', zh: '缺少 @ 符号', ru: 'Не хватает символа @' },
   'Falta el dominio después de @': { en: 'The domain after @ is missing', pt: 'Falta o domínio depois de @', zh: '@ 后缺少域名', ru: 'Не хватает домена после @' },
   'Falta el dominio (ej: .com)': { en: 'The domain is missing (e.g. .com)', pt: 'Falta o domínio (ex: .com)', zh: '缺少域名（例如 .com）', ru: 'Не хватает домена (например, .com)' },
+  'Correo ya registrado': { en: 'Email already registered', pt: 'Email já cadastrado', zh: '邮箱已注册', ru: 'Email уже зарегистрирован' },
+  'El correo ya se encuentra registrado.': { en: 'This email is already registered.', pt: 'Este email já está cadastrado.', zh: '此邮箱已注册。', ru: 'Этот email уже зарегистрирован.' },
+  'Entendido': { en: 'Got it', pt: 'Entendi', zh: '知道了', ru: 'Понятно' },
+  'No pudimos validar si el correo ya existe. Intenta nuevamente.': { en: 'We could not validate whether this email already exists. Try again.', pt: 'Não foi possível validar se este email já existe. Tente novamente.', zh: '无法验证此邮箱是否已存在。请重试。', ru: 'Не удалось проверить, существует ли этот email. Попробуйте еще раз.' },
   'Tu carrito está vacío': { en: 'Your cart is empty', pt: 'Seu carrinho está vazio', zh: '你的购物车是空的', ru: 'Ваша корзина пуста' },
   'Elige un café del catálogo para continuar': { en: 'Choose a coffee from the catalog to continue', pt: 'Escolha um café do catálogo para continuar', zh: '从目录中选择一杯咖啡以继续', ru: 'Выберите кофе из каталога, чтобы продолжить' },
   'Ver catálogo': { en: 'View catalog', pt: 'Ver catálogo', zh: '查看目录', ru: 'Открыть каталог' },
@@ -1074,8 +1096,67 @@ function goTo(screenId) {
   }
 }
 
+function initDuplicateEmailModal() {
+  const modal = document.getElementById('duplicate-email-modal');
+  if (!modal) return;
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) hideDuplicateEmailModal();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+      hideDuplicateEmailModal();
+    }
+  });
+}
+
+function showDuplicateEmailModal(email) {
+  const modal = document.getElementById('duplicate-email-modal');
+  const value = document.getElementById('duplicate-email-value');
+  if (!modal) return;
+
+  if (value) value.textContent = email;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  setTimeout(() => document.getElementById('duplicate-email-close')?.focus(), 0);
+}
+
+function hideDuplicateEmailModal() {
+  const modal = document.getElementById('duplicate-email-modal');
+  if (!modal) return;
+
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+  document.getElementById('field-email')?.focus();
+}
+
 //  Email validation ─
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function normalizeEmail(email) {
+  return email.trim().toLowerCase();
+}
+
+function escapeLikePattern(value) {
+  return value.replace(/[\\%_]/g, '\\$&');
+}
+
+async function emailAlreadyRegistered(email) {
+  const { data, error } = await db
+    .from('leads')
+    .select('id')
+    .ilike('email', escapeLikePattern(email))
+    .limit(1);
+
+  if (error) throw error;
+  return Array.isArray(data) && data.length > 0;
+}
+
+function isDuplicateEmailError(error) {
+  const message = `${error?.code || ''} ${error?.message || ''}`.toLowerCase();
+  return message.includes('23505') || (message.includes('duplicate') && message.includes('email'));
+}
 
 function validateEmail(input, isBlur = false) {
   const val     = input.value.trim();
@@ -1197,11 +1278,13 @@ async function handleRegister(e) {
   const email   = document.getElementById('field-email').value.trim();
   const company = document.getElementById('field-company').value.trim();
   const job     = document.getElementById('field-job').value.trim();
+  const normalizedEmail = normalizeEmail(email);
+  const emailInput = document.getElementById('field-email');
 
   // Validate email before submitting
-  validateEmail(document.getElementById('field-email'), true);
+  validateEmail(emailInput, true);
   if (!EMAIL_RE.test(email)) {
-    document.getElementById('field-email').focus();
+    emailInput.focus();
     return;
   }
 
@@ -1212,22 +1295,58 @@ async function handleRegister(e) {
   btn.textContent = t('Guardando…');
   btn.disabled = true;
 
+  try {
+    if (await emailAlreadyRegistered(normalizedEmail)) {
+      showEmailFeedback('error', t('Correo ya registrado'));
+      emailInput.style.borderBottomColor = '#ba1a1a';
+      showDuplicateEmailModal(normalizedEmail);
+      btn.textContent = t('Continuar al Pago');
+      btn.disabled = false;
+      return;
+    }
+  } catch (err) {
+    console.warn('[Supabase] Could not validate email:', err);
+    errEl.textContent = t('No pudimos validar si el correo ya existe. Intenta nuevamente.');
+    errEl.classList.remove('hidden');
+    btn.textContent = t('Continuar al Pago');
+    btn.disabled = false;
+    return;
+  }
+
   // Save lead to Supabase (non-blocking — demo continues regardless)
   try {
     const { error } = await db.from('leads').insert([{
       name,
-      email,
+      email: normalizedEmail,
       company,
       job_title: job,
       coffee_name: cart ? cart.name : null,
       coffee_desc: null,
     }]);
-    if (error) console.warn('[Supabase]', error.message);
+    if (error) {
+      if (isDuplicateEmailError(error)) {
+        showEmailFeedback('error', t('Correo ya registrado'));
+        emailInput.style.borderBottomColor = '#ba1a1a';
+        showDuplicateEmailModal(normalizedEmail);
+        btn.textContent = t('Continuar al Pago');
+        btn.disabled = false;
+        return;
+      }
+      console.warn('[Supabase]', error.message);
+    }
   } catch (err) {
+    if (isDuplicateEmailError(err)) {
+      showEmailFeedback('error', t('Correo ya registrado'));
+      emailInput.style.borderBottomColor = '#ba1a1a';
+      showDuplicateEmailModal(normalizedEmail);
+      btn.textContent = t('Continuar al Pago');
+      btn.disabled = false;
+      return;
+    }
     console.warn('[Supabase] Could not save lead:', err);
   }
 
-  currentUser = { name, email, company, job };
+  currentUser = { name, email: normalizedEmail, company, job };
 
   // (payment banner removed)
 
@@ -1310,6 +1429,7 @@ async function checkStock() {
 
 // Init
 initLanguageControls();
+initDuplicateEmailModal();
 renderCartItem();
 checkStock();
 </script>
