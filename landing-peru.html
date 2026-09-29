@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payku · Pasarela de Pagos LATAM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple-deep:  #1a003a;
+      --purple-dark:  #310065;
+      --purple-mid:   #4A148C;
+      --purple-light: #7C3AED;
+      --pink:         #E040FB;
+      --pink-soft:    #f3e8ff;
+      --gold:         #FFD700;
+      --bg:           #07001a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--bg);
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+    html { overflow-x: hidden; }
+    .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    /*  NAV  */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(7,0,26,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-shell {
+      gap: 1rem;
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+    .language-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(14px);
+      flex-shrink: 0;
+    }
+    .lang-btn {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      line-height: 1;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .lang-btn:hover,
+    .lang-btn.active {
+      background: rgba(124,58,237,0.45);
+      box-shadow: 0 0 18px rgba(224,64,251,0.25);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile lang dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+    .lang-dropdown-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px 6px 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(14px);
+      cursor: pointer;
+      font-size: 18px;
+      color: #fff;
+      line-height: 1;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .lang-dropdown-trigger:hover {
+      border-color: rgba(124,58,237,0.5);
+      background: rgba(124,58,237,0.2);
+    }
+    .lang-dropdown-trigger svg {
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .lang-dropdown.open .lang-dropdown-trigger svg {
+      transform: rotate(180deg);
+    }
+    .lang-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(20,5,45,0.95);
+      border: 1px solid rgba(124,58,237,0.35);
+      border-radius: 16px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 140px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(224,64,251,0.08);
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 200;
+    }
+    .lang-dropdown.open .lang-dropdown-menu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .lang-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.75);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Manrope', sans-serif;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, color 0.15s;
+    }
+    .lang-dropdown-item:hover {
+      background: rgba(124,58,237,0.3);
+      color: #fff;
+    }
+    .lang-dropdown-item.active {
+      background: rgba(124,58,237,0.4);
+      color: #fff;
+    }
+    .lang-dropdown-item .lang-flag {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    /*  GRADIENT TEXT */
+    .grad-text {
+      background: linear-gradient(135deg, #fff 0%, #e8c7ff 40%, #E040FB 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .grad-text-gold {
+      background: linear-gradient(135deg, #FFD700, #FF8C00, #FF4500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /*  GLOW EFFECTS  */
+    .glow-purple {
+      box-shadow: 0 0 40px rgba(124,58,237,0.35), 0 0 80px rgba(74,20,140,0.2);
+    }
+    .glow-pink {
+      box-shadow: 0 0 30px rgba(224,64,251,0.4);
+    }
+    .text-glow {
+      text-shadow: 0 0 30px rgba(224,64,251,0.5), 0 0 60px rgba(124,58,237,0.3);
+    }
+
+    /*  HERO BACKGROUND  */
+    .hero-bg {
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(74,20,140,0.6) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 40% at 80% 50%, rgba(224,64,251,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse 30% 30% at 20% 70%, rgba(49,0,101,0.4) 0%, transparent 60%),
+                  var(--bg);
+    }
+
+    /*  PARTICLES CANVAS */
+    #particle-canvas {
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 0;
+    }
+
+    /*  SLOTH */
+    .sloth-hero {
+      width: clamp(160px, 20vw, 260px);
+      filter: drop-shadow(0 20px 60px rgba(224,64,251,0.5))
+              drop-shadow(0 0 30px rgba(124,58,237,0.4));
+      animation: sloth-float 4s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    @keyframes sloth-float {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      25%       { transform: translateY(-18px) rotate(0deg); }
+      50%       { transform: translateY(-28px) rotate(2deg); }
+      75%       { transform: translateY(-14px) rotate(0deg); }
+    }
+    .sloth-shadow {
+      width: 80px; height: 18px;
+      background: radial-gradient(ellipse, rgba(224,64,251,0.4), transparent 70%);
+      margin: 0 auto;
+      animation: shadow-pulse 4s ease-in-out infinite;
+      border-radius: 50%;
+    }
+    @keyframes shadow-pulse {
+      0%, 100% { transform: scaleX(1);   opacity: 0.5; }
+      50%       { transform: scaleX(0.5); opacity: 0.2; }
+    }
+
+    /*  ANTI-GRAVITY WORDS  */
+    .ag-word {
+      display: inline-block;
+      animation: ag-float var(--dur, 3s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes ag-float {
+      0%, 100% { transform: translateY(0px)   rotate(var(--rot-a, -0.5deg)); }
+      33%       { transform: translateY(var(--rise-a, -12px)) rotate(var(--rot-b, 0.5deg)); }
+      66%       { transform: translateY(var(--rise-b, -6px))  rotate(var(--rot-c, -0.3deg)); }
+    }
+
+    /*  SECTION DIVIDER  */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(124,58,237,0.4), rgba(224,64,251,0.4), transparent);
+    }
+
+    /*  CARDS */
+    .product-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(124,58,237,0.12), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(124,58,237,0.4);
+      box-shadow: 0 20px 60px rgba(74,20,140,0.3), 0 0 0 1px rgba(224,64,251,0.1);
+    }
+    .product-card:hover::before { opacity: 1; }
+
+    .card-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    /*  PAYMENT METHOD PILLS */
+    .pay-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-size: 13px; font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .pay-pill:hover {
+      background: rgba(124,58,237,0.2);
+      border-color: rgba(124,58,237,0.5);
+      transform: scale(1.04);
+    }
+
+    /*  MARQUEE */
+    .marquee-track {
+      display: flex; gap: 12px;
+      animation: marquee-scroll 28s linear infinite;
+      width: max-content;
+    }
+    .marquee-track-rev {
+      display: flex; gap: 12px;
+      animation: marquee-scroll 22s linear infinite reverse;
+      width: max-content;
+    }
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-wrap { overflow: hidden; mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent); }
+
+    /*  STAT COUNTER */
+    .stat-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+    }
+    .stat-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      background: linear-gradient(135deg, #fff, #c084fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /*  PRICING */
+    .price-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 2.5rem;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .price-card:hover { transform: translateY(-4px); }
+    .price-card.featured {
+      background: linear-gradient(135deg, rgba(74,20,140,0.5), rgba(49,0,101,0.6));
+      border-color: rgba(124,58,237,0.5);
+      box-shadow: 0 0 60px rgba(124,58,237,0.25);
+    }
+    .price-badge {
+      position: absolute; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #E040FB, #7C3AED);
+      color: #fff; font-size: 11px; font-weight: 800;
+      padding: 4px 10px; border-radius: 999px; letter-spacing: 0.05em;
+    }
+
+    /*  INTEGRATION LOGO */
+    .int-logo {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.7);
+      gap: 8px;
+      transition: all 0.25s;
+    }
+    .int-logo:hover {
+      background: rgba(124,58,237,0.15);
+      border-color: rgba(124,58,237,0.4);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    /*  BUTTON  */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, #7C3AED, #E040FB);
+      color: #fff; font-weight: 800; font-size: 15px;
+      padding: 14px 32px; border-radius: 999px; border: none; cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 8px 32px rgba(124,58,237,0.4);
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 12px 40px rgba(224,64,251,0.5);
+    }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; font-weight: 700; font-size: 14px;
+      padding: 12px 26px; border-radius: 999px; cursor: pointer;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); }
+
+    /*  SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left  { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-right { opacity: 0; transform: translateX(40px);  transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /*  ORBITING DOTS */
+    .orbit-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px dashed rgba(124,58,237,0.2);
+      pointer-events: none;
+    }
+    .orbit-dot {
+      position: absolute; border-radius: 50%;
+      background: rgba(224,64,251,0.7);
+      box-shadow: 0 0 8px rgba(224,64,251,0.8);
+    }
+
+    /*  SECURITY BADGE */
+    .sec-badge {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+    }
+    .sec-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: linear-gradient(135deg, rgba(74,20,140,0.6), rgba(124,58,237,0.6));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+
+    /*  FLOATING ELEMENTS */
+    .float-slow { animation: float-slow 6s ease-in-out infinite; }
+    .float-med  { animation: float-slow 4s ease-in-out infinite 0.5s; }
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-14px); }
+    }
+
+    /*  GRID BACKGROUND  */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(124,58,237,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,58,237,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /*  LATAM FLAGS STRIP */
+    .flag-strip {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7);
+    }
+
+    /*  CTA SECTION BG */
+    .cta-bg {
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(74,20,140,0.5) 0%, transparent 70%),
+                  rgba(255,255,255,0.02);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 32px;
+    }
+
+    /*  CHIP */
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(124,58,237,0.2);
+      border: 1px solid rgba(124,58,237,0.4);
+      color: #c084fc;
+      font-size: 11px; font-weight: 800;
+      padding: 4px 12px; border-radius: 999px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    /*  FEATURE ROW */
+    .feat-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .feat-row:last-child { border-bottom: none; }
+    .feat-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: linear-gradient(135deg, #7C3AED, #E040FB);
+      margin-top: 6px; flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(224,64,251,0.6);
+    }
+
+    /* SECTIONS behind bg-sloth */
+    section, footer, .section-divider {
+      position: relative;
+      z-index: 2;
+    }
+    nav { z-index: 100; }
+
+    /* BACKGROUND SLOTH */
+    #bg-sloth {
+      position: fixed;
+      z-index: 1;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      width: 160px;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    /* Contenedor de chispas — antes del inner en DOM, siempre detrás del perezoso */
+    #bg-sloth-trail {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    /* Inner wrapper — recibe la rotación+flip para que llama y perezoso giren juntos */
+    #bg-sloth-inner {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      isolation: isolate;
+    }
+    #bg-sloth-img {
+      width: 100%;
+      display: block;
+      position: relative; /* asegura que quede sobre z-index:-1 (sparks y llama) */
+      z-index: 0;
+      filter: drop-shadow(0 0 18px rgba(224,64,251,0.7))
+              drop-shadow(0 0 35px rgba(124,58,237,0.5));
+    }
+    /* Rocket flame — posicionada relativa al inner wrapper, rota con él */
+    #bg-sloth-flame {
+      position: absolute;
+      z-index: -1;
+      top: 62%;
+      right: 100%;
+      width: 90px;
+      height: 30px;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      filter: blur(7px);
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,200,50,0.4), rgba(255,80,0,0.8), rgba(255,160,0,0.6), transparent);
+    }
+    /* Spark particles */
+    .sloth-spark {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, #FFD700, #FF8C00);
+    }
+
+    /*  MOBILE */
+    @media (max-width: 767px) {
+      /* Kill overflow from large decorations */
+      .orbit-ring { display: none !important; }
+
+      /* Hero center */
+      #hero-title  { text-align: center; }
+      #hero-chip   { margin-left: auto; margin-right: auto; }
+      #hero-sub    { text-align: center; max-width: 100% !important; }
+      #hero-ctas   { flex-direction: column; align-items: stretch; }
+      #hero-ctas a { width: 100%; justify-content: center; }
+      #hero-stats  { justify-content: center; gap: 1.5rem; }
+      #hero-stats .stat-sep { display: none; }
+
+      /* Headline size */
+      .hero-headline { font-size: clamp(2.6rem, 11vw, 4rem) !important; }
+
+      /* Section padding */
+      section { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
+
+      /* No horizontal slide — avoids x-overflow on narrow screens */
+      .reveal-left  { transform: translateY(30px); }
+      .reveal-right { transform: translateY(30px); }
+      .reveal-left.visible, .reveal-right.visible { transform: translateX(0) translateY(0); }
+
+      /* Cards & pricing */
+      .product-card { padding: 1.5rem; }
+      .price-card   { padding: 1.5rem; }
+      .stat-card    { padding: 1.25rem 1rem; }
+      .stat-num     { font-size: clamp(1.8rem, 7vw, 2.5rem); }
+
+      /* Integrations gap */
+      .int-gap-override { gap: 2.5rem !important; }
+
+      /* CTA */
+      .cta-bg { padding: 2rem 1.25rem !important; border-radius: 20px; }
+
+      /* Nav */
+      nav .btn-primary { padding: 8px 14px; font-size: 12px; }
+      .nav-shell { gap: 0.5rem; padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+      .nav-logo { height: 1.5rem !important; }
+      .nav-actions { gap: 0.5rem; }
+
+      /* Stats mb */
+      .stats-mb { margin-bottom: 2rem !important; }
+
+      /* Sections mb */
+      .section-mb { margin-bottom: 2.5rem !important; }
+    }
+    @media (max-width: 480px) {
+      .nav-shell {
+        justify-content: space-between;
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+      }
+      .nav-actions { justify-content: flex-end; }
+      .hero-bg { padding-top: 5rem !important; }
+    }
+    @media (max-width: 420px) {
+      nav .btn-primary { padding: 8px 10px; font-size: 11px; gap: 5px; }
+      nav .btn-primary svg { width: 15px; height: 15px; }
+      .nav-logo { height: 1.25rem !important; }
+    }
+    @media (max-width: 360px) {
+      .nav-actions { gap: 0.4rem; }
+      .hero-bg { padding-top: 5rem !important; }
+    }
+  </style>
+</head>
+<body class="grid-bg">
+
+<!-- ════════════════════════════ BG SLOTH ════════════════════════════ -->
+<div id="bg-sloth">
+  <div id="bg-sloth-trail"></div><!-- chispas van aquí, antes del inner → siempre detrás -->
+  <div id="bg-sloth-inner">
+    <div id="bg-sloth-flame"></div>
+    <img src="https://payku.com/images/noto.png" alt="" id="bg-sloth-img">
+  </div>
+</div>
+
+<!-- ════════════════════════════ NAV ════════════════════════════ -->
+<nav>
+  <div class="nav-shell max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <img src="https://payku.com/images/pk23logo.png"
+      alt="Payku" class="nav-logo h-7 brightness-0 invert">
+    <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-white/70">
+      <a href="#productos" class="hover:text-white transition-colors">Productos</a>
+      <a href="#metodos" class="hover:text-white transition-colors">Métodos de pago</a>
+      <a href="#integraciones" class="hover:text-white transition-colors">Integraciones</a>
+      <a href="#tarifas" class="hover:text-white transition-colors">Tarifas</a>
+    </div>
+    <div class="nav-actions">
+      <!-- Desktop: pill con todas las banderas -->
+      <div class="language-switcher hidden md:inline-flex" role="group" aria-label="Seleccionar idioma">
+        <button type="button" class="lang-btn active" data-lang="es" aria-label="Español" title="Español">🇨🇱</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English" title="English">🇺🇸</button>
+        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português" title="Português">🇧🇷</button>
+        <button type="button" class="lang-btn" data-lang="zh" aria-label="中文" title="中文">🇨🇳</button>
+        <button type="button" class="lang-btn" data-lang="ru" aria-label="Русский" title="Русский">🇷🇺</button>
+      </div>
+      <!-- Mobile: dropdown compacto -->
+      <div class="lang-dropdown md:hidden" id="langDropdown">
+        <button type="button" class="lang-dropdown-trigger" id="langDropdownTrigger" aria-haspopup="true" aria-expanded="false">
+          <span id="langDropdownFlag">🇨🇱</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="lang-dropdown-menu" id="langDropdownMenu" role="listbox">
+          <button type="button" class="lang-dropdown-item active" data-lang="es" role="option" aria-selected="true">
+            <span class="lang-flag">🇨🇱</span> Español
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="en" role="option" aria-selected="false">
+            <span class="lang-flag">🇺🇸</span> English
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="pt" role="option" aria-selected="false">
+            <span class="lang-flag">🇧🇷</span> Português
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="zh" role="option" aria-selected="false">
+            <span class="lang-flag">🇨🇳</span> 中文
+          </button>
+          <button type="button" class="lang-dropdown-item" data-lang="ru" role="option" aria-selected="false">
+            <span class="lang-flag">🇷🇺</span> Русский
+          </button>
+        </div>
+      </div>
+      <a href="https://calendly.com/payku/sobre-payku?back=1&month=2026-04" class="btn-primary text-sm py-2.5 px-5">
+        Agenda una cita
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════ HERO ════════════════════════════ -->
+<section class="hero-bg relative min-h-screen flex items-start md:items-center overflow-hidden pt-20">
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Orbit decorations (desktop only) -->
+  <div class="orbit-ring hidden md:block" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%)">
+    <div class="orbit-dot" style="width:6px;height:6px;top:-3px;left:50%;animation:orbit 8s linear infinite"></div>
+  </div>
+  <div class="orbit-ring hidden md:block" style="width:800px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%)">
+    <div class="orbit-dot" style="width:4px;height:4px;bottom:-2px;left:30%;animation:orbit 14s linear infinite reverse"></div>
+  </div>
+  <style>
+    @keyframes orbit {
+      from { transform: rotate(0deg) translateX(-50%); }
+      to   { transform: rotate(360deg) translateX(-50%); }
+    }
+  </style>
+
+  <div class="max-w-7xl mx-auto px-5 md:px-6 py-10 md:py-20 lg:py-32 relative z-10 w-full">
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+
+      <!-- Left -->
+      <div class="text-center md:text-left">
+        <div class="chip mb-6" id="hero-chip">
+          <span style="width:6px;height:6px;border-radius:50%;background:#E040FB;display:inline-block;animation:pulse 1.5s ease-in-out infinite"></span>
+          La plataforma de pagos más completa de Chile y Perú
+        </div>
+        <style>@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}</style>
+
+        <h1 class="font-headline hero-headline" style="font-size:clamp(3rem,6vw,5.5rem);font-weight:900;line-height:1.05;margin-bottom:1.5rem" id="hero-title">
+          <span class="ag-word grad-text text-glow" style="--dur:3.2s;--delay:0s;--rise-a:-14px;--rise-b:-7px;--rot-a:-1deg;--rot-b:0.5deg;--rot-c:-0.5deg">Cobra.</span><br>
+          <span class="ag-word" style="--dur:3.8s;--delay:0.3s;--rise-a:-10px;--rise-b:-18px;--rot-a:0.5deg;--rot-b:-0.8deg;--rot-c:0.3deg">Suscribe.</span><br>
+          <span class="ag-word" style="--dur:2.9s;--delay:0.6s;--rise-a:-20px;--rise-b:-8px;--rot-a:-0.3deg;--rot-b:1deg;--rot-c:-0.6deg">Paga.</span>
+        </h1>
+
+        <p class="text-white/60 text-lg md:text-xl leading-relaxed mb-10" style="max-width:500px" id="hero-sub">
+          Débito, crédito, transferencias, suscripciones, links de pago y más.
+          <span class="text-white font-semibold">Sin costo de mantenimiento.</span> Disponible en Chile y Perú.
+        </p>
+
+        <div class="flex flex-wrap gap-4 mb-12" id="hero-ctas">
+          <a href="https://docs.payku.com" class="btn-ghost">Ver documentación</a>
+        </div>
+
+        <!-- Mini stats -->
+        <div class="flex flex-wrap gap-6 md:gap-8" id="hero-stats">
+          <div>
+            <p class="font-headline font-black text-2xl text-white">2016</p>
+            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Fundada en Chile</p>
+          </div>
+          <div class="stat-sep hidden md:block" style="width:1px;background:rgba(255,255,255,0.1)"></div>
+          <div>
+            <p class="font-headline font-black text-2xl text-white">2016</p>
+            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Perú</p>
+          </div>
+          <div class="stat-sep hidden md:block" style="width:1px;background:rgba(255,255,255,0.1)"></div>
+          <div>
+            <p class="font-headline font-black text-2xl text-white">S/ 0</p>
+            <p class="text-xs text-white/50 font-semibold uppercase tracking-wider mt-0.5">Costo de mantenimiento</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: sloth -->
+      <div class="flex flex-col items-center justify-center order-first md:order-last mb-6 md:mb-0" id="hero-sloth">
+
+        <!-- Sloth -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:clamp(12px,3vw,28px)">
+
+          <!-- Sloth + shadow stacked -->
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="position:relative">
+              <!-- Glow ring -->
+              <div style="
+                position:absolute;inset:-30px;border-radius:50%;
+                background:radial-gradient(circle,rgba(224,64,251,0.2),transparent 70%);
+                animation:glow-pulse 3s ease-in-out infinite;
+              "></div>
+              <style>@keyframes glow-pulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}</style>
+
+              <img src="https://payku.com/images/noto.png" alt="Noto el perezoso" class="sloth-hero">
+            </div>
+            <div class="sloth-shadow mt-4"></div>
+          </div>
+
+
+        </div>
+
+        <!-- Floating tags (desktop only — absolute positions overflow on mobile) -->
+        <div class="hidden md:block" style="position:relative;width:100%;height:0">
+          <a href="https://www.payku.com/#:~:text=M%C3%89TODOS%20DE%20PAGO%20SOPORTADOS" target="_blank" rel="noopener" class="pay-pill float-slow" style="position:absolute;top:-220px;left:-60px;animation-delay:0.5s;font-size:12px;padding:8px 14px;text-decoration:none;cursor:pointer">
+            💳 Medios de pago
+          </a>
+          <div class="pay-pill float-med" style="position:absolute;top:-370px;left:35%;animation-delay:1s;font-size:12px;padding:8px 14px">
+            🔁 Suscripciones
+          </div>
+          <div class="pay-pill float-slow" style="position:absolute;top:-80px;left:40%;animation-delay:1.8s;font-size:12px;padding:8px 14px">
+            🏦 Transferencia
+          </div>
+          <div class="pay-pill float-med" style="position:absolute;top:-100px;left:-80px;animation-delay:0.8s;font-size:12px;padding:8px 14px">
+            🔗 Link de Pago
+          </div>
+          <div class="pay-pill float-slow" style="position:absolute;top:-340px;left:-30px;animation-delay:1.4s;font-size:12px;padding:8px 14px">
+            💸 Cuotas sin interés
+          </div>
+        </div>
+
+        <!-- Mobile pill row (below sloth, no absolute) -->
+        <div class="md:hidden flex flex-wrap gap-2 justify-center mt-5">
+          <div class="pay-pill" style="font-size:11px;padding:6px 12px">💳 Medios de pago</div>
+          <div class="pay-pill" style="font-size:11px;padding:6px 12px">🔁 Suscripciones</div>
+          <div class="pay-pill" style="font-size:11px;padding:6px 12px">🏦 Transferencia</div>
+          <div class="pay-pill" style="font-size:11px;padding:6px 12px">🔗 Link de Pago</div>
+          <div class="pay-pill" style="font-size:11px;padding:6px 12px">💸 Cuotas sin interés</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+    <span class="text-xs font-semibold tracking-widest uppercase">Scroll</span>
+    <div style="width:1px;height:40px;background:linear-gradient(to bottom,white,transparent);animation:scroll-line 1.5s ease-in-out infinite"></div>
+    <style>@keyframes scroll-line{0%,100%{opacity:0.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}</style>
+  </div>
+</section>
+
+<!-- ════════════════════════════ MARQUEE PAYMENTS ════════════════════════════ -->
+<section id="metodos" class="py-10 md:py-16 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 mb-8 reveal">
+    <p class="text-center text-xs font-black uppercase tracking-widest text-white/40 mb-2">Métodos de pago aceptados</p>
+  </div>
+  <div class="marquee-wrap mb-4">
+    <div class="marquee-track">
+      <div class="pay-pill">💳 Visa Crédito</div>
+      <div class="pay-pill">💳 Mastercard</div>
+      <div class="pay-pill">💳 American Express</div>
+      <div class="pay-pill">💳 Diners Club</div>
+      <div class="pay-pill">📲 Onepay</div>
+      <div class="pay-pill">🌐 Webpay Plus</div>
+      <div class="pay-pill">💳 Visa Crédito</div>
+      <div class="pay-pill">💳 Mastercard</div>
+      <div class="pay-pill">💳 American Express</div>
+      <div class="pay-pill">💳 Diners Club</div>
+      <div class="pay-pill">📲 Onepay</div>
+      <div class="pay-pill">🌐 Webpay Plus</div>
+    </div>
+  </div>
+  <div class="marquee-wrap">
+    <div class="marquee-track-rev">
+      <div class="pay-pill">🇨🇱 Chile</div>
+      <div class="pay-pill">🇵🇪 Perú</div>
+      <!--div class="pay-pill">🇻🇪 Venezuela</div-->
+      <div class="pay-pill">🔒 Transacciones cifradas</div>
+      <div class="pay-pill">⚡ Integración en minutos</div>
+      <div class="pay-pill">📊 Panel en tiempo real</div>
+      <div class="pay-pill">💸 Sin costo de mantenimiento</div>
+      <div class="pay-pill">🔄 Cobros automáticos</div>
+      <div class="pay-pill">🇨🇱 Chile</div>
+      <div class="pay-pill">🇵🇪 Perú</div>
+      <!--div class="pay-pill">🇻🇪 Venezuela</div-->
+      <div class="pay-pill">🔒 Transacciones cifradas</div>
+      <div class="pay-pill">⚡ Integración en minutos</div>
+      <div class="pay-pill">📊 Panel en tiempo real</div>
+      <div class="pay-pill">💸 Sin costo de mantenimiento</div>
+      <div class="pay-pill">🔄 Cobros automáticos</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- ════════════════════════════ PRODUCTOS ════════════════════════════ -->
+<section id="productos" class="py-14 md:py-24 lg:py-32">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-10 md:mb-16 reveal">
+      <div class="chip mb-4">Nuestros Productos</div>
+      <h2 class="font-headline font-black grad-text mb-4" style="font-size:clamp(2rem,4vw,3.5rem);line-height:1.1">
+        Todo lo que necesitas<br>para cobrar online
+      </h2>
+      <p class="text-white/50 text-lg" style="max-width:520px;margin:0 auto">
+        Desde un link de pago hasta una API completa. Elige la solución que se adapta a tu negocio.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- 1: Botón / Link de Pago -->
+      <div class="product-card reveal" style="transition-delay:0.05s">
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(224,64,251,0.2))">🔗</div>
+        <div class="chip mb-3" style="font-size:9px">MÁS POPULAR</div>
+        <h3 class="font-headline font-black text-xl text-white mb-3">Botón de Pago</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6">
+          Crea botones de pago y compártelos por email, WhatsApp o redes sociales. Sin necesidad de tener un sitio web.
+        </p>
+        <div class="space-y-0">
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Link personalizado para cada cobro</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Compatible con email y redes sociales</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Cupones de descuento incluidos</p></div>
+        </div>
+      </div>
+
+      <!-- 2: Cobros Recurrentes -->
+      <div class="product-card reveal" style="transition-delay:0.1s">
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(59,130,246,0.3),rgba(99,102,241,0.2))">🔁</div>
+        <h3 class="font-headline font-black text-xl text-white mb-3">Cobros Recurrentes</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6">
+          Recibe pagos recurrentes de tus clientes: suscripciones de monto fijo y variable, automáticas y por consumo, en CLP y en UF.
+        </p>
+        <div class="space-y-0">
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Suscripciones y membresías</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Ciclos de cobro configurables</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Fecha de expiración por plan</p></div>
+        </div>
+      </div>
+
+      <!-- 3: API -->
+      <div class="product-card reveal" style="transition-delay:0.15s">
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(16,185,129,0.3),rgba(5,150,105,0.2))">⚡</div>
+        <h3 class="font-headline font-black text-xl text-white mb-3">API REST</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6">
+          Integra Payku directamente en tu plataforma. PayIn y PayOut en una sola API, con ambiente de pruebas incluido.
+        </p>
+        <div class="space-y-0">
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">PayIn (cobros) y PayOut (pagos)</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Tarjetas de prueba para desarrollo</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Ambiente sandbox disponible</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Anulaciones</p></div>
+        </div>
+      </div>
+
+      <!-- 4: Marketplace -->
+      <div class="product-card reveal" style="transition-delay:0.2s">
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(245,158,11,0.3),rgba(239,68,68,0.2))">🏪</div>
+        <h3 class="font-headline font-black text-xl text-white mb-3">Marketplace</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6">
+          Divide los pagos entre varias cuentas en distintos porcentajes. Ideal para eventos, plataformas y negocios multi-vendedor.
+        </p>
+        <div class="space-y-0">
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">División de pagos por porcentaje</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Soporte para múltiples cuentas</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Para eventos y plataformas</p></div>
+        </div>
+      </div>
+
+      <!-- 5: Payouts -->
+      <div class="product-card reveal" style="transition-delay:0.25s">
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(236,72,153,0.3),rgba(168,85,247,0.2))">💸</div>
+        <h3 class="font-headline font-black text-xl text-white mb-3">Payouts</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6">
+          Realiza pagos y dispersiones desde tu plataforma. Liquida a tus proveedores, trabajadores o colaboradores directo desde Payku.
+        </p>
+        <div class="space-y-0">
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Pagos salientes desde tu cuenta</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Via API o desde el panel</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Disponible en Chile y Perú</p></div>
+        </div>
+      </div>
+
+      <!-- 6: Donaciones -->
+      <div class="product-card reveal" style="transition-delay:0.3s;background:linear-gradient(135deg,rgba(74,20,140,0.2),rgba(49,0,101,0.3));border-color:rgba(124,58,237,0.3)">
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(224,64,251,0.3),rgba(124,58,237,0.2))">❤️</div>
+        <h3 class="font-headline font-black text-xl text-white mb-3">Donaciones</h3>
+        <p class="text-white/55 text-sm leading-relaxed mb-6">
+          Recibe donaciones online de forma simple y segura. Ideal para fundaciones, causas sociales y campañas de recaudación.
+        </p>
+        <div class="space-y-0">
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Formulario adaptado a tu sitio web</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Link compartible al instante</p></div>
+          <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/70">Colectas digitales</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- ════════════════════════════ STATS ════════════════════════════ -->
+<section class="py-14 md:py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+      <div class="stat-card reveal" style="transition-delay:0.05s">
+        <p class="stat-num">2016</p>
+        <p class="text-white/40 text-sm font-semibold mt-2">Fundada en Santiago</p>
+      </div>
+      <div class="stat-card reveal" style="transition-delay:0.1s">
+        <p class="stat-num">CL · PE</p>
+        <p class="text-white/40 text-sm font-semibold mt-2">Chile y Perú</p>
+      </div>
+      <div class="stat-card reveal" style="transition-delay:0.2s">
+        <p class="stat-num" data-target="1" data-suffix=" día" data-suffix-key="day">0</p>
+        <p class="text-white/40 text-sm font-semibold mt-2">Liquidación mínima</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- ════════════════════════════ INTEGRACIONES ════════════════════════════ -->
+<section id="integraciones" class="py-14 md:py-24 lg:py-32">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+      <div class="reveal-left">
+        <div class="chip mb-5">Integraciones</div>
+        <h2 class="font-headline font-black grad-text mb-5" style="font-size:clamp(2rem,3.5vw,3rem);line-height:1.1">
+          Conecta con tu<br>plataforma favorita
+        </h2>
+        <p class="text-white/55 text-base leading-relaxed mb-8">
+          Plugins oficiales para WooCommerce, PrestaShop, Shopify y Jumpseller. O integra directamente vía API REST.
+        </p>
+        <div class="flex flex-col gap-3">
+          <div class="sec-badge">
+            <div class="sec-icon">🔌</div>
+            <div>
+              <p class="font-bold text-sm text-white">Plugins listos en 5 minutos</p>
+              <p class="text-xs text-white/50 mt-0.5">Descarga, instala, activa y listo para cobrar</p>
+            </div>
+          </div>
+          <div class="sec-badge">
+            <div class="sec-icon">📖</div>
+            <div>
+              <p class="font-bold text-sm text-white">Documentación completa</p>
+              <p class="text-xs text-white/50 mt-0.5">Guías paso a paso, ejemplos de código y soporte</p>
+            </div>
+          </div>
+          <div class="sec-badge">
+            <div class="sec-icon">🧪</div>
+            <div>
+              <p class="font-bold text-sm text-white">Ambiente de pruebas incluido</p>
+              <p class="text-xs text-white/50 mt-0.5">Sandbox con tarjetas de test para validar tu integración</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="int-logo">🛒 WooCommerce</div>
+          <div class="int-logo">🏪 PrestaShop</div>
+          <div class="int-logo">🛍️ Shopify</div>
+          <div class="int-logo">🦘 Jumpseller</div>
+          <div class="int-logo">⚡ API REST</div>
+        </div>
+        <p class="text-white/30 text-xs text-center mt-4 font-semibold">+ integración directa vía API REST en cualquier stack</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- ════════════════════════════ TARIFAS ════════════════════════════ -->
+<section id="tarifas" class="py-14 md:py-24 lg:py-32">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-10 md:mb-16 reveal">
+      <div class="chip mb-4">Tarifas Transparentes</div>
+      <h2 class="font-headline font-black grad-text mb-4" style="font-size:clamp(2rem,4vw,3.5rem);line-height:1.1">
+        Sin letra chica.<br>Sin sorpresas.
+      </h2>
+      <p class="text-white/50 text-lg">Sin costo de mantenimiento mensual. Pagas solo cuando vendes.</p>
+
+      <!-- Sin costos de incorporación callout -->
+      <div class="reveal mt-8" style="display:inline-block">
+        <div style="
+          background: linear-gradient(135deg, rgba(74,20,140,0.45), rgba(49,0,101,0.55));
+          border: 1px solid rgba(224,64,251,0.35);
+          border-radius: 20px;
+          padding: 1.25rem 2.5rem;
+          position: relative;
+          overflow: hidden;
+        ">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(224,64,251,0.1),transparent);pointer-events:none"></div>
+          <p class="font-headline font-black" style="
+            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+            line-height: 1.1;
+            background: linear-gradient(135deg, #FFD700, #FF8C00, #FF4500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            letter-spacing: -0.02em;
+          ">Sin costos de incorporación</p>
+          <p class="text-white/50 text-sm font-semibold mt-2">Regístrate gratis. Activa tu cuenta al instante.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
+      <!-- QR Interoperable -->
+      <div class="price-card reveal" style="transition-delay:0.05s">
+        <div class="text-3xl mb-4">📱</div>
+        <h3 class="font-headline font-black text-xl text-white mb-2">QR Interoperable</h3>
+        <p class="text-white/40 text-sm mb-6">Solo en soles</p>
+        <div class="mb-6">
+          <span class="font-headline font-black text-4xl text-white">3%</span>
+          <span class="text-white/40 text-sm ml-1">+ IGV</span>
+        </div>
+        <p class="text-white/50 text-xs mb-6">Abono al día hábil siguiente</p>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Yape, PLIN, BIM, Izipay Ya, Lemon, OhPay y Ligo</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Sin costo de mantenimiento mensual</p></div>
+      </div>
+
+      <!-- Tarjetas nacionales FEATURED -->
+      <div class="price-card featured reveal" style="transition-delay:0.1s">
+        <div class="price-badge">MÁS USADO</div>
+        <div class="text-3xl mb-4">💳</div>
+        <h3 class="font-headline font-black text-xl text-white mb-2">Tarjetas Nacionales</h3>
+        <p class="text-white/40 text-sm mb-6">Crédito, débito y prepago nacional</p>
+        <div class="mb-6">
+          <span class="font-headline font-black text-4xl text-white">3.5%</span>
+          <span class="text-white/40 text-sm ml-1">+ IGV</span>
+        </div>
+        <p class="text-white/50 text-xs mb-6">Abono al día hábil siguiente</p>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Visa, Mastercard, Amex, Diners</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Soles y dólares</p></div>
+      </div>
+
+      <!-- Tarjetas internacionales -->
+      <div class="price-card reveal" style="transition-delay:0.15s">
+        <div class="text-3xl mb-4">🌎</div>
+        <h3 class="font-headline font-black text-xl text-white mb-2">Tarjetas Internacionales</h3>
+        <p class="text-white/40 text-sm mb-6">Crédito, débito y prepago internacional</p>
+        <div class="mb-6">
+          <span class="font-headline font-black text-4xl text-white">4.5%</span>
+          <span class="text-white/40 text-sm ml-1">+ IGV</span>
+        </div>
+        <p class="text-white/50 text-xs mb-6">Abono al día hábil siguiente</p>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Visa, Mastercard, Amex, Diners</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Soles y dólares</p></div>
+      </div>
+
+      <!-- No necesitas empresa -->
+      <div class="price-card reveal" style="transition-delay:0.2s">
+        <div class="text-3xl mb-4">🙌</div>
+        <h3 class="font-headline font-black text-xl text-white mb-2">Para personas y negocios</h3>
+        <div class="mb-6">
+          <span class="font-headline font-black text-4xl grad-text-gold">S/ 0</span>
+          <span class="text-white/40 text-sm ml-1">mantenimiento</span>
+        </div>
+        <p class="text-white/50 text-xs mb-6">Solo necesitas una cuenta bancaria</p>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Registro en simples pasos</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Pagas solo cuando vendes</p></div>
+        <div class="feat-row"><div class="feat-dot"></div><p class="text-sm text-white/60">Activación inmediata</p></div>
+      </div>
+
+    </div>
+
+    <p class="text-center text-white/30 text-sm reveal">
+      * Tarifas + IGV. Abono al día hábil siguiente en todos los medios de pago. Descontamos la comisión del monto que te depositamos. Sin costo de mantenimiento ni costos fijos.
+    </p>
+  </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- ════════════════════════════ SEGURIDAD ════════════════════════════ -->
+<section class="py-14 md:py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-10 md:mb-14 reveal">
+      <div class="chip mb-4">Seguridad</div>
+      <h2 class="font-headline font-black grad-text mb-4" style="font-size:clamp(2rem,4vw,3rem)">
+        Protección en cada transacción
+      </h2>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+      <div class="sec-badge flex-col items-center text-center gap-2 py-5 md:py-6 reveal" style="transition-delay:0.05s">
+        <div class="sec-icon mx-auto text-xl md:text-2xl" style="width:48px;height:48px;border-radius:14px">🔒</div>
+        <div>
+          <p class="font-bold text-sm text-white">Encriptación SSL</p>
+          <p class="text-xs text-white/40 mt-0.5 hidden sm:block">Datos cifrados en tránsito y en reposo</p>
+        </div>
+      </div>
+      <div class="sec-badge flex-col items-center text-center gap-2 py-5 md:py-6 reveal" style="transition-delay:0.1s">
+        <div class="sec-icon mx-auto text-xl md:text-2xl" style="width:48px;height:48px;border-radius:14px">✅</div>
+        <div>
+          <p class="font-bold text-sm text-white">Triple Validación</p>
+          <p class="text-xs text-white/40 mt-0.5 hidden sm:block">Cada transacción es validada 3 veces</p>
+        </div>
+      </div>
+      <div class="sec-badge flex-col items-center text-center gap-2 py-5 md:py-6 reveal" style="transition-delay:0.15s">
+        <div class="sec-icon mx-auto text-xl md:text-2xl" style="width:48px;height:48px;border-radius:14px">🛡️</div>
+        <div>
+          <p class="font-bold text-sm text-white">3D Secure</p>
+          <p class="text-xs text-white/40 mt-0.5 hidden sm:block">Autenticación adicional para pagos con tarjeta</p>
+        </div>
+      </div>
+      <div class="sec-badge flex-col items-center text-center gap-2 py-5 md:py-6 reveal" style="transition-delay:0.2s">
+        <div class="sec-icon mx-auto text-xl md:text-2xl" style="width:48px;height:48px;border-radius:14px">🏦</div>
+        <div>
+          <p class="font-bold text-sm text-white">Respaldo bancario</p>
+          <p class="text-xs text-white/40 mt-0.5 hidden sm:block">Integración directa con la red bancaria chilena</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- ════════════════════════════ CTA FINAL ════════════════════════════ -->
+<section class="py-14 md:py-24 lg:py-32">
+  <div class="max-w-4xl mx-auto px-4 md:px-6">
+    <div class="cta-bg p-8 sm:p-12 md:p-20 text-center reveal" style="position:relative;overflow:hidden">
+
+      <!-- Background glow circles -->
+      <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(224,64,251,0.15),transparent);top:-100px;left:-100px;pointer-events:none"></div>
+      <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.15),transparent);bottom:-100px;right:-100px;pointer-events:none"></div>
+
+      <!-- Sloth small -->
+      <div class="mx-auto mb-8" style="width:90px">
+        <img src="https://payku.com/images/noto.png" alt="Noto" class="w-full float-slow"
+          style="filter:drop-shadow(0 10px 30px rgba(224,64,251,0.5))">
+      </div>
+
+      <div class="chip mx-auto mb-6">Empieza hoy</div>
+      <h2 class="font-headline font-black mb-5 text-glow" style="font-size:clamp(2rem,4vw,3.5rem);line-height:1.1">
+        <span class="grad-text">Tranquilo,</span><br>Payku lo hace fácil
+      </h2>
+      <p class="text-white/55 text-lg mb-10" style="max-width:480px;margin:0 auto 2.5rem">
+        La plataforma de pagos online más completa de Chile y Perú. Sin mantención, sin empresa constituida. Empieza a cobrar hoy.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="https://calendly.com/payku/sobre-payku?back=1&month=2026-04" class="btn-primary" style="font-size:16px;padding:16px 36px">
+          Agenda una cita
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="" class="btn-ghost" style="font-size:15px;padding:15px 28px">
+          Conocer más
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="flex flex-wrap gap-6 justify-center mt-10">
+        <div class="flag-strip"><span>🇨🇱</span> Chile</div>
+        <div class="flag-strip"><span>🇵🇪</span> Perú</div>
+        <!-- <div class="flag-strip"><span>🇻🇪</span> Venezuela</div> -->
+      </div>
+    <!-- Tarjetas de presentación estilo Payku -->
+    <div class="max-w-md mx-auto mt-10 reveal">
+      <br><br>
+      <p class="text-center text-xs font-black uppercase tracking-widest text-white/30 mb-6">Tarjeta de contacto</p>
+      <div style="display:flex;flex-direction:column;gap:1rem">
+
+        <!-- Kristina Guido -->
+        <a href="kristina-guido.vcf" style="text-decoration:none;display:block">
+          <div style="background:linear-gradient(135deg,#2d0060 0%,#1a003a 60%,#310065 100%);border-radius:18px;padding:1.4rem 1.5rem;position:relative;overflow:hidden;cursor:pointer;transition:transform 0.25s ease,box-shadow 0.25s ease;box-shadow:0 8px 40px rgba(74,20,140,0.5);display:flex;flex-direction:column;justify-content:space-between;min-height:200px;"
+            onmouseover="this.style.transform='translateY(-5px) scale(1.01)';this.style.boxShadow='0 24px 60px rgba(124,58,237,0.5)'"
+            onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 8px 40px rgba(74,20,140,0.5)'">
+            <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.25),transparent 70%);top:-80px;right:-60px;pointer-events:none"></div>
+            <div style="position:absolute;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(224,64,251,0.15),transparent 70%);bottom:-50px;left:-30px;pointer-events:none"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 50%);pointer-events:none"></div>
+            <!-- Logo + badge -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+              <img src="https://payku.com/images/pk23logo.png" alt="Payku" style="height:18px;filter:brightness(0) invert(1);opacity:0.95">
+              <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);font-size:8px;font-weight:800;padding:3px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;letter-spacing:0.06em;text-transform:uppercase;">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Guardar contacto
+              </span>
+            </div>
+            <!-- Datos + QR -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative;margin-top:1rem">
+              <div>
+                <img src="https://payku.com/images/noto.png" alt="" style="width:30px;height:30px;object-fit:contain;margin-bottom:6px;filter:drop-shadow(0 2px 8px rgba(224,64,251,0.5))">
+                <p style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:1rem;color:#fff;line-height:1.15;letter-spacing:-0.01em">Kristina Guido</p>
+                <div style="display:flex;flex-direction:column;gap:4px;margin-top:10px">
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16l.19.92z"/></svg>
+                    +56 9 8133 0709
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    kristina@payku.com
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    payku.com
+                  </div>
+                </div>
+              </div>
+              <div style="background:#fff;border-radius:12px;padding:9px;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,0.3)">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Guido%3BKristina%3B%3B%3B%0AFN:Kristina%20Guido%0AORG:Payku%0ATEL%3BTYPE%3DCELL:%2B56981330709%0AEMAIL%3BTYPE%3DWORK:kristina%40payku.com%0AURL:https://www.payku.com%0AEND:VCARD&color=2d0060&bgcolor=ffffff"
+                  alt="QR Kristina" style="width:110px;height:110px;display:block;border-radius:5px">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Daniel Naranjo -->
+        <a href="daniel-naranjo.vcf" style="text-decoration:none;display:block">
+          <div style="background:linear-gradient(135deg,#2d0060 0%,#1a003a 60%,#310065 100%);border-radius:18px;padding:1.4rem 1.5rem;position:relative;overflow:hidden;cursor:pointer;transition:transform 0.25s ease,box-shadow 0.25s ease;box-shadow:0 8px 40px rgba(74,20,140,0.5);display:flex;flex-direction:column;justify-content:space-between;min-height:200px;"
+            onmouseover="this.style.transform='translateY(-5px) scale(1.01)';this.style.boxShadow='0 24px 60px rgba(124,58,237,0.5)'"
+            onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 8px 40px rgba(74,20,140,0.5)'">
+            <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.25),transparent 70%);top:-80px;right:-60px;pointer-events:none"></div>
+            <div style="position:absolute;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(224,64,251,0.15),transparent 70%);bottom:-50px;left:-30px;pointer-events:none"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 50%);pointer-events:none"></div>
+            <!-- Logo + badge -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+              <img src="https://payku.com/images/pk23logo.png" alt="Payku" style="height:18px;filter:brightness(0) invert(1);opacity:0.95">
+              <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);font-size:8px;font-weight:800;padding:3px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;letter-spacing:0.06em;text-transform:uppercase;">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Guardar contacto
+              </span>
+            </div>
+            <!-- Datos + QR -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative;margin-top:1rem">
+              <div>
+                <img src="https://payku.com/images/noto.png" alt="" style="width:30px;height:30px;object-fit:contain;margin-bottom:6px;filter:drop-shadow(0 2px 8px rgba(224,64,251,0.5))">
+                <p style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:1rem;color:#fff;line-height:1.15;letter-spacing:-0.01em">Daniel Naranjo</p>
+                <div style="display:flex;flex-direction:column;gap:4px;margin-top:10px">
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16l.19.92z"/></svg>
+                    +56 9 8133 3448
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    danielnaranjo@payku.com
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    payku.com
+                  </div>
+                </div>
+              </div>
+              <div style="background:#fff;border-radius:12px;padding:9px;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,0.3)">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Naranjo%3BDaniel%3B%3B%3B%0AFN:Daniel%20Naranjo%0AORG:Payku%0ATEL%3BTYPE%3DCELL:%2B56981333448%0AEMAIL%3BTYPE%3DWORK:danielnaranjo%40payku.com%0AURL:https://www.payku.com%0AEND:VCARD&color=2d0060&bgcolor=ffffff"
+                  alt="QR Daniel" style="width:110px;height:110px;display:block;border-radius:5px">
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Daniela Velez -->
+        <a href="daniela-velez.vcf" style="text-decoration:none;display:block">
+          <div style="background:linear-gradient(135deg,#2d0060 0%,#1a003a 60%,#310065 100%);border-radius:18px;padding:1.4rem 1.5rem;position:relative;overflow:hidden;cursor:pointer;transition:transform 0.25s ease,box-shadow 0.25s ease;box-shadow:0 8px 40px rgba(74,20,140,0.5);display:flex;flex-direction:column;justify-content:space-between;min-height:200px;"
+            onmouseover="this.style.transform='translateY(-5px) scale(1.01)';this.style.boxShadow='0 24px 60px rgba(124,58,237,0.5)'"
+            onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 8px 40px rgba(74,20,140,0.5)'">
+            <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.25),transparent 70%);top:-80px;right:-60px;pointer-events:none"></div>
+            <div style="position:absolute;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(224,64,251,0.15),transparent 70%);bottom:-50px;left:-30px;pointer-events:none"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 50%);pointer-events:none"></div>
+            <!-- Logo + badge -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+              <img src="https://payku.com/images/pk23logo.png" alt="Payku" style="height:18px;filter:brightness(0) invert(1);opacity:0.95">
+              <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);font-size:8px;font-weight:800;padding:3px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;letter-spacing:0.06em;text-transform:uppercase;">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Guardar contacto
+              </span>
+            </div>
+            <!-- Datos + QR -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative;margin-top:1rem">
+              <div>
+                <img src="https://payku.com/images/noto.png" alt="" style="width:30px;height:30px;object-fit:contain;margin-bottom:6px;filter:drop-shadow(0 2px 8px rgba(224,64,251,0.5))">
+                <p style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:1rem;color:#fff;line-height:1.15;letter-spacing:-0.01em">Daniela Velez</p>
+                <div style="display:flex;flex-direction:column;gap:4px;margin-top:10px">
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16l.19.92z"/></svg>
+                    +51 980 455 648
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    daniela@payku.com
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,0.6)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    payku.com
+                  </div>
+                </div>
+              </div>
+              <div style="background:#fff;border-radius:12px;padding:9px;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,0.3)">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AN:Velez%3BDaniela%3B%3B%3B%0AFN:Daniela%20Velez%0AORG:Payku%0ATEL%3BTYPE%3DCELL:%2B51980455648%0AEMAIL%3BTYPE%3DWORK:daniela%40payku.com%0AURL:https://www.payku.com%0AEND:VCARD&color=2d0060&bgcolor=ffffff"
+                  alt="QR Daniela" style="width:110px;height:110px;display:block;border-radius:5px">
+              </div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+          </div>
+
+        </div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════ CERTIFICACIONES + MEMBRESÍAS ════════════════════════════ -->
+<section class="py-10 md:py-14">
+  <div class="max-w-7xl mx-auto px-5 md:px-6">
+
+    <!-- Certificaciones -->
+    <p class="text-xs font-black uppercase tracking-widest text-white/40 mb-5">Certificaciones de Seguridad</p>
+    <div class="grid sm:grid-cols-2 gap-3 mb-10">
+
+      <!-- PCI DSS -->
+      <div class="sec-badge gap-4 py-5 reveal" style="transition-delay:0.05s">
+        <div class="sec-icon flex-shrink-0" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(74,20,140,0.6),rgba(124,58,237,0.6))">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap mb-1">
+            <p class="font-bold text-sm text-white">Certificación PCI DSS</p>
+            <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+              Verificado
+            </span>
+          </div>
+          <p class="text-xs text-white/40">Payment Card Industry Data Security Standard</p>
+        </div>
+      </div>
+
+      <!-- SOC 2 -->
+      <div class="sec-badge gap-4 py-5 reveal" style="transition-delay:0.1s">
+        <div class="sec-icon flex-shrink-0" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(59,130,246,0.5),rgba(99,102,241,0.5))">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap mb-1">
+            <p class="font-bold text-sm text-white">Certificación SOC 2</p>
+            <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:4px">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+              Verificado
+            </span>
+          </div>
+          <p class="text-xs text-white/40">System and Organization Controls</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Membresías -->
+    <div class="section-divider mb-8"></div>
+    <div class="flex flex-col sm:flex-row items-center gap-6 reveal">
+      <div class="flex items-center gap-5 flex-shrink-0">
+        <!-- CAPECE -->
+        <img src="images/capece-logo.png" alt="CAPECE - Cámara Peruana de Comercio Electrónico"
+          class="h-8 brightness-0 invert opacity-70"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span style="display:none;align-items:center;gap:6px;opacity:0.7;font-weight:800;font-size:15px;letter-spacing:-0.02em">
+          🇵🇪 CAPECE
+        </span>
+        <!-- Peru Payments -->
+        <img src="https://www.payku.com/images/peru-payments.svg" alt="Peru Payments Association"
+          class="h-8 brightness-0 invert opacity-70"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span style="display:none;align-items:center;gap:6px;opacity:0.7;font-weight:800;font-size:13px">
+          🇵🇪 Peru Payments Association
+        </span>
+      </div>
+      <p class="text-white/40 text-sm text-center sm:text-left">
+        Payku es miembro de <a href="https://www.capece.org.pe" target="_blank" rel="noopener" class="text-white/70 hover:text-white underline underline-offset-2 transition-colors">CAPECE</a>,
+        la Cámara Peruana de Comercio Electrónico, y de la Peru Payments Association.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- ════════════════════════════ FOOTER ════════════════════════════ -->
+<footer class="py-8 md:py-12 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-5 md:px-6 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
+    <div class="flex items-center gap-4">
+      <img src="https://payku.com/images/pk23logo.png"
+        alt="Payku" class="h-6 brightness-0 invert opacity-70">
+      <span class="text-white/30 text-sm">Pasarela de Pagos LATAM · © 2026</span>
+    </div>
+    <div class="flex gap-6 text-sm text-white/40 font-medium">
+      <a href="https://payku.com" class="hover:text-white/70 transition-colors">payku.com</a>
+      <a href="https://docs.payku.com" class="hover:text-white/70 transition-colors">Documentación</a>
+      <a href="https://www.payku.com" class="hover:text-white/70 transition-colors">Registro</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════ SCRIPTS ════════════════════════════ -->
+<script>
+// Traducciones locales
+const LANGUAGES = {
+  es: { html: 'es', locale: 'es-CL', name: 'Español' },
+  en: { html: 'en', locale: 'en-US', name: 'English' },
+  pt: { html: 'pt-BR', locale: 'pt-BR', name: 'Português' },
+  zh: { html: 'zh-CN', locale: 'zh-CN', name: '中文' },
+  ru: { html: 'ru', locale: 'ru-RU', name: 'Русский' }
+};
+const PAGE_TITLES = {
+  es: 'Payku · Pasarela de Pagos LATAM',
+  en: 'Payku · LATAM Payment Gateway',
+  pt: 'Payku · Gateway de Pagamentos LATAM',
+  zh: 'Payku · 拉美支付网关',
+  ru: 'Payku · Платежный шлюз LATAM'
+};
+const SWITCHER_LABELS = {
+  es: 'Seleccionar idioma',
+  en: 'Select language',
+  pt: 'Selecionar idioma',
+  zh: '选择语言',
+  ru: 'Выбрать язык'
+};
+const COUNTER_SUFFIXES = {
+  day: { es: ' día', en: ' day', pt: ' dia', zh: ' 天', ru: ' день' }
+};
+const I18N = {
+  // Perú landing
+  'Sin costo de mantenimiento.': { en: 'No maintenance fee.', pt: 'Sem taxa de manutenção.', zh: '无维护费。', ru: 'Без платы за обслуживание.' },
+  'Costo de mantenimiento': { en: 'Maintenance cost', pt: 'Custo de manutenção', zh: '维护成本', ru: 'Стоимость обслуживания' },
+  'Perú': { en: 'Peru', pt: 'Peru', zh: '秘鲁', ru: 'Перу' },
+  '💸 Sin costo de mantenimiento': { en: '💸 No maintenance fee', pt: '💸 Sem taxa de manutenção', zh: '💸 无维护费', ru: '💸 Без платы за обслуживание' },
+  'Plugins oficiales para WooCommerce, PrestaShop, Shopify y Jumpseller. O integra directamente vía API REST.': { en: 'Official plugins for WooCommerce, PrestaShop, Shopify and Jumpseller. Or integrate directly via REST API.', pt: 'Plugins oficiais para WooCommerce, PrestaShop, Shopify e Jumpseller. Ou integre diretamente via API REST.', zh: '提供 WooCommerce、PrestaShop、Shopify 和 Jumpseller 官方插件，也可通过 REST API 直接集成。', ru: 'Официальные плагины для WooCommerce, PrestaShop, Shopify и Jumpseller. Или интегрируйтесь напрямую через REST API.' },
+  'Sin costo de mantenimiento mensual. Pagas solo cuando vendes.': { en: 'No monthly maintenance fee. You pay only when you sell.', pt: 'Sem taxa mensal de manutenção. Você paga só quando vende.', zh: '无月度维护费。只有成交时才付费。', ru: 'Без ежемесячной платы. Платите только когда продаёте.' },
+  'Sin costo de mantenimiento mensual': { en: 'No monthly maintenance fee', pt: 'Sem taxa mensal de manutenção', zh: '无月度维护费', ru: 'Без ежемесячной платы за обслуживание' },
+  'QR Interoperable': { en: 'Interoperable QR', pt: 'QR interoperável', zh: '互通二维码', ru: 'Совместимый QR' },
+  'Solo en soles': { en: 'Soles only', pt: 'Somente em soles', zh: '仅限索尔', ru: 'Только в солях' },
+  '+ IGV': { en: '+ IGV', pt: '+ IGV', zh: '+ IGV', ru: '+ IGV' },
+  'Abono al día hábil siguiente': { en: 'Payout on the next business day', pt: 'Depósito no dia útil seguinte', zh: '次个工作日入账', ru: 'Зачисление на следующий рабочий день' },
+  'Yape, PLIN, BIM, Izipay Ya, Lemon, OhPay y Ligo': { en: 'Yape, PLIN, BIM, Izipay Ya, Lemon, OhPay and Ligo', pt: 'Yape, PLIN, BIM, Izipay Ya, Lemon, OhPay e Ligo', zh: 'Yape、PLIN、BIM、Izipay Ya、Lemon、OhPay 和 Ligo', ru: 'Yape, PLIN, BIM, Izipay Ya, Lemon, OhPay и Ligo' },
+  'Tarjetas Nacionales': { en: 'Domestic Cards', pt: 'Cartões nacionais', zh: '本国银行卡', ru: 'Местные карты' },
+  'Crédito, débito y prepago nacional': { en: 'Domestic credit, debit and prepaid', pt: 'Crédito, débito e pré-pago nacional', zh: '本地信用卡、借记卡和预付卡', ru: 'Местные кредитные, дебетовые и предоплаченные' },
+  'Tarjetas Internacionales': { en: 'International Cards', pt: 'Cartões internacionais', zh: '国际银行卡', ru: 'Международные карты' },
+  'Crédito, débito y prepago internacional': { en: 'International credit, debit and prepaid', pt: 'Crédito, débito e pré-pago internacional', zh: '国际信用卡、借记卡和预付卡', ru: 'Международные кредитные, дебетовые и предоплаченные' },
+  'Visa, Mastercard, Amex, Diners': { en: 'Visa, Mastercard, Amex, Diners', pt: 'Visa, Mastercard, Amex, Diners', zh: 'Visa、Mastercard、Amex、Diners', ru: 'Visa, Mastercard, Amex, Diners' },
+  'Soles y dólares': { en: 'Soles and dollars', pt: 'Soles e dólares', zh: '索尔和美元', ru: 'Соли и доллары' },
+  'mantenimiento': { en: 'maintenance', pt: 'manutenção', zh: '维护费', ru: 'обслуживание' },
+  '* Tarifas + IGV. Abono al día hábil siguiente en todos los medios de pago. Descontamos la comisión del monto que te depositamos. Sin costo de mantenimiento ni costos fijos.': { en: '* Rates + IGV. Payout on the next business day for every payment method. We deduct the commission from the amount we deposit to you. No maintenance or fixed costs.', pt: '* Tarifas + IGV. Depósito no dia útil seguinte em todos os meios de pagamento. Descontamos a comissão do valor depositado. Sem taxa de manutenção nem custos fixos.', zh: '* 费率另加 IGV。所有支付方式均于次个工作日入账。佣金从结算金额中扣除。无维护费和固定费用。', ru: '* Тарифы + IGV. Зачисление на следующий рабочий день по всем способам оплаты. Комиссия удерживается из суммы выплаты. Без платы за обслуживание и фиксированных расходов.' },
+  ', la Cámara Peruana de Comercio Electrónico, y de la Peru Payments Association.': { en: ', the Peruvian Chamber of E-Commerce, and of the Peru Payments Association.', pt: ', a Câmara Peruana de Comércio Eletrônico, e da Peru Payments Association.', zh: '（秘鲁电子商务商会）以及 Peru Payments Association 的成员。', ru: ' — Перуанской палаты электронной коммерции, и Peru Payments Association.' },
+  'Productos': { en: 'Products', pt: 'Produtos', zh: '产品', ru: 'Продукты' },
+  'Métodos de pago': { en: 'Payment methods', pt: 'Métodos de pagamento', zh: '支付方式', ru: 'Способы оплаты' },
+  'Integraciones': { en: 'Integrations', pt: 'Integrações', zh: '集成', ru: 'Интеграции' },
+  'Tarifas': { en: 'Pricing', pt: 'Tarifas', zh: '费率', ru: 'Тарифы' },
+  'Agenda una cita': { en: 'Book a call', pt: 'Agende', zh: '预约', ru: 'Записаться' },
+  'La plataforma de pagos más completa de Chile y Perú': { en: 'Chile and Peru’s most complete payment platform', pt: 'A plataforma de pagamentos mais completa do Chile e do Peru', zh: '智利和秘鲁最完整的支付平台', ru: 'Самая полная платежная платформа в Чили и Перу' },
+  'Cobra.': { en: 'Collect.', pt: 'Cobre.', zh: '收款。', ru: 'Принимай.' },
+  'Suscribe.': { en: 'Subscribe.', pt: 'Assine.', zh: '订阅。', ru: 'Подписки.' },
+  'Paga.': { en: 'Pay.', pt: 'Pague.', zh: '付款。', ru: 'Плати.' },
+  'Débito, crédito, transferencias, suscripciones, links de pago y más.': { en: 'Debit, credit, bank transfers, subscriptions, payment links and more.', pt: 'Débito, crédito, transferências, assinaturas, links de pagamento e mais.', zh: '借记卡、信用卡、转账、订阅、支付链接等。', ru: 'Дебет, кредит, переводы, подписки, платежные ссылки и многое другое.' },
+  'Sin cobro de mantención.': { en: 'No maintenance fee.', pt: 'Sem taxa de manutenção.', zh: '无维护费。', ru: 'Без платы за обслуживание.' },
+  'Disponible en Chile y Perú.': { en: 'Available in Chile and Peru.', pt: 'Disponível no Chile e no Peru.', zh: '可在智利和秘鲁使用。', ru: 'Доступно в Чили и Перу.' },
+  'Ver documentación': { en: 'View documentation', pt: 'Ver documentação', zh: '查看文档', ru: 'Документация' },
+  'Fundada en Chile': { en: 'Founded in Chile', pt: 'Fundada no Chile', zh: '创立于智利', ru: 'Основана в Чили' },
+  'Presencia LATAM': { en: 'LATAM presence', pt: 'Presença LATAM', zh: '拉美覆盖', ru: 'Присутствие в LATAM' },
+  'Costo de mantención': { en: 'Maintenance cost', pt: 'Custo de manutenção', zh: '维护成本', ru: 'Стоимость обслуживания' },
+  '💳 Medios de pago': { en: '💳 Payment methods', pt: '💳 Meios de pagamento', zh: '💳 支付方式', ru: '💳 Способы оплаты' },
+  '🔁 Suscripciones': { en: '🔁 Subscriptions', pt: '🔁 Assinaturas', zh: '🔁 订阅', ru: '🔁 Подписки' },
+  '🏦 Transferencia': { en: '🏦 Bank transfer', pt: '🏦 Transferência', zh: '🏦 转账', ru: '🏦 Перевод' },
+  '🔗 Link de Pago': { en: '🔗 Payment Link', pt: '🔗 Link de pagamento', zh: '🔗 支付链接', ru: '🔗 Платежная ссылка' },
+  '💸 Cuotas sin interés': { en: '💸 Interest-free installments', pt: '💸 Parcelas sem juros', zh: '💸 免息分期', ru: '💸 Рассрочка без процентов' },
+  'Scroll': { en: 'Scroll', pt: 'Role', zh: '滚动', ru: 'Прокрутите' },
+  'Métodos de pago aceptados': { en: 'Accepted payment methods', pt: 'Métodos de pagamento aceitos', zh: '支持的支付方式', ru: 'Принимаемые способы оплаты' },
+  '💳 Visa Crédito': { en: '💳 Visa Credit', pt: '💳 Visa Crédito', zh: '💳 Visa 信用卡', ru: '💳 Visa кредитная' },
+  '🏦 Transferencia Bancaria': { en: '🏦 Bank Transfer', pt: '🏦 Transferência bancária', zh: '🏦 银行转账', ru: '🏦 Банковский перевод' },
+  '📱 Redcompra (Débito)': { en: '📱 Redcompra (Debit)', pt: '📱 Redcompra (Débito)', zh: '📱 Redcompra（借记卡）', ru: '📱 Redcompra (дебет)' },
+  '🇨🇱 Chile': { en: '🇨🇱 Chile', pt: '🇨🇱 Chile', zh: '🇨🇱 智利', ru: '🇨🇱 Чили' },
+  '🇵🇪 Perú': { en: '🇵🇪 Peru', pt: '🇵🇪 Peru', zh: '🇵🇪 秘鲁', ru: '🇵🇪 Перу' },
+  '🔒 Transacciones cifradas': { en: '🔒 Encrypted transactions', pt: '🔒 Transações criptografadas', zh: '🔒 加密交易', ru: '🔒 Зашифрованные транзакции' },
+  '⚡ Integración en minutos': { en: '⚡ Integration in minutes', pt: '⚡ Integração em minutos', zh: '⚡ 几分钟完成集成', ru: '⚡ Интеграция за минуты' },
+  '📊 Panel en tiempo real': { en: '📊 Real-time dashboard', pt: '📊 Painel em tempo real', zh: '📊 实时面板', ru: '📊 Панель в реальном времени' },
+  '💸 Sin cobro de mantención': { en: '💸 No maintenance fee', pt: '💸 Sem taxa de manutenção', zh: '💸 无维护费', ru: '💸 Без платы за обслуживание' },
+  '🔄 Cobros automáticos': { en: '🔄 Automatic charges', pt: '🔄 Cobranças automáticas', zh: '🔄 自动扣款', ru: '🔄 Автоматические списания' },
+  'Nuestros Productos': { en: 'Our Products', pt: 'Nossos Produtos', zh: '我们的产品', ru: 'Наши продукты' },
+  'Todo lo que necesitas': { en: 'Everything you need', pt: 'Tudo o que você precisa', zh: '你需要的一切', ru: 'Все, что нужно' },
+  'para cobrar online': { en: 'to accept online payments', pt: 'para cobrar online', zh: '在线收款', ru: 'для онлайн-платежей' },
+  'Desde un link de pago hasta una API completa. Elige la solución que se adapta a tu negocio.': { en: 'From a payment link to a full API. Choose the solution that fits your business.', pt: 'De um link de pagamento a uma API completa. Escolha a solução que se adapta ao seu negócio.', zh: '从支付链接到完整 API，选择适合你业务的方案。', ru: 'От платежной ссылки до полноценного API. Выберите решение для вашего бизнеса.' },
+  'MÁS POPULAR': { en: 'MOST POPULAR', pt: 'MAIS POPULAR', zh: '最受欢迎', ru: 'ПОПУЛЯРНО' },
+  'Botón de Pago': { en: 'Payment Button', pt: 'Botão de pagamento', zh: '支付按钮', ru: 'Кнопка оплаты' },
+  'Crea botones de pago y compártelos por email, WhatsApp o redes sociales. Sin necesidad de tener un sitio web.': { en: 'Create payment buttons and share them by email, WhatsApp or social media. No website needed.', pt: 'Crie botões de pagamento e compartilhe por email, WhatsApp ou redes sociais. Sem precisar de site.', zh: '创建支付按钮，并通过电子邮件、WhatsApp 或社交网络分享。无需网站。', ru: 'Создавайте кнопки оплаты и делитесь ими по email, WhatsApp или в соцсетях. Сайт не нужен.' },
+  'Link personalizado para cada cobro': { en: 'Custom link for each charge', pt: 'Link personalizado para cada cobrança', zh: '每笔收款都有专属链接', ru: 'Персональная ссылка для каждого платежа' },
+  'Compatible con email y redes sociales': { en: 'Works with email and social media', pt: 'Compatível com email e redes sociais', zh: '兼容电子邮件和社交网络', ru: 'Подходит для email и соцсетей' },
+  'Cupones de descuento incluidos': { en: 'Discount coupons included', pt: 'Cupons de desconto incluídos', zh: '包含折扣券', ru: 'Купоны на скидку включены' },
+  'Cobros Recurrentes': { en: 'Recurring Charges', pt: 'Cobranças recorrentes', zh: '周期性收款', ru: 'Регулярные платежи' },
+  'Recibe pagos recurrentes para tus clientes: suscripciones, membresías y pagos periódicos de forma automática.': { en: 'Receive recurring payments from your customers: subscriptions, memberships and scheduled payments automatically.', pt: 'Receba pagamentos recorrentes dos seus clientes: assinaturas, membresias e pagamentos periódicos automaticamente.', zh: '自动接收客户的周期性付款：订阅、会员和定期支付。', ru: 'Принимайте регулярные платежи клиентов: подписки, членства и периодические платежи автоматически.' },
+  'Suscripciones y membresías': { en: 'Subscriptions and memberships', pt: 'Assinaturas e membresias', zh: '订阅和会员', ru: 'Подписки и членства' },
+  'Ciclos de cobro configurables': { en: 'Configurable billing cycles', pt: 'Ciclos de cobrança configuráveis', zh: '可配置的计费周期', ru: 'Настраиваемые циклы списания' },
+  'Fecha de expiración por plan': { en: 'Expiration date by plan', pt: 'Data de expiração por plano', zh: '按计划设置到期日期', ru: 'Срок действия по плану' },
+  'Integra Payku directamente en tu plataforma. PayIn y PayOut en una sola API, con ambiente de pruebas incluido.': { en: 'Integrate Payku directly into your platform. PayIn and PayOut in one API, with a test environment included.', pt: 'Integre a Payku diretamente à sua plataforma. PayIn e PayOut em uma única API, com ambiente de testes incluído.', zh: '将 Payku 直接集成到你的平台。一个 API 支持 PayIn 和 PayOut，并包含测试环境。', ru: 'Интегрируйте Payku напрямую в вашу платформу. PayIn и PayOut в одном API, включая тестовую среду.' },
+  'API REST': { en: 'REST API', pt: 'API REST', zh: 'REST 接口', ru: 'REST-интерфейс' },
+  'PayIn (cobros) y PayOut (pagos)': { en: 'PayIn (collections) and PayOut (payments)', pt: 'PayIn (cobranças) e PayOut (pagamentos)', zh: 'PayIn（收款）和 PayOut（付款）', ru: 'PayIn (прием) и PayOut (выплаты)' },
+  'Tarjetas de prueba para desarrollo': { en: 'Test cards for development', pt: 'Cartões de teste para desenvolvimento', zh: '开发用测试卡', ru: 'Тестовые карты для разработки' },
+  'Ambiente sandbox disponible': { en: 'Sandbox environment available', pt: 'Ambiente sandbox disponível', zh: '提供沙盒环境', ru: 'Доступна sandbox-среда' },
+  'Marketplace': { en: 'Marketplace', pt: 'Marketplace', zh: '市场平台', ru: 'Маркетплейс' },
+  'Divide los pagos entre varias cuentas en distintos porcentajes. Ideal para eventos, plataformas y negocios multi-vendedor.': { en: 'Split payments across multiple accounts by percentage. Ideal for events, platforms and multi-vendor businesses.', pt: 'Divida pagamentos entre várias contas por porcentagem. Ideal para eventos, plataformas e negócios multivendedor.', zh: '按比例将付款拆分到多个账户。适合活动、平台和多商户业务。', ru: 'Разделяйте платежи между несколькими счетами по процентам. Идеально для мероприятий, платформ и мультивендорных бизнесов.' },
+  'División de pagos por porcentaje': { en: 'Payment split by percentage', pt: 'Divisão de pagamentos por porcentagem', zh: '按比例分账', ru: 'Разделение платежей по процентам' },
+  'Soporte para múltiples cuentas': { en: 'Support for multiple accounts', pt: 'Suporte para múltiplas contas', zh: '支持多个账户', ru: 'Поддержка нескольких счетов' },
+  'Para eventos y plataformas': { en: 'For events and platforms', pt: 'Para eventos e plataformas', zh: '适用于活动和平台', ru: 'Для мероприятий и платформ' },
+  'Payouts': { en: 'Payouts', pt: 'Payouts', zh: '付款', ru: 'Выплаты' },
+  'Realiza pagos y dispersiones desde tu plataforma. Liquida a tus proveedores, trabajadores o colaboradores directo desde Payku.': { en: 'Send payments and disbursements from your platform. Pay suppliers, workers or collaborators directly from Payku.', pt: 'Faça pagamentos e dispersões pela sua plataforma. Pague fornecedores, trabalhadores ou colaboradores direto pela Payku.', zh: '从你的平台发起付款和分账。通过 Payku 直接结算给供应商、员工或合作伙伴。', ru: 'Отправляйте платежи и распределения со своей платформы. Выплачивайте поставщикам, сотрудникам и партнерам прямо из Payku.' },
+  'Pagos salientes desde tu cuenta': { en: 'Outgoing payments from your account', pt: 'Pagamentos enviados da sua conta', zh: '从你的账户发起付款', ru: 'Исходящие платежи со счета' },
+  'Via API o desde el panel': { en: 'Via API or from the dashboard', pt: 'Via API ou pelo painel', zh: '通过 API 或面板操作', ru: 'Через API или из панели' },
+  'Disponible en Chile y Perú': { en: 'Available in Chile and Peru', pt: 'Disponível no Chile e no Peru', zh: '可在智利和秘鲁使用', ru: 'Доступно в Чили и Перу' },
+  'Donaciones': { en: 'Donations', pt: 'Doações', zh: '捐赠', ru: 'Пожертвования' },
+  'Recibe donaciones online de forma simple y segura. Ideal para fundaciones, causas sociales y campañas de recaudación.': { en: 'Receive online donations simply and securely. Ideal for foundations, social causes and fundraising campaigns.', pt: 'Receba doações online de forma simples e segura. Ideal para fundações, causas sociais e campanhas de arrecadação.', zh: '简单、安全地接收线上捐赠。适合基金会、公益项目和募款活动。', ru: 'Принимайте онлайн-пожертвования просто и безопасно. Подходит для фондов, социальных инициатив и сборов.' },
+  'Monto libre o fijo': { en: 'Free or fixed amount', pt: 'Valor livre ou fixo', zh: '自定义或固定金额', ru: 'Свободная или фиксированная сумма' },
+  'Link compartible al instante': { en: 'Shareable link instantly', pt: 'Link compartilhável instantaneamente', zh: '即时生成可分享链接', ru: 'Ссылка для мгновенного обмена' },
+  'Sin necesidad de sitio web': { en: 'No website needed', pt: 'Sem precisar de site', zh: '无需网站', ru: 'Сайт не нужен' },
+  'Fundada en Santiago': { en: 'Founded in Santiago', pt: 'Fundada em Santiago', zh: '创立于圣地亚哥', ru: 'Основана в Сантьяго' },
+  'Chile y Perú': { en: 'Chile and Peru', pt: 'Chile e Peru', zh: '智利和秘鲁', ru: 'Чили и Перу' },
+  'Medios de pago': { en: 'Payment methods', pt: 'Meios de pagamento', zh: '支付方式', ru: 'Способы оплаты' },
+  'Liquidación mínima': { en: 'Minimum settlement', pt: 'Liquidação mínima', zh: '最低结算时间', ru: 'Минимальное зачисление' },
+  'Conecta con tu': { en: 'Connect with your', pt: 'Conecte com sua', zh: '连接你的', ru: 'Подключите вашу' },
+  'plataforma favorita': { en: 'favorite platform', pt: 'plataforma favorita', zh: '常用平台', ru: 'любимую платформу' },
+  'Plugins oficiales para WooCommerce, PrestaShop, OpenCart, WHMCS y Shopify. O integra directamente vía API REST. También compatible con Floid, la nueva tecnología de Open Finance.': { en: 'Official plugins for WooCommerce, PrestaShop, OpenCart, WHMCS and Shopify. Or integrate directly through the REST API. Also compatible with Floid, the new Open Finance technology.', pt: 'Plugins oficiais para WooCommerce, PrestaShop, OpenCart, WHMCS e Shopify. Ou integre diretamente via API REST. Também compatível com Floid, a nova tecnologia de Open Finance.', zh: '提供 WooCommerce、PrestaShop、OpenCart、WHMCS 和 Shopify 官方插件。也可通过 REST 接口直接集成，并兼容新的开放金融技术 Floid。', ru: 'Официальные плагины для WooCommerce, PrestaShop, OpenCart, WHMCS и Shopify. Или прямая интеграция через REST-интерфейс. Также совместимо с Floid, новой технологией Open Finance.' },
+  '⚡ API REST': { en: '⚡ REST API', pt: '⚡ API REST', zh: '⚡ REST 接口', ru: '⚡ REST-интерфейс' },
+  '🛍️ Shopify': { en: '🛍️ Shopify', pt: '🛍️ Shopify', zh: '🛍️ Shopify', ru: '🛍️ Shopify' },
+  '🦘 Jumpseller': { en: '🦘 Jumpseller', pt: '🦘 Jumpseller', zh: '🦘 Jumpseller', ru: '🦘 Jumpseller' },
+  '🟢 Tenpo': { en: '🟢 Tenpo', pt: '🟢 Tenpo', zh: '🟢 Tenpo', ru: '🟢 Tenpo' },
+  'Plugins listos en 5 minutos': { en: 'Plugins ready in 5 minutes', pt: 'Plugins prontos em 5 minutos', zh: '插件 5 分钟即可启用', ru: 'Плагины готовы за 5 минут' },
+  'Descarga, instala, activa y listo para cobrar': { en: 'Download, install, activate and start collecting', pt: 'Baixe, instale, ative e comece a cobrar', zh: '下载、安装、启用，即可开始收款', ru: 'Скачайте, установите, активируйте и принимайте платежи' },
+  'Documentación completa': { en: 'Complete documentation', pt: 'Documentação completa', zh: '完整文档', ru: 'Полная документация' },
+  'Guías paso a paso, ejemplos de código y soporte': { en: 'Step-by-step guides, code examples and support', pt: 'Guias passo a passo, exemplos de código e suporte', zh: '分步指南、代码示例和支持', ru: 'Пошаговые руководства, примеры кода и поддержка' },
+  'Ambiente de pruebas incluido': { en: 'Test environment included', pt: 'Ambiente de testes incluído', zh: '包含测试环境', ru: 'Тестовая среда включена' },
+  'Sandbox con tarjetas de test para validar tu integración': { en: 'Sandbox with test cards to validate your integration', pt: 'Sandbox com cartões de teste para validar sua integração', zh: '使用测试卡在沙盒中验证集成', ru: 'Sandbox с тестовыми картами для проверки интеграции' },
+  '+ integración directa vía API REST en cualquier stack': { en: '+ direct REST API integration in any stack', pt: '+ integração direta via API REST em qualquer stack', zh: '+ 可在任意技术栈通过 REST 接口直接集成', ru: '+ прямая интеграция через REST-интерфейс в любом стеке' },
+  'Tarifas Transparentes': { en: 'Transparent Pricing', pt: 'Tarifas transparentes', zh: '透明费率', ru: 'Прозрачные тарифы' },
+  'Sin letra chica.': { en: 'No fine print.', pt: 'Sem letras miúdas.', zh: '无隐藏条款。', ru: 'Без мелкого шрифта.' },
+  'Sin sorpresas.': { en: 'No surprises.', pt: 'Sem surpresas.', zh: '无意外费用。', ru: 'Без сюрпризов.' },
+  'Sin cobro de mantención mensual. Pagas solo cuando vendes.': { en: 'No monthly maintenance fee. You pay only when you sell.', pt: 'Sem taxa mensal de manutenção. Você paga só quando vende.', zh: '无月度维护费。只有成交时才付费。', ru: 'Без ежемесячной платы за обслуживание. Платите только при продаже.' },
+  'Sin costos de incorporación': { en: 'No onboarding costs', pt: 'Sem custos de adesão', zh: '无入驻费用', ru: 'Без платы за подключение' },
+  'Regístrate gratis. Activa tu cuenta al instante.': { en: 'Register for free. Activate your account instantly.', pt: 'Cadastre-se grátis. Ative sua conta instantaneamente.', zh: '免费注册，即刻激活账户。', ru: 'Зарегистрируйтесь бесплатно. Активируйте аккаунт сразу.' },
+  'Transferencia bancaria': { en: 'Bank transfer', pt: 'Transferência bancária', zh: '银行转账', ru: 'Банковский перевод' },
+  'El medio más económico': { en: 'The most economical method', pt: 'O meio mais econômico', zh: '最经济的方式', ru: 'Самый экономичный способ' },
+  '+ IVA': { en: '+ VAT', pt: '+ IVA', zh: '+ 增值税', ru: '+ НДС' },
+  'Liquidación a 3 días hábiles': { en: 'Settlement in 3 business days', pt: 'Liquidação em 3 dias úteis', zh: '3 个工作日结算', ru: 'Зачисление за 3 рабочих дня' },
+  'Todos los bancos de Chile': { en: 'All banks in Chile', pt: 'Todos os bancos do Chile', zh: '智利所有银行', ru: 'Все банки Чили' },
+  'Sin cobro de mantención mensual': { en: 'No monthly maintenance fee', pt: 'Sem taxa mensal de manutenção', zh: '无月度维护费', ru: 'Без ежемесячной платы за обслуживание' },
+  'MÁS USADO': { en: 'MOST USED', pt: 'MAIS USADO', zh: '最常用', ru: 'ЧАСТО ИСПОЛЬЗУЕТСЯ' },
+  'Webpay / Tarjetas': { en: 'Webpay / Cards', pt: 'Webpay / Cartões', zh: 'Webpay / 银行卡', ru: 'Webpay / Карты' },
+  'Débito y crédito': { en: 'Debit and credit', pt: 'Débito e crédito', zh: '借记卡和信用卡', ru: 'Дебет и кредит' },
+  'Liquidación a 1 o 3 días hábiles': { en: 'Settlement in 1 or 3 business days', pt: 'Liquidação em 1 ou 3 dias úteis', zh: '1 或 3 个工作日结算', ru: 'Зачисление за 1 или 3 рабочих дня' },
+  'Visa, Mastercard, Amex, Magna, Diners': { en: 'Visa, Mastercard, Amex, Magna, Diners', pt: 'Visa, Mastercard, Amex, Magna, Diners', zh: 'Visa、Mastercard、Amex、Magna、Diners', ru: 'Visa, Mastercard, Amex, Magna, Diners' },
+  'Redcompra (débito) y Onepay': { en: 'Redcompra (debit) and Onepay', pt: 'Redcompra (débito) e Onepay', zh: 'Redcompra（借记卡）和 Onepay', ru: 'Redcompra (дебет) и Onepay' },
+  'La comisión puede trasladarse al cliente': { en: 'The fee can be passed on to the customer', pt: 'A comissão pode ser repassada ao cliente', zh: '手续费可转由客户承担', ru: 'Комиссию можно переложить на клиента' },
+  'Para personas y negocios': { en: 'For individuals and businesses', pt: 'Para pessoas e negócios', zh: '适用于个人和企业', ru: 'Для людей и бизнеса' },
+  'mantención': { en: 'maintenance', pt: 'manutenção', zh: '维护费', ru: 'обслуживание' },
+  'Solo necesitas una cuenta bancaria': { en: 'You only need a bank account', pt: 'Você só precisa de uma conta bancária', zh: '你只需要一个银行账户', ru: 'Нужен только банковский счет' },
+  'No necesitas empresa constituida': { en: 'No registered company required', pt: 'Não precisa ter empresa constituída', zh: '无需注册公司', ru: 'Компания не требуется' },
+  'Pagas solo cuando vendes': { en: 'You pay only when you sell', pt: 'Você paga só quando vende', zh: '只有成交时才付费', ru: 'Платите только при продаже' },
+  'Activación inmediata': { en: 'Immediate activation', pt: 'Ativação imediata', zh: '立即启用', ru: 'Мгновенная активация' },
+  '* Tarifas en CLP + IVA. Liquidación en 1 día hábil disponible según método de pago. Sin cobros de mantención mensual ni anual.': { en: '* Rates in CLP + VAT. Settlement in 1 business day available depending on payment method. No monthly or annual maintenance fees.', pt: '* Tarifas em CLP + IVA. Liquidação em 1 dia útil disponível conforme o método de pagamento. Sem cobranças de manutenção mensal ou anual.', zh: '* 费率以 CLP + 增值税计。根据支付方式可在 1 个工作日结算。无月费或年费。', ru: '* Тарифы в CLP + НДС. Зачисление за 1 рабочий день доступно в зависимости от способа оплаты. Без ежемесячной или годовой платы.' },
+  'Seguridad': { en: 'Security', pt: 'Segurança', zh: '安全', ru: 'Безопасность' },
+  'Protección en cada transacción': { en: 'Protection in every transaction', pt: 'Proteção em cada transação', zh: '每笔交易都有保护', ru: 'Защита каждой транзакции' },
+  'Encriptación SSL': { en: 'SSL encryption', pt: 'Criptografia SSL', zh: 'SSL 加密', ru: 'SSL-шифрование' },
+  'Datos cifrados en tránsito y en reposo': { en: 'Data encrypted in transit and at rest', pt: 'Dados criptografados em trânsito e em repouso', zh: '传输和存储数据均加密', ru: 'Данные шифруются при передаче и хранении' },
+  'Triple Validación': { en: 'Triple Validation', pt: 'Tripla validação', zh: '三重验证', ru: 'Тройная проверка' },
+  'Cada transacción es validada 3 veces': { en: 'Each transaction is validated 3 times', pt: 'Cada transação é validada 3 vezes', zh: '每笔交易验证 3 次', ru: 'Каждая транзакция проверяется 3 раза' },
+  '3D Secure': { en: '3D Secure', pt: '3D Secure', zh: '3D 安全认证', ru: '3D-защита' },
+  'Autenticación adicional para pagos con tarjeta': { en: 'Additional authentication for card payments', pt: 'Autenticação adicional para pagamentos com cartão', zh: '银行卡支付的额外认证', ru: 'Дополнительная аутентификация для карточных платежей' },
+  'Respaldo bancario': { en: 'Banking support', pt: 'Respaldo bancário', zh: '银行支持', ru: 'Банковская поддержка' },
+  'Integración directa con la red bancaria chilena': { en: 'Direct integration with Chile’s banking network', pt: 'Integração direta com a rede bancária chilena', zh: '直接接入智利银行网络', ru: 'Прямая интеграция с банковской сетью Чили' },
+  'Empieza hoy': { en: 'Start today', pt: 'Comece hoje', zh: '今天开始', ru: 'Начните сегодня' },
+  'Tranquilo,': { en: 'Relax,', pt: 'Fique tranquilo,', zh: '放心，', ru: 'Спокойно,' },
+  'Payku lo hace fácil': { en: 'Payku makes it easy', pt: 'a Payku facilita', zh: 'Payku 让一切更简单', ru: 'Payku делает это просто' },
+  'La plataforma de pagos online más completa de Chile y Perú. Sin mantención, sin empresa constituida. Empieza a cobrar hoy.': { en: 'Chile and Peru’s most complete online payment platform. No maintenance fee, no registered company required. Start collecting today.', pt: 'A plataforma de pagamentos online mais completa do Chile e do Peru. Sem manutenção, sem empresa constituída. Comece a cobrar hoje.', zh: '智利和秘鲁最完整的在线支付平台。无维护费，无需注册公司。今天开始收款。', ru: 'Самая полная платформа онлайн-платежей в Чили и Перу. Без обслуживания, без регистрации компании. Начните принимать платежи сегодня.' },
+  'Conocer más': { en: 'Learn more', pt: 'Saiba mais', zh: '了解更多', ru: 'Узнать больше' },
+  'Chile': { en: 'Chile', pt: 'Chile', zh: '智利', ru: 'Чили' },
+  'Perú': { en: 'Peru', pt: 'Peru', zh: '秘鲁', ru: 'Перу' },
+  'Tarjeta de contacto': { en: 'Contact card', pt: 'Cartão de contato', zh: '联系人名片', ru: 'Карточка контакта' },
+  'Guardar contacto': { en: 'Save contact', pt: 'Salvar contato', zh: '保存联系人', ru: 'Сохранить контакт' },
+  'Certificaciones de Seguridad': { en: 'Security Certifications', pt: 'Certificações de segurança', zh: '安全认证', ru: 'Сертификаты безопасности' },
+  'Certificación PCI DSS': { en: 'PCI DSS Certification', pt: 'Certificação PCI DSS', zh: 'PCI DSS 认证', ru: 'Сертификация PCI DSS' },
+  'Verificado': { en: 'Verified', pt: 'Verificado', zh: '已验证', ru: 'Проверено' },
+  'Payment Card Industry Data Security Standard': { en: 'Payment Card Industry Data Security Standard', pt: 'Padrão de Segurança de Dados da Indústria de Cartões de Pagamento', zh: '支付卡行业数据安全标准', ru: 'Стандарт безопасности данных индустрии платежных карт' },
+  'Certificación SOC 2': { en: 'SOC 2 Certification', pt: 'Certificação SOC 2', zh: 'SOC 2 认证', ru: 'Сертификация SOC 2' },
+  'System and Organization Controls': { en: 'System and Organization Controls', pt: 'Controles de sistemas e organizações', zh: '系统与组织控制', ru: 'Контроли систем и организаций' },
+  'Payku es miembro de': { en: 'Payku is a member of', pt: 'A Payku é membro da', zh: 'Payku 是以下机构成员：', ru: 'Payku является участником' },
+  ', la asociación de empresas Fintech de Chile y la Peru Payments Association.': { en: ', the association of Fintech companies in Chile, and the Peru Payments Association.', pt: ', a associação de empresas Fintech do Chile, e da Peru Payments Association.', zh: '，智利金融科技企业协会，以及 Peru Payments Association。', ru: ', ассоциации финтех-компаний Чили, и Peru Payments Association.' },
+  'Evento · 2026': { en: 'Event · 2026', pt: 'Evento · 2026', zh: '活动 · 2026', ru: 'Событие · 2026' },
+  'Chile Fintech Forum 2026': { en: 'Chile Fintech Forum 2026', pt: 'Chile Fintech Forum 2026', zh: '智利金融科技论坛 2026', ru: 'Финтех-форум Chile 2026' },
+  'El evento más importante del ecosistema Fintech en Latinoamérica. El equipo Payku está presente — ¡conversemos!': { en: 'The most important event in Latin America’s Fintech ecosystem. The Payku team is there — let’s talk!', pt: 'O evento mais importante do ecossistema Fintech na América Latina. A equipe Payku estará presente — vamos conversar!', zh: '拉丁美洲金融科技生态系统最重要的活动。Payku 团队也会到场 — 来聊聊吧！', ru: 'Самое важное событие финтех-экосистемы Латинской Америки. Команда Payku будет там — давайте поговорим!' },
+  'El evento más importante del ecosistema Fintech en Latinoamérica.': { en: 'The most important event in Latin America’s Fintech ecosystem.', pt: 'O evento mais importante do ecossistema Fintech na América Latina.', zh: '拉丁美洲金融科技生态系统最重要的活动。', ru: 'Самое важное событие финтех-экосистемы Латинской Америки.' },
+  'El equipo Payku está presente — ¡conversemos!': { en: 'The Payku team is there — let’s talk!', pt: 'A equipe Payku estará presente — vamos conversar!', zh: 'Payku 团队也会到场 — 来聊聊吧！', ru: 'Команда Payku будет там — давайте поговорим!' },
+  'Pasarela de Pagos LATAM · © 2026': { en: 'LATAM Payment Gateway · © 2026', pt: 'Gateway de Pagamentos LATAM · © 2026', zh: '拉美支付网关 · © 2026', ru: 'Платежный шлюз LATAM · © 2026' },
+  'Documentación': { en: 'Documentation', pt: 'Documentação', zh: '文档', ru: 'Документация' },
+  'Registro': { en: 'Sign up', pt: 'Cadastro', zh: '注册', ru: 'Регистрация' },
+  'Anulaciones': { en: 'Reversals', pt: 'Estornos', zh: '撤销', ru: 'Аннулирования' },
+  'Colectas digitales': { en: 'Digital collections', pt: 'Coletas digitais', zh: '数字募款', ru: 'Цифровые сборы' },
+  'Formulario adaptado a tu sitio web': { en: 'Form adapted to your website', pt: 'Formulário adaptado ao seu site', zh: '适配你网站的表单', ru: 'Форма, адаптированная к вашему сайту' },
+  'Registro en simples pasos': { en: 'Registration in simple steps', pt: 'Cadastro em poucos passos', zh: '简单步骤完成注册', ru: 'Регистрация в несколько шагов' },
+  'Recibe pagos recurrentes de tus clientes: suscripciones de monto fijo y variable, automáticas y por consumo, en CLP y en UF.': { en: 'Receive recurring payments from your customers: fixed and variable amount subscriptions, automatic and usage-based, in CLP and UF.', pt: 'Receba pagamentos recorrentes dos seus clientes: assinaturas de valor fixo e variável, automáticas e por consumo, em CLP e UF.', zh: '接收来自客户的周期性付款：固定和浮动金额订阅、自动和按量计费，支持 CLP 和 UF。', ru: 'Принимайте регулярные платежи клиентов: подписки с фиксированной и переменной суммой, автоматические и по потреблению, в CLP и UF.' },
+  // Fintech Forum modal & banner
+  'Nos vemos en': { en: 'See you at', pt: 'Nos vemos em', zh: '与我们相见于', ru: 'Увидимся на' },
+  'Evento · 2026': { en: 'Event · 2026', pt: 'Evento · 2026', zh: '活动 · 2026', ru: 'Мероприятие · 2026' },
+  'El evento más importante del ecosistema Fintech en Latinoamérica.': { en: 'The most important event in the Fintech ecosystem in Latin America.', pt: 'O evento mais importante do ecossistema Fintech na América Latina.', zh: '拉丁美洲金融科技生态系统中最重要的活动。', ru: 'Самое важное мероприятие экосистемы Fintech в Латинской Америке.' },
+  'Visitar Chile Fintech Forum': { en: 'Visit Chile Fintech Forum', pt: 'Visitar Chile Fintech Forum', zh: '访问智利金融科技论坛', ru: 'Посетить Chile Fintech Forum' },
+  'Serás redireccionado al sitio oficial del evento.': { en: 'You will be redirected to the official event website.', pt: 'Você será redirecionado ao site oficial do evento.', zh: '您将被重定向到活动官方网站。', ru: 'Вы будете перенаправлены на официальный сайт мероприятия.' },
+  '¿Deseas continuar?': { en: 'Do you wish to continue?', pt: 'Deseja continuar?', zh: '是否继续？', ru: 'Хотите продолжить?' },
+  'Ir al sitio': { en: 'Go to site', pt: 'Ir ao site', zh: '前往网站', ru: 'Перейти на сайт' },
+  'Cancelar': { en: 'Cancel', pt: 'Cancelar', zh: '取消', ru: 'Отмена' }
+};
+
+let currentLang = 'es';
+const i18nTextNodes = [];
+
+function getStoredLanguage() {
+  try {
+    return localStorage.getItem('paykuLandingLang');
+  } catch (error) {
+    return null;
+  }
+}
+
+function detectBrowserLanguage() {
+  const supported = { es: 'es', en: 'en', pt: 'pt', zh: 'zh', ru: 'ru' };
+  const langs = navigator.languages && navigator.languages.length
+    ? navigator.languages
+    : [navigator.language || 'en'];
+  for (const l of langs) {
+    const prefix = l.toLowerCase().split('-')[0];
+    if (supported[prefix]) return supported[prefix];
+  }
+  return 'en';
+}
+
+function storeLanguage(lang) {
+  try {
+    localStorage.setItem('paykuLandingLang', lang);
+  } catch (error) {
+    // localStorage puede no estar disponible en algunos navegadores al abrir HTML local.
+  }
+}
+
+function translateKey(key, lang) {
+  return lang === 'es' ? key : (I18N[key] && I18N[key][lang]) || key;
+}
+
+function normalizeI18nKey(value) {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function collectI18nTextNodes() {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || parent.closest('script, style, svg, noscript')) return NodeFilter.FILTER_REJECT;
+      const key = normalizeI18nKey(node.nodeValue);
+      return I18N[key] ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+
+  let node;
+  while ((node = walker.nextNode())) {
+    i18nTextNodes.push({ node, key: normalizeI18nKey(node.nodeValue) });
+  }
+}
+
+function setTextPreservingWhitespace(node, value) {
+  const raw = node.nodeValue;
+  const leading = raw.match(/^\s*/)[0];
+  const trailing = raw.match(/\s*$/)[0];
+  node.nodeValue = `${leading}${value}${trailing}`;
+}
+
+function formatCounterNumber(value, decimals = 0, lang = currentLang) {
+  if (decimals > 0) return value.toFixed(decimals);
+  const locale = (LANGUAGES[lang] || LANGUAGES.es).locale;
+  return Math.round(value).toLocaleString(locale);
+}
+
+function updateCounterSuffixes(lang) {
+  document.querySelectorAll('[data-suffix-key]').forEach(el => {
+    const suffixKey = el.dataset.suffixKey;
+    const suffix = (COUNTER_SUFFIXES[suffixKey] && COUNTER_SUFFIXES[suffixKey][lang]) || el.dataset.suffix || '';
+    el.dataset.suffix = suffix;
+
+    if (el.dataset.counted === 'true' || el.textContent.trim() !== '0') {
+      const target = parseFloat(el.dataset.target || '0');
+      const decimals = parseInt(el.dataset.decimals || '0', 10);
+      el.textContent = formatCounterNumber(target, decimals, lang) + suffix;
+    }
+  });
+}
+
+function applyLanguage(lang) {
+  if (!LANGUAGES[lang]) lang = 'es';
+  currentLang = lang;
+  document.documentElement.lang = LANGUAGES[lang].html;
+  document.title = PAGE_TITLES[lang] || PAGE_TITLES.es;
+
+  i18nTextNodes.forEach(({ node, key }) => {
+    setTextPreservingWhitespace(node, translateKey(key, lang));
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(button => {
+    const isActive = button.dataset.lang === lang;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+    button.setAttribute('title', LANGUAGES[button.dataset.lang].name);
+    button.setAttribute('aria-label', LANGUAGES[button.dataset.lang].name);
+  });
+
+  const switcher = document.querySelector('.language-switcher');
+  if (switcher) switcher.setAttribute('aria-label', SWITCHER_LABELS[lang] || SWITCHER_LABELS.es);
+
+  updateCounterSuffixes(lang);
+  storeLanguage(lang);
+}
+
+collectI18nTextNodes();
+document.querySelectorAll('.lang-btn').forEach(button => {
+  button.addEventListener('click', () => applyLanguage(button.dataset.lang));
+});
+
+// Mobile dropdown
+(function initMobileLangDropdown() {
+  const dropdown = document.getElementById('langDropdown');
+  const trigger  = document.getElementById('langDropdownTrigger');
+  const flagEl   = document.getElementById('langDropdownFlag');
+  if (!dropdown || !trigger) return;
+
+  const FLAGS = { es: '🇨🇱', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', ru: '🇷🇺' };
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = dropdown.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  document.addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+  });
+
+  dropdown.querySelectorAll('.lang-dropdown-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const lang = item.dataset.lang;
+      applyLanguage(lang);
+      dropdown.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Sync dropdown when applyLanguage runs
+  const _orig = applyLanguage;
+  applyLanguage = function(lang) {
+    _orig(lang);
+    if (flagEl) flagEl.textContent = FLAGS[lang] || FLAGS.es;
+    dropdown.querySelectorAll('.lang-dropdown-item').forEach(item => {
+      const active = item.dataset.lang === lang;
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-selected', String(active));
+    });
+  };
+})();
+
+applyLanguage(getStoredLanguage() || detectBrowserLanguage());
+
+// Particulas
+(function initParticles() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(true); }
+    reset(init = false) {
+      this.x    = Math.random() * W;
+      this.y    = init ? Math.random() * H : H + 10;
+      this.size = Math.random() * 2 + 0.5;
+      this.speedY = -(Math.random() * 0.6 + 0.2);
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.5 + 0.1;
+      this.color = Math.random() > 0.5
+        ? `rgba(224,64,251,${this.opacity})`
+        : `rgba(124,58,237,${this.opacity})`;
+      this.twinkle = Math.random() * Math.PI * 2;
+      this.twinkleSpeed = Math.random() * 0.03 + 0.01;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.twinkle += this.twinkleSpeed;
+      if (this.y < -10) this.reset();
+    }
+    draw() {
+      const alpha = this.opacity * (0.7 + 0.3 * Math.sin(this.twinkle));
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.color.replace(/[\d.]+\)$/, alpha + ')');
+      ctx.fill();
+    }
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: 120 }, () => new Particle());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', () => { resize(); });
+  init();
+  animate();
+})();
+
+
+// Counter animation 
+function animateCounter(el) {
+  const target   = parseFloat(el.dataset.target);
+  const suffix   = el.dataset.suffix || '';
+  const decimals = parseInt(el.dataset.decimals || '0');
+  const duration = 2000;
+  const start    = performance.now();
+
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased    = 1 - Math.pow(1 - progress, 3);
+    const value    = target * eased;
+    el.textContent = formatCounterNumber(value, decimals, currentLang) + suffix;
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.dataset.counted = 'true';
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+
+// Scroll reveal + counter trigger
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // trigger counters inside
+      entry.target.querySelectorAll('[data-target]').forEach(el => animateCounter(el));
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+
+// Card mouse glow
+document.querySelectorAll('.product-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width  * 100).toFixed(1);
+    const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
+    card.style.setProperty('--mx', x + '%');
+    card.style.setProperty('--my', y + '%');
+  });
+});
+
+
+// Hero entrance animation (GSAP)
+gsap.registerPlugin(ScrollTrigger);
+
+const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+tl.from('#hero-chip',  { y: 30, opacity: 0, duration: 0.6 })
+  .from('#hero-title', { y: 50, opacity: 0, duration: 0.8 }, '-=0.3')
+  .from('#hero-sub',   { y: 30, opacity: 0, duration: 0.6 }, '-=0.5')
+  .from('#hero-ctas',  { y: 20, opacity: 0, duration: 0.5 }, '-=0.3')
+  .from('#hero-stats', { y: 20, opacity: 0, duration: 0.5 }, '-=0.2')
+  .from('#hero-sloth', { scale: 0.7, opacity: 0, duration: 1, ease: 'elastic.out(1,0.5)' }, '-=0.8');
+
+
+// Smooth anchor scrolling
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+
+//  BACKGROUND SLOTH SCROLL ANIMATION 
+(function () {
+  const wrap  = document.getElementById('bg-sloth');
+  const trail = document.getElementById('bg-sloth-trail'); // contenedor de chispas (detrás del inner)
+  const inner = document.getElementById('bg-sloth-inner');
+  const img   = document.getElementById('bg-sloth-img');
+  const flame = document.getElementById('bg-sloth-flame');
+
+  // CONFIGURACIÓN DE LLAMA POR CASO 
+  // top   → posición vertical relativa al cuerpo del perezoso (0% = arriba, 100% = abajo)
+  // width → largo de la llama en px
+  const FLAME = {
+    //           top  → posición vertical (0%=arriba, 100%=abajo del perezoso)
+    //           width → largo de la llama en px
+    //           rotate → giro extra de la llama sobre su propio eje (grados)
+    horizontal:    { top: '92%', width: '90px', rotate:  -60 },
+    diagonal_up:   { top: '82%', width: '90px', rotate:  -50 },
+    diagonal_down: { top: '92%', width: '90px', rotate:  -70 },
+  };
+  // 
+
+  let isAnimating = false;
+  let lastScrollY = window.scrollY;
+  let scrollAccum = 0;
+  const TRIGGER_PX = 950;
+
+  let passType = 'horizontal';
+
+  function spawnSparks(goingRight) {
+    for (let i = 0; i < 6; i++) {
+      const spark = document.createElement('div');
+      spark.className = 'sloth-spark';
+      const size = Math.random() * 6 + 3;
+      const oy   = (Math.random() - 0.5) * 40;
+      const ox   = 20 + Math.random() * 50;
+      spark.style.cssText = `
+        width:${size}px; height:${size}px;
+        top: calc(50% + ${oy}px);
+        ${goingRight ? 'left:-' + ox + 'px' : 'right:-' + ox + 'px'};
+        opacity:1;
+      `;
+      trail.appendChild(spark);
+      gsap.to(spark, {
+        x: goingRight ? -(30 + Math.random() * 60) : (30 + Math.random() * 60),
+        y: (Math.random() - 0.5) * 30,
+        opacity: 0,
+        duration: 0.5 + Math.random() * 0.4,
+        ease: 'power2.out',
+        onComplete: () => spark.remove()
+      });
+    }
+  }
+
+  function setFlame(passKey) {
+    const cfg = FLAME[passKey] || FLAME.horizontal;
+    flame.style.top             = cfg.top;
+    flame.style.width           = cfg.width;
+    flame.style.right           = '100%';
+    flame.style.left            = '';
+    flame.style.transform       = `translateY(-50%) rotate(${cfg.rotate ?? 0}deg)`;
+    flame.style.transformOrigin = 'right center';
+    flame.style.background      = 'linear-gradient(90deg, rgba(255,200,50,0.4), rgba(255,80,0,0.8), rgba(255,160,0,0.6), transparent)';
+  }
+
+  function flySloth(direction) {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const currentPass = passType;
+    passType = (passType === 'horizontal') ? 'diagonal' : 'horizontal';
+
+    const goingRight = direction === 'right';
+
+    let startX, endX, startY, endY;
+
+    if (currentPass === 'horizontal') {
+      const midY = vh * (0.20 + Math.random() * 0.55);
+      startX = goingRight ? -200 : vw + 200;
+      endX   = goingRight ? vw + 200 : -200;
+      startY = midY;
+      endY   = midY;
+    } else {
+      const diag    = Math.random() > 0.5 ? 1 : -1;
+      const yBase   = vh * (0.25 + Math.random() * 0.30);
+      const ySpread = vh * 0.35;
+      startX = goingRight ? -200     : vw + 200;
+      endX   = goingRight ? vw + 200 : -200;
+      startY = diag ===  1 ? yBase + ySpread : yBase;
+      endY   = diag ===  1 ? yBase           : yBase + ySpread;
+    }
+
+    const dy = endY - startY;
+    let passKey = 'horizontal';
+    if (currentPass === 'diagonal') passKey = dy < 0 ? 'diagonal_up' : 'diagonal_down';
+    setFlame(passKey);
+
+    // Rotación del inner wrapper (perezoso + llama giran juntos)
+    let rotDeg;
+    if (currentPass === 'horizontal') {
+      rotDeg = 20;
+    } else {
+      const dx = Math.abs(endX - startX);
+      rotDeg = Math.atan2(dy, dx) * (180 / Math.PI);
+      rotDeg = Math.max(-45, Math.min(35, rotDeg));
+    }
+    // El scaleX(-1) espeja todo el inner (perezoso + llama) para going left
+    inner.style.transform = goingRight
+      ? `scaleX(1) rotate(${rotDeg}deg)`
+      : `scaleX(-1) rotate(${rotDeg}deg)`;
+
+    gsap.killTweensOf(wrap);
+    gsap.set(wrap, { x: startX, y: startY, opacity: 0 });
+    gsap.to(wrap, {
+      x: endX,
+      y: endY,
+      opacity: 0.72,
+      duration: 4.0,
+      ease: 'power1.inOut',
+      onStart: () => spawnSparks(goingRight),
+      onUpdate: function () {
+        if (Math.random() < 0.06) spawnSparks(goingRight);
+      },
+      onComplete: () => {
+        gsap.set(wrap, { opacity: 0 });
+        isAnimating = false;
+      }
+    });
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const currentY = window.scrollY;
+      const delta    = currentY - lastScrollY;
+      lastScrollY    = currentY;
+
+      if ((delta > 0 && scrollAccum < 0) || (delta < 0 && scrollAccum > 0)) {
+        scrollAccum = 0;
+      }
+      scrollAccum += delta;
+
+      if (Math.abs(scrollAccum) >= TRIGGER_PX) {
+        flySloth(scrollAccum > 0 ? 'right' : 'left');
+        scrollAccum = 0;
+      }
+      ticking = false;
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
