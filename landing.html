@@ -642,7 +642,7 @@
     <div class="nav-actions">
       <!-- Desktop: pill con todas las banderas -->
       <div class="language-switcher hidden md:inline-flex" role="group" aria-label="Seleccionar idioma">
-        <button type="button" class="lang-btn active" data-lang="es" aria-label="Español" title="Español">🇨🇱</button>
+        <button type="button" class="lang-btn active" data-lang="es" aria-label="Español" title="Español">🇵🇪</button>
         <button type="button" class="lang-btn" data-lang="en" aria-label="English" title="English">🇺🇸</button>
         <button type="button" class="lang-btn" data-lang="pt" aria-label="Português" title="Português">🇧🇷</button>
         <button type="button" class="lang-btn" data-lang="zh" aria-label="中文" title="中文">🇨🇳</button>
@@ -651,12 +651,12 @@
       <!-- Mobile: dropdown compacto -->
       <div class="lang-dropdown md:hidden" id="langDropdown">
         <button type="button" class="lang-dropdown-trigger" id="langDropdownTrigger" aria-haspopup="true" aria-expanded="false">
-          <span id="langDropdownFlag">🇨🇱</span>
+          <span id="langDropdownFlag">🇵🇪</span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="lang-dropdown-menu" id="langDropdownMenu" role="listbox">
           <button type="button" class="lang-dropdown-item active" data-lang="es" role="option" aria-selected="true">
-            <span class="lang-flag">🇨🇱</span> Español
+            <span class="lang-flag">🇵🇪</span> Español
           </button>
           <button type="button" class="lang-dropdown-item" data-lang="en" role="option" aria-selected="false">
             <span class="lang-flag">🇺🇸</span> English
@@ -1807,7 +1807,7 @@ document.querySelectorAll('.lang-btn').forEach(button => {
   const flagEl   = document.getElementById('langDropdownFlag');
   if (!dropdown || !trigger) return;
 
-  const FLAGS = { es: '🇨🇱', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', ru: '🇷🇺' };
+  const FLAGS = { es: '🇵🇪', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', ru: '🇷🇺' };
 
   trigger.addEventListener('click', (e) => {
     e.stopPropagation();
